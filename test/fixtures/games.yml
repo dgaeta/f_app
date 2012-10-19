@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  creator_id: 1
+  is_private: false
+  duration: 1
+  wager: 1
+
+two:
+  creator_id: 1
+  is_private: false
+  duration: 1
+  wager: 1

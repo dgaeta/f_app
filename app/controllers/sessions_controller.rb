@@ -46,8 +46,8 @@ class SessionsController < ApplicationController
     respond_to do |format|
       if user
       redirect_back_or_to root_url, :notice => "Logged in!"
-        format.html { redirect_to @session, notice: 'login successful' }
-        format.json { render json: @session, status: :created, location: @session }
+        format.html {  'login successful' }
+        format.json {  :created }
       else
         format.html { render action: "new" }
         format.json { render json: @session.errors, status: :unprocessable_entity }
@@ -75,8 +75,7 @@ class SessionsController < ApplicationController
   # DELETE /sessions/1.json
   def destroy
     logout
-    @session = Session.find(params[:id])
-    @session.destroy
+    
 
     respond_to do |format|
       format.html { redirect_to sessions_url }

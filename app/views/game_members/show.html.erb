@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @game_member.game_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @game_member.user_id %>
+</p>
+
+<p>
+  <b>Checkins:</b>
+  <%= @game_member.checkins %>
+</p>
+
+<p>
+  <b>Checkouts:</b>
+  <%= @game_member.checkouts %>
+</p>
+
+<p>
+  <b>Successful checks:</b>
+  <%= @game_member.successful_checks %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_member_path(@game_member) %> |
+<%= link_to 'Back', game_members_path %>

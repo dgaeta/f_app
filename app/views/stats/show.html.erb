@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Winners:</b>
+  <%= @stat.winners_id %>
+</p>
+
+<p>
+  <b>Money earned:</b>
+  <%= @stat.money_earned %>
+</p>
+
+<p>
+  <b>Games won:</b>
+  <%= @stat.games_won %>
+</p>
+
+<p>
+  <b>Games played:</b>
+  <%= @stat.games_played %>
+</p>
+
+
+<%= link_to 'Edit', edit_stat_path(@stat) %> |
+<%= link_to 'Back', stats_path %>

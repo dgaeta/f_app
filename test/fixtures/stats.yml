@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  winners_id: 1
+  money_earned: 1
+  games_won: 1
+  games_played: 1
+
+two:
+  winners_id: 1
+  money_earned: 1
+  games_won: 1
+  games_played: 1

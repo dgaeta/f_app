@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Creator:</b>
+  <%= @game.creator_id %>
+</p>
+
+<p>
+  <b>Is private:</b>
+  <%= @game.is_private %>
+</p>
+
+<p>
+  <b>Duration:</b>
+  <%= @game.duration %>
+</p>
+
+<p>
+  <b>Wager:</b>
+  <%= @game.wager %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>

@@ -1,4 +1,12 @@
 FApp::Application.routes.draw do
+  resources :stats
+
+  resources :game_members
+
+  resources :comments
+
+  resources :games
+
   resources :landings
 
   resources :sessions
