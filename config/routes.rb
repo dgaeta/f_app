@@ -16,6 +16,8 @@ FApp::Application.routes.draw do
  get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "signup" => "users#new", :as => "signup"
+  get "gamecomments" => "comments#gamecomments", :as => "gamecomments"
+  get "number_of_players" => "game_members#number_of_players", :as => "number_of_players"
 
   
   root :to => "landings#index"

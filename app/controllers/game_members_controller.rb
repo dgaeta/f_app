@@ -80,4 +80,13 @@ class GameMembersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+ def number_of_players 
+    @game_member = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+    
+
+    render(:text => @game_member.count)
+  end 
+
+
 end

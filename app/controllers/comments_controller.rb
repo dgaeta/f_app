@@ -13,8 +13,9 @@ class CommentsController < ApplicationController
   # GET /comments/1
   # GET /comments/1.json
   def show
-    @comment = Comment.find(params[:id])
-
+    #@comment = Comment.find(params[:id])
+    @comment = Comment.find(params[:from_id])
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @comment }
@@ -80,4 +81,21 @@ class CommentsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def gamecomments
+
+    # GET /gamecomments/1
+    # GET /gamecomments/1.json
+    @comment = Comment.find(params[:from_id])
+    #@comment_step2 = @comment_step1.find("game_member_id = ?", params[:league_id])
+    
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @comment }
+    end
+  end
+
+
+
 end

@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "comments", ["from_id"], :name => "fki_from_id"
+
   create_table "game_members", :force => true do |t|
     t.integer  "game_id"
     t.integer  "user_id"
@@ -31,6 +33,9 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.datetime "updated_at",        :null => false
   end
 
+  add_index "game_members", ["game_id"], :name => "fki_game_id"
+  add_index "game_members", ["user_id"], :name => "fki_user_id"
+
   create_table "games", :force => true do |t|
     t.integer  "creator_id"
     t.boolean  "is_private"
@@ -39,6 +44,8 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "games", ["creator_id"], :name => "fki_creator_id"
 
   create_table "landings", :force => true do |t|
     t.datetime "created_at", :null => false
