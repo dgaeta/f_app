@@ -86,6 +86,10 @@ class GameMembersController < ApplicationController
     
 
     render(:text => @game_member.count)
+
+    respond_to do |format|
+      format.json {  @game_member.count }
+    end
   end 
 
 
