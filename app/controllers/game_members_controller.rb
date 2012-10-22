@@ -91,6 +91,49 @@ class GameMembersController < ApplicationController
       format.json {  @game_member.count }
     end
   end 
+ 
+ def check_in_request
+   @game_member = GameMember.where("id = ?", params[2])  #find the current user and then bring him and his whole data down from the cloud
+   @game_member.checkins - Time.now.to_i
+   @game_member.save
+   
+   render(:text => @game_member)
+   
+   #@game_member.update_all(:checkins => 2 )
+   #@current_user.update_attributes(params[:checkins])
+   
+  
+
+    #respond_to do |format|
+      #if @game_member.update_attributes(:checkins, @checkins)
+        #format.html { redirect_to @game_member, notice: 'You checked in.' }
+        #format.json { head :no_content }
+      #else
+        #format.html { redirect_to @game_member, notice: 'Check in unsuccessful.' }
+        #format.json { render json: @game_member.errors, status: :unprocessable_entity }
+      #end
+    #end
+  end
+
+  def check_out_request
+    @check_out_time_as_an_integer = Time.now.to_i - @check_in_time_as_an_integer
+
+    
+    check_out_time = Time.now
+    
+    render(:text => @check_out_time_as_an_integer)
+ 
+
+    #respond_to do |format|
+      #if @game_member.update_attributes(:checkins, @checkins)
+        #format.html { redirect_to @game_member, notice: 'You checked in.' }
+        #format.json { head :no_content }
+      #else
+        #format.html { redirect_to @game_member, notice: 'Check in unsuccessful.' }
+        #format.json { render json: @game_member.errors, status: :unprocessable_entity }
+      #end
+    #end
+  end
 
 
 end
