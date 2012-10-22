@@ -40,8 +40,7 @@ class SessionsController < ApplicationController
   # POST /sessions
   # POST /sessions.json
   def create
-    MultiJson.decode('{"email":"password"}) # => {"email" => "password"}')
-
+  logger.debug params.inspect
     user = login(params[:email], params[:password])
    
 
