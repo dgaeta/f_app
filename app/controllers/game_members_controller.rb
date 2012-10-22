@@ -116,15 +116,14 @@ class GameMembersController < ApplicationController
   end
 
   def check_out_request
-    @check_out_time_as_an_integer = Time.now.to_i - @check_in_time_as_an_integer
-
-    
-    check_out_time = Time.now
-    
-    render(:text => @check_out_time_as_an_integer)
+   @game_member = GameMember.find(params[:id])  #find the current user and then bring him and his whole data down from the cloud
+   @game_member.checkouts = Time.now.to_i
+   @game_member.save
+   
+   render(:text => @game_member)
  
 
-    #respond_to do |format|
+    #respond_to |format|
       #if @game_member.update_attributes(:checkins, @checkins)
         #format.html { redirect_to @game_member, notice: 'You checked in.' }
         #format.json { head :no_content }

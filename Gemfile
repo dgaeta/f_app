@@ -35,7 +35,7 @@ end
 
  gem 'rabl'
  gem 'yajl-ruby'
- gem "multi_json", "~> 1.3.6"
+
 
 # Use unicorn as the app server
 # gem 'unicorn'

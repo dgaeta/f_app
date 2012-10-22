@@ -40,7 +40,7 @@ class SessionsController < ApplicationController
   # POST /sessions
   # POST /sessions.json
   def create
-  logger.debug params.inspect
+  
     user = login(params[:email], params[:password])
    
 
