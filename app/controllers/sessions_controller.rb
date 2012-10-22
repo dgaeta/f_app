@@ -1,7 +1,5 @@
 class SessionsController < ApplicationController
-  require 'multi_json'
-  require 'json'
-  # GET /sessions
+   # GET /sessions
   # GET /sessions.json
   def index
     @sessions = Session.all
