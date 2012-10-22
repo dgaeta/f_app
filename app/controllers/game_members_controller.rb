@@ -97,7 +97,7 @@ class GameMembersController < ApplicationController
    @game_member.checkins = Time.now.to_i
    @game_member.save
    
-   render(:text => @game_member)
+   render(:json => @game_member)
    
    #@game_member.update_all(:checkins => 2 )
    #@current_user.update_attributes(params[:checkins])
@@ -120,59 +120,43 @@ class GameMembersController < ApplicationController
    @game_member.checkouts = Time.now.to_i
    @game_member.save
    
-   render(:text => @game_member)
- 
 
-    #respond_to |format|
-      #if @game_member.update_attributes(:checkins, @checkins)
-        #format.html { redirect_to @game_member, notice: 'You checked in.' }
-        #format.json { head :no_content }
-      #else
-        #format.html { redirect_to @game_member, notice: 'Check in unsuccessful.' }
-        #format.json { render json: @game_member.errors, status: :unprocessable_entity }
-      #end
-    #end
+   #VALIDATING TIME AT GYM 
+
+    last_checkin = GameMember.where(:id =>2).pluck(:checkins)
+    last_checkout = GameMember.where(:id =>2).pluck(:checkouts)
+
+    total_minutes_at_gym = last_checkout[0] - last_checkin[0]
+
+   
+        if total_minutes_at_gym > 2700 
+          @game_member.successful_checks += 1
+          @game_member.save
+           render(json: @game_member) 
+        else
+          render(json: @game_member)
+        end
   end
 
+ 
 
   def leaderboard 
-    @leaderboard_table = GameMember.find_by_sql("Select
-                                                  users.first_name,
-                                                   users.last_name,
-                                                   game_members.successful_checks
-                                                  From
-                                                   game_members,
-                                                   users
-                                                  Order By
-                                                   game_members.successful_checks")
+    members_in_game = GameMember.
+      includes(:user).
+      where(:game_id => params[:game_id]).
+      order("successful_checks DESC")
+
+#      joins("INNER JOIN users ON users.id = game_members.user_id").
+
+    leaderboard_stats = members_in_game.map do |member|
+      {:user_id => member.user.id,
+      :first_name => member.user.first_name,
+      :last_name => member.user.last_name,
+      :successful_checks => member.successful_checks}
+    end
 
 
-
-    #GameMember.joins("LEFT JOIN users ON users.id = game_members.user_id')
-    
-
-
-                              #GameMember.find_by_sql("select first_name, last_name
-                                                      #from users join game_members 
-                                                      #on users.id = game_members.user_id;")
-
-                            #GameMember.joins('LEFT OUTER JOIN users ON users.id = game_members.user_id')
-                            #{}SELECT clients.* FROM clients LEFT OUTER JOIN addresses ON addresses.client_id = clients.id
-
-
-
-  #.order("successful_checkins DESC")
-    #@leaderboard_first_name.pluck(:first_name)   #getting the array for first_name column
-
-
-    #@leaderboard_last_name = GameMember.where("game_id = ?", params[1]).order("successful_checkins DESC")
-    #@leaderboard_last_name.pluck(:last_name) 
-
-
-    #@leaderboard_successful_checks = GameMember.where("game_id = ?", params[1]).order("successful_checkins DESC")
-    #@leaderboard_successful_checks.pluck(:successful_checkins)
-
-    render(:text => @leaderboard_table) #+ @leaderboard_last_name + @leaderboard_first_name)
+    render(:json => leaderboard_stats) #+ @leaderboard_last_name + @leaderboard_first_name)
   end
 
 end
