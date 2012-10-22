@@ -93,8 +93,8 @@ class GameMembersController < ApplicationController
   end 
  
  def check_in_request
-   @game_member = GameMember.where("id = ?", params[2])  #find the current user and then bring him and his whole data down from the cloud
-   @game_member.checkins - Time.now.to_i
+   @game_member = GameMember.find(params[:id])  #find the current user and then bring him and his whole data down from the cloud
+   @game_member.checkins = Time.now.to_i
    @game_member.save
    
    render(:text => @game_member)
@@ -150,8 +150,7 @@ class GameMembersController < ApplicationController
 
 
     #GameMember.joins("LEFT JOIN users ON users.id = game_members.user_id')
-     #        query = Post.joins("LEFT JOIN categories ON post.category_id = categories.id")
-
+    
 
 
                               #GameMember.find_by_sql("select first_name, last_name
