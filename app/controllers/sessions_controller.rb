@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+
+  require 'json'
   # GET /sessions
   # GET /sessions.json
   def index
@@ -40,6 +42,8 @@ class SessionsController < ApplicationController
   # POST /sessions
   # POST /sessions.json
   def create
+    user = ActiveSupport::JSON.decode(request.body.to_json)
+
     user = login(params[:email], params[:password])
    
 

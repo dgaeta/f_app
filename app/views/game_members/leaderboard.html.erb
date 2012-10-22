@@ -1,0 +1,31 @@
+<h1>Leaderboard</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th>First Name </th>
+    <th>Last Name</th>
+    <th>Game_member_id</th>
+    <th>User_id</th>
+    <th>checkins</th>
+    <th>checkouts</th>
+    <th>successful checks</th>
+  </tr>
+
+<% @game_members.each do |game_member| %>
+  <tr>
+    <td><%= user.first_name %></td>
+    <td><%= user.last_name %></td>
+    <td><%= user.first_name %></td>
+    <td><%= game_member.id %></td>
+    <td><%= game_member.checkins %></td>
+    <td><%= game_member.checkouts %></td>
+    <td><%= game_member.successful_checks %></td>
+    <td><%= link_to 'Show', game_member %></td>
+    <td><%= link_to 'Edit', edit_game_member_path(game_member) %></td>
+    <td><%= link_to 'Destroy', game_member, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

@@ -126,6 +126,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jbuilder
   jquery-rails
+  multi_json (~> 1.3.6)
   pg (= 0.12.2)
   rabl
   rails (= 3.2.8)

@@ -136,4 +136,45 @@ class GameMembersController < ApplicationController
   end
 
 
+  def leaderboard 
+    @leaderboard_table = GameMember.find_by_sql("Select
+                                                  users.first_name,
+                                                   users.last_name,
+                                                   game_members.successful_checks
+                                                  From
+                                                   game_members,
+                                                   users
+                                                  Order By
+                                                   game_members.successful_checks")
+
+
+
+    #GameMember.joins("LEFT JOIN users ON users.id = game_members.user_id')
+     #        query = Post.joins("LEFT JOIN categories ON post.category_id = categories.id")
+
+
+
+                              #GameMember.find_by_sql("select first_name, last_name
+                                                      #from users join game_members 
+                                                      #on users.id = game_members.user_id;")
+
+                            #GameMember.joins('LEFT OUTER JOIN users ON users.id = game_members.user_id')
+                            #{}SELECT clients.* FROM clients LEFT OUTER JOIN addresses ON addresses.client_id = clients.id
+
+
+
+  #.order("successful_checkins DESC")
+    #@leaderboard_first_name.pluck(:first_name)   #getting the array for first_name column
+
+
+    #@leaderboard_last_name = GameMember.where("game_id = ?", params[1]).order("successful_checkins DESC")
+    #@leaderboard_last_name.pluck(:last_name) 
+
+
+    #@leaderboard_successful_checks = GameMember.where("game_id = ?", params[1]).order("successful_checkins DESC")
+    #@leaderboard_successful_checks.pluck(:successful_checkins)
+
+    render(:text => @leaderboard_table) #+ @leaderboard_last_name + @leaderboard_first_name)
+  end
+
 end

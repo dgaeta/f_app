@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :stats, :dependent => :destroy 
   
   authenticates_with_sorcery!
-  attr_accessor :email, :first_name, :last_name, :password, :password_confirmation
+  attr_accessible :email, :first_name, :last_name, :password, :password_confirmation
 
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create

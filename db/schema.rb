@@ -26,11 +26,11 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
   create_table "game_members", :force => true do |t|
     t.integer  "game_id"
     t.integer  "user_id"
-    t.integer  "checkins"
-    t.integer  "checkouts"
     t.integer  "successful_checks"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.integer  "checkins"
+    t.integer  "checkouts"
   end
 
   add_index "game_members", ["game_id"], :name => "fki_game_id"
@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.string   "salt"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.text     "first_name"
+    t.text     "last_name"
   end
 
 end
