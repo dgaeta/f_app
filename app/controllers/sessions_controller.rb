@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-
+  require 'multi_json'
   require 'json'
   # GET /sessions
   # GET /sessions.json
@@ -42,7 +42,7 @@ class SessionsController < ApplicationController
   # POST /sessions
   # POST /sessions.json
   def create
-    user = ActiveSupport::JSON.decode(request.body.to_json)
+    MultiJson.decode('{"email":"password"}) # => {"email" => "password"}')
 
     user = login(params[:email], params[:password])
    
