@@ -1,4 +1,4 @@
 class Comment < ActiveRecord::Base
  belongs_to :game_member
-  attr_accessible :from_id, :gametocomments_id, :message, :stamp
+  attr_accessible :game_member_id, :message, :stamp
 end

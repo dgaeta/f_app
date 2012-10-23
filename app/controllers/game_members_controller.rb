@@ -81,15 +81,16 @@ class GameMembersController < ApplicationController
     end
   end
 
- def number_of_players 
-    @game_member = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+ def pot_size 
+    number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+    number_of_players = number_of_players.count
+    wager = Game.where("id = ?", params[:game_id]).pluck(:wager)
+    wager = wager[0].to_i
+
+    pot_size = number_of_players*wager
+
     
-
-    render(:text => @game_member.count)
-
-    respond_to do |format|
-      format.json {  @game_member.count }
-    end
+    render(:json => pot_size)
   end 
  
  def check_in_request
@@ -123,8 +124,8 @@ class GameMembersController < ApplicationController
 
    #VALIDATING TIME AT GYM 
 
-    last_checkin = GameMember.where(:id =>2).pluck(:checkins)
-    last_checkout = GameMember.where(:id =>2).pluck(:checkouts)
+    last_checkin = GameMember.where( "id = ?", params[:id]).pluck(:checkins)
+    last_checkout = GameMember.where("id = ?", params[:id]).pluck(:checkouts)
 
     total_minutes_at_gym = last_checkout[0] - last_checkin[0]
 

@@ -14,14 +14,14 @@
 ActiveRecord::Schema.define(:version => 20121019194134) do
 
   create_table "comments", :force => true do |t|
-    t.integer  "from_id"
+    t.integer  "game_member_id"
     t.text     "message"
     t.time     "stamp"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "comments", ["from_id"], :name => "fki_from_id"
+  add_index "comments", ["game_member_id"], :name => "fki_game_member_id"
 
   create_table "game_members", :force => true do |t|
     t.integer  "game_id"

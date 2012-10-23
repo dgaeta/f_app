@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
    
   has_many :games, :dependent => :destroy 
-  has_many :league_members,  :through => :games, :dependent => :destroy
+  has_many :game_members,  :through => :games, :dependent => :destroy
   has_many :comments, :through => :game_members
   has_many :stats, :dependent => :destroy 
   
