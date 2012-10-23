@@ -81,17 +81,13 @@ class GameMembersController < ApplicationController
     end
   end
 
- def pot_size 
-    number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
-    number_of_players = number_of_players.count
-    wager = Game.where("id = ?", params[:game_id]).pluck(:wager)
-    wager = wager[0].to_i
-
-    pot_size = number_of_players*wager
-
+  def number_of_players 
+    @game_member = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     
-    render(:json => pot_size)
-  end 
+
+    render(:json => @game_member.count)
+  end
+
  
  def check_in_request
    @game_member = GameMember.find(params[:id])  #find the current user and then bring him and his whole data down from the cloud
@@ -139,6 +135,7 @@ class GameMembersController < ApplicationController
         end
   end
 
+
  
 
   def leaderboard 
@@ -147,9 +144,9 @@ class GameMembersController < ApplicationController
       where(:game_id => params[:game_id]).
       order("successful_checks DESC")
 
-#      joins("INNER JOIN users ON users.id = game_members.user_id").
+       
 
-    leaderboard_stats = members_in_game.map do |member|
+      leaderboard_stats = members_in_game.map do |member|
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
@@ -159,5 +156,18 @@ class GameMembersController < ApplicationController
 
     render(:json => leaderboard_stats) #+ @leaderboard_last_name + @leaderboard_first_name)
   end
+
+  def pot_size 
+    number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+    number_of_players = number_of_players.count
+    wager = Game.where("id = ?", params[:game_id]).pluck(:wager)
+    wager = wager[0].to_i
+
+    pot_size = number_of_players*wager
+
+    
+    render(:json => pot_size)
+  end
+
 
 end
