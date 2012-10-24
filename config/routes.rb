@@ -26,7 +26,7 @@ FApp::Application.routes.draw do
   get "create_game" => "games#create_game", :as => "create_game"
   get "user_stats" => "stats#user_stats", :as => "user_stats"
   get "public_games" => "games#public_games", :as => "public_games"
-  get "users/new" => "users#new", :as => "users/new"
+  get "new" => "users#new", :as => "new"
 
 
 
