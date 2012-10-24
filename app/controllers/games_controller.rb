@@ -106,7 +106,7 @@ class GamesController < ApplicationController
 
   end
 
-  def winners_and_losers
+=begin def winners_and_losers
     #this is leaderboard method from game_members controller 
     members_in_game = GameMember.includes(:user).
       where(:game_id => params[:game_id]).
@@ -127,7 +127,6 @@ class GamesController < ApplicationController
     second_places = leaderboard_stats[1]
     third_place = leaderboard_stats[2]
     
-
-    end
-
+=end
+    
 end
