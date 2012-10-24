@@ -82,10 +82,10 @@ class GameMembersController < ApplicationController
   end
 
   def number_of_players 
-    @game_member = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+    number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     
 
-    render(:json => @game_member.count)
+    render(:json => number_of_players.count)
   end
 
  
@@ -139,8 +139,7 @@ class GameMembersController < ApplicationController
  
 
   def leaderboard 
-    members_in_game = GameMember.
-      includes(:user).
+    members_in_game = GameMember.includes(:user).
       where(:game_id => params[:game_id]).
       order("successful_checks DESC")
 
@@ -157,17 +156,39 @@ class GameMembersController < ApplicationController
     render(:json => leaderboard_stats) #+ @leaderboard_last_name + @leaderboard_first_name)
   end
 
-  def pot_size 
+  def stakes
     number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     number_of_players = number_of_players.count
     wager = Game.where("id = ?", params[:game_id]).pluck(:wager)
     wager = wager[0].to_i
 
-    pot_size = number_of_players*wager
+    stakes = number_of_players*wager
 
     
-    render(:json => pot_size)
+    render(:json => stakes)
   end
+
+  def join_game
+    GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
+    
+    wager = Game.where(:id => params[:game_id]).pluck(:wager)
+    wager = wager[0].to_i
+
+    new_total_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
+    new_total_players = new_total_players.count
+    new_total_players += 1
+
+    @game = Game.where(:id => params[:game_id])
+    @game[:stakes] += wager
+    @game[:players] += new_total_players
+    @game.save
+
+    message = "You joined a game. Loading Motivation and Good Times..."
+
+
+    render(:json => @game)
+  end
+
 
 
 end

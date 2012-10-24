@@ -35,7 +35,7 @@ end
 
  gem 'rabl'
  gem 'yajl-ruby'
-
+gem 'pry-rails', :group => :development
 
 # Use unicorn as the app server
 # gem 'unicorn'

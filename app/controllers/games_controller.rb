@@ -82,5 +82,28 @@ class GamesController < ApplicationController
   end
 
 
+  def create_game
+    Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
+     :duration => params[:duration], :wager => params[:wager])
+    
+    message = "You created a game. Next steps => Get some rest. Listen to some tunes. Invite friends to your game."
+
+    render(:json => message)
+  end
+
+  def public_games
+    public_games = Game.where("is_private = false")
+
+    public_games = public_games.map do |game|
+      {:id => game.id,
+      :duration => game.duration,
+      :wager => game.wager,
+      :players => game.players,
+      :stakes => game.stakes}
+    end
+
+    render(:json => public_games)
+
+  end
 
 end

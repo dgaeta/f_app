@@ -80,4 +80,16 @@ class StatsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def user_stats
+    user_stats = Stat.includes(:user).where(:winners_id => params[:user_id])
+
+    user_stats = user_stats.map do |member|
+      {:money_earned => member.money_earned,
+      :games_played => member.games_played,
+      :games_won => member.games_won}
+    end
+
+    render(:json => user_stats)
+  end
 end

@@ -17,11 +17,11 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.integer  "game_member_id"
     t.text     "message"
     t.time     "stamp"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
-  add_index "comments", ["game_member_id"], :name => "fki_game_member_id"
+  add_index "comments", ["game_member_id"], :name => "fki_from_id"
 
   create_table "game_members", :force => true do |t|
     t.integer  "game_id"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.integer  "wager"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "players"
+    t.integer  "stakes"
   end
 
   add_index "games", ["creator_id"], :name => "fki_creator_id"
@@ -66,8 +68,10 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.datetime "updated_at",   :null => false
   end
 
+  add_index "stats", ["winners_id"], :name => "fki_winners_id"
+
   create_table "users", :force => true do |t|
-    t.string   "email"
+    t.text     "email"
     t.string   "crypted_password"
     t.string   "salt"
     t.datetime "created_at",       :null => false

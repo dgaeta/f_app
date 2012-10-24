@@ -97,16 +97,13 @@ class CommentsController < ApplicationController
   end
 
 
- def game_comments 
-    members_in_game = Comment.
-      includes(:game_members).
+=begin def game_comments 
+    members_in_game = GameMember.
+      includes(:comment).
       where(:game_id => 2)
 
-      members_in_game.includes):comment
+      members_in_game.includes(:comment)
 
-
-
-#      joins("INNER JOIN users ON users.id = game_members.user_id").
 
     leaderboard_stats = members_in_game.map do |member|
       {:user_id => member.user.id,
@@ -114,6 +111,6 @@ class CommentsController < ApplicationController
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks}
     end
-
+=end
 
 end

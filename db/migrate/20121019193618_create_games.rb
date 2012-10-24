@@ -5,6 +5,8 @@ class CreateGames < ActiveRecord::Migration
       t.boolean :is_private
       t.integer :duration
       t.integer :wager
+      t.integer :players
+      t.integer :stakes
 
       t.timestamps
     end
