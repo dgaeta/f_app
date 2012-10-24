@@ -106,4 +106,28 @@ class GamesController < ApplicationController
 
   end
 
+  def winners_and_losers
+    #this is leaderboard method from game_members controller 
+    members_in_game = GameMember.includes(:user).
+      where(:game_id => params[:game_id]).
+      order("successful_checks DESC")
+
+       
+
+      leaderboard_stats = members_in_game.map do |member|
+      {:user_id => member.user.id,
+      :first_name => member.user.first_name,
+      :last_name => member.user.last_name,
+      :successful_checks => member.successful_checks}
+    #end leaderboard method
+
+    
+
+    first_place = leaderboard_stats[0]
+    second_places = leaderboard_stats[1]
+    third_place = leaderboard_stats[2]
+    
+
+    end
+
 end
