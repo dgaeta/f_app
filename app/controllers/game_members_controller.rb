@@ -125,6 +125,8 @@ class GameMembersController < ApplicationController
 
     total_minutes_at_gym = last_checkout[0] - last_checkin[0]
 
+    @game_member.total_minutes_at_gym += total_minutes_at_gym ##MAKE SURE THIS WORKS 
+
    
         if total_minutes_at_gym > 2700 
           @game_member.successful_checks += 1
@@ -139,13 +141,13 @@ class GameMembersController < ApplicationController
  
 
   def leaderboard 
-    members_in_game = GameMember.includes(:user).
+    leaderboard_stats = GameMember.includes(:user).
       where(:game_id => params[:game_id]).
       order("successful_checks DESC")
 
        
 
-      leaderboard_stats = members_in_game.map do |member|
+      leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
@@ -174,19 +176,26 @@ class GameMembersController < ApplicationController
     wager = Game.where(:id => params[:game_id]).pluck(:wager)
     wager = wager[0].to_i
 
+    current_stakes = Game.where(:id => params[:game_id]).pluck(:stakes)
+    current_stakes = current_stakes[0].to_i
+
+    new_stakes = wager + current_stakes
+
     new_total_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     new_total_players = new_total_players.count
     new_total_players += 1
 
-    @game = Game.where(:id => params[:game_id])
-    @game[:stakes] += wager
-    @game[:players] += new_total_players
-    @game.save
+
+
+    game = Game.where(:id => params[:game_id])
+    game.update_attributes(:stakes => new_stakes)
+    game.update_attributes(:players => new_total_players)
+    game.save
 
     message = "You joined a game. Loading Motivation and Good Times..."
 
 
-    render(:json => @game)
+    render(:json => game)
   end
 
 

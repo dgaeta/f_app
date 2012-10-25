@@ -1,4 +1,4 @@
-<h1>Listing stats</h1>
+w<h1>Listing stats</h1>
 
 <table>
   <tr>
@@ -6,6 +6,10 @@
     <th>Money earned</th>
     <th>Games won</th>
     <th>Games played</th>
+    <th>Gold medals</th>
+    <th>Silver medals</th>
+    <th>Bronze medals</th>
+    <th>Losses -_-</th>
     <th></th>
     <th></th>
     <th></th>
@@ -17,6 +21,10 @@
     <td><%= stat.money_earned %></td>
     <td><%= stat.games_won %></td>
     <td><%= stat.games_played %></td>
+    <td><%= stat.first_place_finishes %></td>
+    <td><%= stat.second_place_finishes  %></td>
+    <td><%= stat.third_place_finishes  %></td>
+    <td><%= stat.losses %></td>
     <td><%= link_to 'Show', stat %></td>
     <td><%= link_to 'Edit', edit_stat_path(stat) %></td>
     <td><%= link_to 'Destroy', stat, method: :delete, data: { confirm: 'Are you sure?' } %></td>

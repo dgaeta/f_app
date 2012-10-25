@@ -20,6 +20,26 @@
   <%= @stat.games_played %>
 </p>
 
+<p>
+  <b>Gold medals:</b>
+  <%= @stat.first_place_finishes %>
+</p>
+
+<p>
+  <b>Silver Medals:</b>
+  <%= @stat.second_place_finishes %>
+</p>
+
+<p>
+  <b>Bronze Medals:</b>
+  <%= @stat.third_place_finishes %>
+</p>
+
+<p>
+  <b>losses:</b>
+  <%= @stat.losses %>
+</p>
+
 
 <%= link_to 'Edit', edit_stat_path(@stat) %> |
 <%= link_to 'Back', stats_path %>

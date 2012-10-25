@@ -22,12 +22,18 @@ FApp::Application.routes.draw do
   get "check_out_request" => "game_members#check_out_request", :as => "check_out_request"
   get "leaderboard" => "game_members#leaderboard", :as => "leaderboard"
   get "number_of_players" => "game_members#number_of_players", :as => "number_of_players"
-  get "join_game" => "game_members#join_game", :as => "join_game"
+  get "join_game" => "games#join_game", :as => "join_game"
   get "create_game" => "games#create_game", :as => "create_game"
   get "user_stats" => "stats#user_stats", :as => "user_stats"
   get "public_games" => "games#public_games", :as => "public_games"
   get "new" => "users#new", :as => "new"
   get "users" => "users#create", :as => "users"
+  get "index" => "users#index", :as => "index"
+  get "winners_and_losers" => "games#winners_and_losers", :as => "winners_and_losers"
+  get "can_game_start_date" => "games#can_game_start_date", :as => "can_game_start_date"
+  get "can_game_end" => "games#can_game_end", :as => "can_game_end"
+
+
 
 
 
