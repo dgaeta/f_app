@@ -31,7 +31,9 @@ FApp::Application.routes.draw do
   get "index" => "users#index", :as => "index"
   get "winners_and_losers" => "games#winners_and_losers", :as => "winners_and_losers"
   get "can_game_start_date" => "games#can_game_start_date", :as => "can_game_start_date"
+  get "can_game_start_players" => "games#can_game_start_players", :as => "can_game_start_players"
   get "can_game_end" => "games#can_game_end", :as => "can_game_end"
+  get "game_comments" => "comments#game_comments", :as => "game_comments"
 
 
 

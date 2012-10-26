@@ -90,26 +90,28 @@ class GameMembersController < ApplicationController
 
  
  def check_in_request
-   @game_member = GameMember.find(params[:id])  #find the current user and then bring him and his whole data down from the cloud
-   @game_member.checkins = Time.now.to_i
-   @game_member.save
-   
-   render(:json => @game_member)
-   
-   #@game_member.update_all(:checkins => 2 )
-   #@current_user.update_attributes(params[:checkins])
-   
-  
+    last_checkin = GameMember.where(:id => params[:game_member_id]).pluck(:checkins)
+    last_checkin = last_checkin[0]
+    last_checkin = Time.at(last_checkin)
+    last_checkin_cday = last_checkin.to_date
+    last_checkin_cday = last_checkin.mday
 
-    #respond_to do |format|
-      #if @game_member.update_attributes(:checkins, @checkins)
-        #format.html { redirect_to @game_member, notice: 'You checked in.' }
-        #format.json { head :no_content }
-      #else
-        #format.html { redirect_to @game_member, notice: 'Check in unsuccessful.' }
-        #format.json { render json: @game_member.errors, status: :unprocessable_entity }
-      #end
-    #end
+    calendar_day_now = Time.now.to_date
+    calendar_day_now = calendar_day_now.mday
+
+    failure_same_day_string = "Sorry buddy, you can only checkin once per calendar day. Get em' next time!"
+    success_checkin_string = "Awesome, you checked in. Go kick some butt!"
+
+  
+    if last_checkin_cday == calendar_day_now
+      then 
+       render(json: failure_same_day_string)
+      else
+      @game_member = GameMember.where(:id => params[:game_member_id])  #find the current user and then bring him and his whole data down from the cloud
+      @game_member.checkins = Time.now.to_i
+      @game_member.save
+      render(json: success_checkin_string )
+    end
   end
 
   def check_out_request

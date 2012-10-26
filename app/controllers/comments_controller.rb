@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
   # GET /comments/1.json
   def show
     #@comment = Comment.find(params[:id])
-    @comment = Comment.find(params[:from_id])
+    @comment = Comment.find(params[:id])
     
     respond_to do |format|
       format.html # show.html.erb
@@ -82,12 +82,12 @@ class CommentsController < ApplicationController
     end
   end
 
-  def gamecomments
+=begin  def gamecomments
 
     # GET /gamecomments/1
     # GET /gamecomments/1.json
     @comment = Comment.find(params[:from_id])
-    #@comment_step2 = @comment_step1.find("game_member_id = ?", params[:league_id])
+    @comment_step2 = @comment_step1.find("game_member_id = ?", params[:league_id])
     
 
     respond_to do |format|
@@ -95,22 +95,21 @@ class CommentsController < ApplicationController
       format.json { render json: @comment }
     end
   end
-
-
-=begin def game_comments 
-    members_in_game = GameMember.
-      includes(:comment).
-      where(:game_id => 2)
-
-      members_in_game.includes(:comment)
-
-
-    leaderboard_stats = members_in_game.map do |member|
-      {:user_id => member.user.id,
-      :first_name => member.user.first_name,
-      :last_name => member.user.last_name,
-      :successful_checks => member.successful_checks}
-    end
 =end
 
+  def game_comments 
+    @game_member_comments= GameMember.includes(:comments).where(:game_id => params[:game_id])
+
+
+
+
+    @game_member_comments= @game_member_comments.map do |game_member|
+      {:_game_memberid => game_member.id,
+      :comment_id => game_member.comments.id,
+      :message => member.comments.message,
+      :stamp => member.comments.stamp}
+    end
+
+    render(:json => @game_member_comments)
+  end
 end

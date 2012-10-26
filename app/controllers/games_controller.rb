@@ -81,20 +81,20 @@ class GamesController < ApplicationController
     end
   end
 
-=begin  def can_game_start_players
-    players = Game.where( :id => params[:game_id].pluck(:players)
+ def can_game_start_players
+    players = Game.where(:id => params[:game_id]).pluck(:players)
     players = players[0]
 
     true_string = "true"
     false_string = "false"
 
     if players >= 5 
-      then render(:json => @true_string)
+      then render(:json => true_string)
      else 
-        render(:json => @false_string)
+        render(:json => false_string)
     end
   end
-=end
+
 
   def can_game_end 
     end_date = Game.where( :id => params[:game_id]).pluck(:game_end_date)

@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <th>From</th>
+    <th>game_member_id</th>
     <th>Message</th>
     <th>Stamp</th>
     <th></th>
@@ -12,7 +12,7 @@
 
 <% @comments.each do |comment| %>
   <tr>
-    <td><%= comment.from_id %></td>
+    <td><%= comment.game_member_id %></td>
     <td><%= comment.message %></td>
     <td><%= comment.stamp %></td>
     <td><%= link_to 'Show', comment %></td>
