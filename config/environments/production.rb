@@ -67,6 +67,16 @@ FApp::Application.configure do
 
   config.logger = Logger.new(STDOUT)
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  :address              => "smtp.gmail.com",
+  :port                 => 587,
+  :domain               => 'gmail.com',
+  :user_name            => 'team@fitsby.com',
+  :password             => 'illini12',
+  :authentication       => 'plain',
+  :enable_starttls_auto => true  }
+
  
 
 end
