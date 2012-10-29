@@ -103,7 +103,8 @@ class GamesController < ApplicationController
 
 
   def can_game_end 
-    end_date = Game.where( :id => params[:game_id]).pluck(:game_end_date)
+    game_id = params[:game_id]
+    end_date = Game.where( :id => game_id).pluck(:game_end_date)
     end_date = end_date[0]
 
     time_now = Time.now.to_i
@@ -114,7 +115,21 @@ class GamesController < ApplicationController
     false_string = "false"
 
     if diff >= 0 
-      then render(:json => true_string )
+      then 
+      players =GameMember.where(:game_id => game_id).pluck(:user_id)
+      number_of_players = players.count  
+
+        @i = 0
+        @num = number_of_players
+
+      while @i < @num  do
+      player = players[@i]
+      player_stats = Stat.where(:winners_id => player).first
+      player_stats.losses += 1
+      player_stats.save
+      @i +=1
+      end
+      render(:json => true_string )
      else 
       render(:json => false_string)
     end
@@ -183,35 +198,60 @@ class GamesController < ApplicationController
   end
 
 def winners_and_losers
-    #this is leaderboard method from game_members controller 
-    leaderboard_stats = GameMember.includes(:stat).
-    where(:user_id => params[:winners_id]).
-    order("successful_checks DESC")
+    leaderboard_stats = GameMember.includes(:user). where(:game_id => params[:game_id]).order("successful_checks DESC")
+
 
        
 
       leaderboard_stats = leaderboard_stats.map do |member|
-        {:user_id => member.id,
-        :successful_checks => member.successful_checks,
-        :first_place_finishes => member.stat.first_place_finishes,
-        :second_place_finishes => member.stat.second_place_finishes,
-        :third_place_finishes => member.stat.third_place_finishes,
-        :losses => member.stat.losses}
+        {:user_id => member.user.id}
+        #:first_name => member.first_name,
+        #:successful_checks => member.successful_checks,
+        #:first_place_finishes => member.first_place_finishes,
+        #:second_place_finishes => member.second_place_finishes,
+        #:third_place_finishes => member.third_place_finishes,
+        #:losses => member.losses, 
+        #:final_standing => member.final_standing}
      end
     #end leaderboard method
 
-    
-    leaderboard_stats[0].final_standing = 1
-    leaderboard_stats[0].losses -= 1
-    leaderboard[0].first_place_finishes += 1
+    first = leaderboard_stats[0]
+    first = first[:user_id]
+    first = GameMember.where(:user_id => first).first
+    first.final_standing = 1
+    first.save
+    first = leaderboard_stats[0]
+    first = first[:user_id]
+    first = Stat.where(:winners_id => first).first
+    first.losses -= 1
+    first.first_place_finishes += 1
+    first.save
 
-    leaderboard_stats[1].final_standing = 2
-    leaderboard_stats[1].losses -= 1
-    leaderboard[1].second_place_finishes += 1
+    second = leaderboard_stats[1]
+    second = second[:user_id]
+    second = GameMember.where(:user_id => second).first
+    second.final_standing = 2
+    second.save
+    second = leaderboard_stats[1]
+    second = second[:user_id]
+    second = Stat.where(:winners_id => second).first
+    second.losses -= 1
+    second.second_place_finishes += 1
+    second.save
 
-    leaderboard_stats[2].final_standing = 3
-    leaderboard_stats[2].losses -= 1
-    leaderboard[2].second_place_finishes += 1
+    third = leaderboard_stats[2]
+    third = second[:user_id]
+    third = GameMember.where(:user_id => third).first
+    third.final_standing = 3
+    third.save
+    third = leaderboard_stats[2]
+    third = third[:user_id]
+    third = Stat.where(:winners_id => third).first
+    third.losses -= 1
+    third.third_place_finishes += 1
+    third.save
+
+    render(json: leaderboard_stats)
 
   end 
 

@@ -150,9 +150,7 @@ class GameMembersController < ApplicationController
  
 
   def leaderboard 
-    leaderboard_stats = GameMember.includes(:user).
-      where(:game_id => params[:game_id]).
-      order("successful_checks DESC")
+    leaderboard_stats = GameMember.includes(:user). where(:game_id => params[:game_id]).order("successful_checks DESC")
 
        
 
