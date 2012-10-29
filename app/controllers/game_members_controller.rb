@@ -90,27 +90,34 @@ class GameMembersController < ApplicationController
 
  
  def check_in_request
-    last_checkin = GameMember.where(:id => params[:game_member_id]).pluck(:checkins)
-    last_checkin = last_checkin[0]
-    last_checkin = Time.at(last_checkin)
-    last_checkin_cday = last_checkin.to_date
-    last_checkin_cday = last_checkin.mday
+    @last_checkin = GameMember.where(:id => params[:game_member_id]).pluck(:checkins)
+    @last_checkin = @last_checkin[0]
 
-    calendar_day_now = Time.now.to_date
-    calendar_day_now = calendar_day_now.mday
+    if @last_checkin == 0 or @last_checkin == nil
+      then
+       @last_checkin = 0
+      else
+        @last_checkin = Time.at(@last_checkin)
+        @last_checkin_cday = @last_checkin.to_date
+        @last_checkin_cday = @last_checkin.mday
+    end
 
-    failure_same_day_string = "Sorry buddy, you can only checkin once per calendar day. Get em' next time!"
-    success_checkin_string = "Awesome, you checked in. Go kick some butt!"
+    @calendar_day_now = Time.now.to_date
+    @calendar_day_now = @calendar_day_now.mday
+
+    @failure_same_day_string = "Sorry buddy, you can only checkin once per calendar day. Get em' next time!"
+    @success_checkin_string = "Awesome, you checked in. Go kick some butt!"
 
   
-    if last_checkin_cday == calendar_day_now
+    if (@last_checkin == @calendar_day_now) or (@last_checkin_cday == @calendar_day_now)
       then 
-       render(json: failure_same_day_string)
+       render(json: @failure_same_day_string)
       else
-      @game_member = GameMember.where(:id => params[:game_member_id])  #find the current user and then bring him and his whole data down from the cloud
+      @game_member = GameMember.where(:id => params[:game_member_id]).first #find the current user and then bring him and his whole data down from the cloud
       @game_member.checkins = Time.now.to_i
       @game_member.save
-      render(json: success_checkin_string )
+      Comment.new(:game_member_id => params[:game_member_id] , :message => "Checked in at the GYM" , :stamp => Time.now)
+      render(json: @success_checkin_string )
     end
   end
 

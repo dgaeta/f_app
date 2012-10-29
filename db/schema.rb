@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121019194134) do
+ActiveRecord::Schema.define(:version => 20121028223959) do
 
   create_table "comments", :force => true do |t|
     t.integer  "game_member_id"
@@ -27,10 +27,13 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.integer  "game_id"
     t.integer  "user_id"
     t.integer  "successful_checks"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
-    t.integer  "checkins"
-    t.integer  "checkouts"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.integer  "checkins",             :default => 0
+    t.integer  "checkouts",            :default => 0
+    t.integer  "final_standing",       :default => 0
+    t.integer  "total_minutes_at_gym"
+    t.integer  "daily_checkins"
   end
 
   add_index "game_members", ["game_id"], :name => "fki_game_id"
@@ -41,10 +44,12 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.boolean  "is_private"
     t.integer  "duration"
     t.integer  "wager"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.time     "updated_at",      :null => false
     t.integer  "players"
     t.integer  "stakes"
+    t.integer  "game_start_date"
+    t.integer  "game_end_date"
   end
 
   add_index "games", ["creator_id"], :name => "fki_creator_id"
@@ -61,11 +66,15 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
 
   create_table "stats", :force => true do |t|
     t.integer  "winners_id"
-    t.integer  "money_earned"
-    t.integer  "games_won"
-    t.integer  "games_played"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "money_earned",          :default => 0
+    t.integer  "games_won",             :default => 0
+    t.integer  "games_played",          :default => 0
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.integer  "first_place_finishes",  :default => 0
+    t.integer  "second_place_finishes", :default => 0
+    t.integer  "third_place_finishes",  :default => 0
+    t.integer  "losses",                :default => 0
   end
 
   add_index "stats", ["winners_id"], :name => "fki_winners_id"
@@ -74,10 +83,15 @@ ActiveRecord::Schema.define(:version => 20121019194134) do
     t.text     "email"
     t.string   "crypted_password"
     t.string   "salt"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.text     "first_name"
     t.text     "last_name"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_token_expires_at"
+    t.datetime "reset_password_email_sent_at"
   end
+
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token"
 
 end

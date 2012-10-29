@@ -2,11 +2,13 @@
 # The default is nothing which will include only core features (password encryption, login/logout).
 # Available submodules are: :user_activation, :http_basic_auth, :remember_me,
 # :reset_password, :session_timeout, :brute_force_protection, :activity_logging, :external
-Rails.application.config.sorcery.submodules = []
+Rails.application.config.sorcery.submodules = [:reset_password]
 
 # Here you can configure each submodule's features.
 Rails.application.config.sorcery.configure do |config|
   # -- core --
+
+
   # What controller action to call for non-authenticated users. You can also
   # override the 'not_authenticated' method of course.
   # Default: `:not_authenticated`
@@ -120,6 +122,9 @@ Rails.application.config.sorcery.configure do |config|
     # Default: `[:username]`
     #
     user.username_attribute_names = :email
+
+    user.reset_password_mailer = UserMailer  
+    user.reset_password_email_method_name = :reset_password_email
 
 
     # change *virtual* password attribute, the one which is used until an encrypted one is generated.
@@ -250,7 +255,7 @@ Rails.application.config.sorcery.configure do |config|
     # reset password code attribute name.
     # Default: `:reset_password_token`
     #
-    # user.reset_password_token_attribute_name =
+    #user.reset_password_token_attribute_name =
 
 
     # expires at attribute name.
@@ -268,13 +273,13 @@ Rails.application.config.sorcery.configure do |config|
     # mailer class. Needed.
     # Default: `nil`
     #
-    # user.reset_password_mailer =
+     user.reset_password_mailer = UserMailer
 
 
     # reset password email method on your mailer class.
     # Default: `:reset_password_email`
     #
-    # user.reset_password_email_method_name =
+     user.reset_password_email_method_name = :reset_password_email
 
 
     # when true sorcery will not automatically
@@ -282,7 +287,7 @@ Rails.application.config.sorcery.configure do |config|
     # manually handle how and when email is sent
     # Default: `false`
     #
-    # user.reset_password_mailer_disabled =
+    #user.reset_password_mailer_disabled = true
 
 
     # how many seconds before the reset request expires. nil for never expires.
@@ -395,4 +400,15 @@ Rails.application.config.sorcery.configure do |config|
   # This line must come after the 'user config' block.
   # Define which model authenticates with sorcery.
   config.user_class = "User"
+end
+
+module Sorcery
+  module Model
+    module InstanceMethods
+      def generic_send_email(method, mailer)
+        config = sorcery_config
+        mail = config.send(mailer).delay.send(config.send(method), self)
+      end
+    end
+  end
 end

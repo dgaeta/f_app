@@ -75,7 +75,9 @@ class GamesController < ApplicationController
     @false_string = "false"
 
     if diff <= 0 
-      then render(:json => @true_string )
+      then 
+      render(:json => @true_string )
+
      else 
       render(:json => @false_string)
     end
@@ -86,12 +88,16 @@ class GamesController < ApplicationController
     players = players[0]
 
     true_string = "true"
-    false_string = "false"
+    false_string = "false. Sorry, you need at least 5 players to start the game."
 
     if players >= 5 
-      then render(:json => true_string)
+      then
+      game = Game.where(:id => params[:game_id]).first
+      game.is_private = true
+      game.save 
+      render(:json => true_string)
      else 
-        render(:json => false_string)
+        render(:json => @false_string)
     end
   end
 
@@ -237,5 +243,20 @@ def winners_and_losers
 
     render(:json => @game)
   end
-    
+
+  def countdown
+    game_end_date = Game.where(:id => params[:game_id]).pluck(:game_end_date)
+    game_end_date = game_end_date[0]
+    game_start_date = Game.where(:id => params[:game_id]).pluck(:game_start_date)
+    game_start_date = game_start_date[0]
+
+
+     days_remaining = (game_end_date - game_start_date)
+     days_remaining = days_remaining / 24 
+     days_remaining = days_remaining / 60 
+     days_remaining = days_remaining / 60
+     days_remaining = days_remaining.round
+  
+    render(json: days_remaining)
+  end
 end

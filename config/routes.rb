@@ -1,4 +1,10 @@
 FApp::Application.routes.draw do
+  get "password_resets/create"
+
+  get "password_resets/edit"
+
+  get "password_resets/update"
+
   resources :stats
 
   resources :game_members
@@ -12,6 +18,8 @@ FApp::Application.routes.draw do
   resources :sessions
 
   resources :users
+
+  resources :password_resets
 
  get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
@@ -34,6 +42,7 @@ FApp::Application.routes.draw do
   get "can_game_start_players" => "games#can_game_start_players", :as => "can_game_start_players"
   get "can_game_end" => "games#can_game_end", :as => "can_game_end"
   get "game_comments" => "comments#game_comments", :as => "game_comments"
+  get "countdown" => "games#countdown", :as => "countdown"
 
 
 
