@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
   authenticates_with_sorcery!
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation
 
-  validates_confirmation_of :password
-  validates :password, :presence => :true, :length => { :minimum => 6 }, :on => :create
+  validates :password_confirmation, :presence => :true
+  validates :password, :presence => :true, :length => { :minimum => 6 }, :on => :create, :confirmation => :true
   validates :email, :presence => :true, :uniqueness => true, :length => { :minimum => 6}, :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
   validates_presence_of :first_name
   validates_presence_of :last_name
