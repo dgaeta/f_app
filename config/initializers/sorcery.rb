@@ -123,8 +123,8 @@ Rails.application.config.sorcery.configure do |config|
     #
     user.username_attribute_names = :email
 
-    user.reset_password_mailer = UserMailer  
-    user.reset_password_email_method_name = :reset_password_email
+    #user.reset_password_mailer = UserMailer  
+    #user.reset_password_email_method_name = :reset_password_email
 
 
     # change *virtual* password attribute, the one which is used until an encrypted one is generated.
