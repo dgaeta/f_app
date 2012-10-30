@@ -30,8 +30,8 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
     @user = User.new
 
    respond_to do |format|
-      #format.html # new.html.erb
-      #format.json { render json: @user }
+      format.html # new.html.erb
+      format.json { render json: @user }
    end
 
   end
