@@ -29,11 +29,11 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
   def new
     @user = User.new
 
-    #respond_to do |format|
+   respond_to do |format|
       #format.html # new.html.erb
       #format.json { render json: @user }
-   # end
-   render(json: @user)
+   end
+
   end
 
   # GET /users/1/edit
