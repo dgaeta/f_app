@@ -92,8 +92,9 @@ class CommentsController < ApplicationController
       puts  member.comments.message
       puts  member.comments.stamp
     end
-=end
 
+ 
     render(:json => @game_member_comments)
   end
+=end
 end
