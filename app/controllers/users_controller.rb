@@ -45,16 +45,15 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
   def create
     @user = User.new(params[:user])
 
-    respond_to do |format|
+    true_string = "success"
+    failure_string = "failure"
+
+    
       if @user.save
-        #UserMailer.welcome_email(@user).deliver
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render json: @user, status: :created, location: @user }
+        render( json: true_string)
       else
-        format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        render( json: failure_string)
       end
-    end
   end
 
   # PUT /users/1
