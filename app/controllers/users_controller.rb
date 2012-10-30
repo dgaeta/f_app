@@ -49,13 +49,14 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
     true_string = "success"
     failure_string = "failure"
 
-    
+    respond_to do |format|
       if @user.save
         render( json: true_string)
       else
         format.html { render action: "new" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   # PUT /users/1
