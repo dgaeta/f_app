@@ -82,45 +82,17 @@ class CommentsController < ApplicationController
     end
   end
 
-=begin  def gamecomments
 
-    # GET /gamecomments/1
-    # GET /gamecomments/1.json
-    @comment = Comment.find(params[:from_id])
-    @comment_step2 = @comment_step1.find("game_member_id = ?", params[:league_id])
-    
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @comment }
+=begin  def game_comments 
+   all_comments = GameMember.includes(:user, :comments).each do |member|
+      puts  member.user.id
+      puts  member.user.first_name
+      puts  member.user.last_name
+      puts  member.comments.message
+      puts  member.comments.stamp
     end
-  end
 =end
-
-  def game_comments 
-    game_members = GameMember.where(:game_id => params[:game_id]).pluck(:id)
-    number_of_players = game_members.count
-
-    
-    @user = User.first
-    @user.game_members.collect { |u| u.comments }
-
-    @game = Game.first
-    @game.game_members.collect { |g| g.comments }
- 
-
-      @i = 0
-        @num = number_of_players
-
-      while @i < @num  do
-      game_member_id = game_members[@i]
-      user_id = GameMember.where(:id => game_member_id).pluck(:user_id)
-      name = User
-      player_stats.losses += 1
-      player_stats.save
-      @i +=1
-      end
-
 
     render(:json => @game_member_comments)
   end
