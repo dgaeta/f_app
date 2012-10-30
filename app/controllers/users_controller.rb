@@ -56,7 +56,6 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
         #format.html { render action: "new" }
         render(json: failure_string)
       end
-    end
   end
 
   # PUT /users/1
