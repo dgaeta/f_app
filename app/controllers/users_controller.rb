@@ -47,7 +47,7 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
 
     respond_to do |format|
       if @user.save
-        UserMailer.welcome_email(@user).deliver
+        #UserMailer.welcome_email(@user).deliver
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render json: @user, status: :created, location: @user }
       else
