@@ -121,7 +121,7 @@ Rails.application.config.sorcery.configure do |config|
     # specify username attributes, for example: [:username, :email].
     # Default: `[:username]`
     #
-    #user.username_attribute_names = :email
+    user.username_attribute_names = :email
 
     #user.reset_password_mailer = UserMailer  
     #user.reset_password_email_method_name = :reset_password_email
