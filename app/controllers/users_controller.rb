@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-  
   # GET /users
   # GET /users.json
   def index
@@ -44,18 +42,16 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
   def create
     @user = User.new(params[:user])
 
-    success_string = @user.id
-    failure_string = "error registering"
-
-   
+    respond_to do |format|
       if @user.save
         UserMailer.welcome_email(@user).deliver
-        #format.html { redirect_to @user, notice: 'User was successfully created.' }
-        render(json: success_string)  
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.json { render json: @user, status: :created, location: @user }
       else
-        #format.html { render action: "new" }
-        render(json: failure_string)
+        format.html { render action: "new" }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   # PUT /users/1
