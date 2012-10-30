@@ -29,11 +29,10 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
   def new
     @user = User.new
 
-   respond_to do |format|
+    respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }
-   end
-
+    end
   end
 
   # GET /users/1/edit
@@ -46,12 +45,11 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
   def create
     @user = User.new(params[:user])
 
-    true_string = "success"
-    failure_string = "failure"
-
     respond_to do |format|
       if @user.save
-        render( json: true_string)
+        #UserMailer.welcome_email(@user).deliver
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
