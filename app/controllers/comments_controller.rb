@@ -98,17 +98,29 @@ class CommentsController < ApplicationController
 =end
 
   def game_comments 
-    @game_member_comments= GameMember.includes(:comments).where(:game_id => params[:game_id])
+    game_members = GameMember.where(:game_id => params[:game_id]).pluck(:id)
+    number_of_players = game_members.count
 
+    
+    @user = User.first
+    @user.game_members.collect { |u| u.comments }
 
+    @game = Game.first
+    @game.game_members.collect { |g| g.comments }
+ 
 
+      @i = 0
+        @num = number_of_players
 
-    @game_member_comments= @game_member_comments.map do |game_member|
-      {:_game_memberid => game_member.id,
-      :comment_id => game_member.comments.id,
-      :message => member.comments.message,
-      :stamp => member.comments.stamp}
-    end
+      while @i < @num  do
+      game_member_id = game_members[@i]
+      user_id = GameMember.where(:id => game_member_id).pluck(:user_id)
+      name = User
+      player_stats.losses += 1
+      player_stats.save
+      @i +=1
+      end
+
 
     render(:json => @game_member_comments)
   end
