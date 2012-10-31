@@ -51,11 +51,11 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
 
     respond_to do |format|
       if @user.save
-        #UserMailer.welcome_email(@user).deliver
+        UserMailer.welcome_email(@user).deliver
         format.json { render json: success_string, status: :created }
         format.html { redirect_to @user, notice: 'User was successfully created.' }  
       else
-        format.json { render json: , status: :unprocessable_entity }
+        format.json { render json: failure_string , status: :unprocessable_entity }
         format.html { render action: "new" }
       end
     end
