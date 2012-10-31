@@ -84,8 +84,16 @@ class GameMembersController < ApplicationController
   def number_of_players 
     number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     
+    if number_of_players == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :number_of_players => number_of_players }
+        render(json: JSON.pretty_generate(true_json))
+    end
 
-    render(:json => number_of_players.count)
+   
   end
 
  
@@ -105,19 +113,18 @@ class GameMembersController < ApplicationController
     @calendar_day_now = Time.now.to_date
     @calendar_day_now = @calendar_day_now.mday
 
-    @failure_same_day_string = "Sorry buddy, you can only checkin once per calendar day. Get em' next time!"
-    @success_checkin_string = "Awesome, you checked in. Go kick some butt!"
-
   
     if (@last_checkin == @calendar_day_now) or (@last_checkin_cday == @calendar_day_now)
       then 
-       render(json: @failure_same_day_string)
+       false_json = { :status => "fail."} 
+       render(json: JSON.pretty_generate(false_json))
       else
       @game_member = GameMember.where(:id => params[:game_member_id]).first #find the current user and then bring him and his whole data down from the cloud
       @game_member.checkins = Time.now.to_i
       @game_member.save
       Comment.new(:game_member_id => params[:game_member_id] , :message => "Checked in at the GYM" , :stamp => Time.now)
-      render(json: @success_checkin_string )
+      true_json =  { :status => "okay"}
+      render(json: JSON.pretty_generate(true_json))
     end
   end
 
@@ -140,9 +147,11 @@ class GameMembersController < ApplicationController
         if total_minutes_at_gym > 2700 
           @game_member.successful_checks += 1
           @game_member.save
-           render(json: @game_member) 
+           true_json =  { :status => "okay"}
+           render(json: JSON.pretty_generate(true_json))
         else
-          render(json: @game_member)
+          false_json = { :status => "fail."} 
+          render(json: JSON.pretty_generate(false_json))
         end
   end
 
@@ -174,7 +183,14 @@ class GameMembersController < ApplicationController
     stakes = number_of_players*wager
 
     
-    render(:json => stakes)
+    if stakes == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :stakes => stakes }
+        render(json: JSON.pretty_generate(true_json))
+    end
   end
 
   def join_game

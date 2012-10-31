@@ -90,6 +90,14 @@ class StatsController < ApplicationController
       :games_won => member.games_won}
     end
 
-    render(:json => user_stats)
+    if user_stats == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :user_stats => user_stats }
+        render(json: JSON.pretty_generate(true_json))
+    end
   end
+  
 end
