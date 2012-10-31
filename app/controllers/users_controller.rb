@@ -52,7 +52,7 @@ require 'json'
 
     respond_to do |format|
       if @user.save
-        true_json = { { :status => "okay"} , :id => @user.id } 
+        true_json = { [{ :status => "okay"}] , :id => @user.id } 
         UserMailer.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to @user, notice: 'User was successfully created.' }  
