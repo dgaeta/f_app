@@ -46,17 +46,18 @@ require 'json'
   def create
     @user = User.new(params[:user])
 
-    success_string = "success"
-    failure_string = "failure"
-     true_json = { :status => "user created"} 
-     false_json = { :status => "creation failed. Try a different email."} 
+   
+     
+     
 
     respond_to do |format|
       if @user.save
+        true_json = { { :status => "okay"} , :id => @user.id } 
         UserMailer.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to @user, notice: 'User was successfully created.' }  
       else
+        false_json = { :status => "fail."} 
         format.json { render json: JSON.pretty_generate(false_json) }
         format.html { render action: "new" }
       end
