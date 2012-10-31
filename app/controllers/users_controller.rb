@@ -48,8 +48,8 @@ require 'json'
 
     success_string = "success"
     failure_string = "failure"
-     true_json = { :success => "user created"} 
-     false_json = { :failure => "creation failed. Try a different email."} 
+     true_json = { :status => "user created"} 
+     false_json = { :status => "creation failed. Try a different email."} 
 
     respond_to do |format|
       if @user.save
