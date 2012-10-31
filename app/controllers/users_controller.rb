@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-
+require 'json'
 
   # GET /users
   # GET /users.json
@@ -48,14 +48,16 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
 
     success_string = "success"
     failure_string = "failure"
+     true_json = { :success => "user created"} 
+     false_json = { :failure => "creation failed. Try a different email."} 
 
     respond_to do |format|
       if @user.save
         UserMailer.welcome_email(@user).deliver
-        format.json { render json: success_string, status: :created }
+        format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to @user, notice: 'User was successfully created.' }  
       else
-        format.json { render json: failure_string , status: :unprocessable_entity }
+        format.json { render json: JSON.pretty_generate(false_json) }
         format.html { render action: "new" }
       end
     end
