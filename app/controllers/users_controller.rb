@@ -87,10 +87,10 @@ skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.f
 
   def deploy_receive      
     @user = User.new(params[:fault])
-    if @activity.save
+    if @user.save
         render json: @user
     else
-        @activity = "error"
+        @user = "error"
         render json: @user
     end
   end
