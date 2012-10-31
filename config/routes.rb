@@ -44,6 +44,8 @@ FApp::Application.routes.draw do
   get "game_comments" => "comments#game_comments", :as => "game_comments"
   get "countdown" => "games#countdown", :as => "countdown"
 
+  match '/api/users' => 'users#deploy_receive', :via => [:post]
+
 
 
 
