@@ -45,11 +45,13 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        true_json =  { :status => "okay", :comment_id => @comment.id }
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render json: @comment, status: :created, location: @comment }
+        format.json { render json: JSON.pretty_generate(true_json) }
       else
+        false_json = { :status => "fail.", :errors => @comment.errors} 
         format.html { render action: "new" }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        ormat.json { render json: JSON.pretty_generate(false_json) }
       end
     end
   end

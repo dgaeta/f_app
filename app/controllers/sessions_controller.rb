@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+  class SessionsController < ApplicationController
    # GET /sessions
   # GET /sessions.json
   def index
@@ -46,12 +46,15 @@ class SessionsController < ApplicationController
 
     respond_to do |format|
       if user
-      redirect_back_or_to root_url, :notice => "Logged in!"
+        true_json =  { :status => "okay"}
+        redirect_back_or_to root_url, :notice => "Logged in!"
         format.html {  'login successful' }
-        format.json {  :created }
+        format.json { render json: JSON.pretty_generate(true_json) }
       else
+        false_json = { :status => "fail." } 
         format.html { render action: "new" }
-        format.json { render json: @session.errors, status: :unprocessable_entity }
+        format.json { render json: JSON.pretty_generate(false_json) }
+
       end
     end
   end

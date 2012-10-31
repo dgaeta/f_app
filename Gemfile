@@ -37,6 +37,7 @@ end
  gem 'yajl-ruby'
 gem 'pry-rails', :group => :development
 gem "time_diff", "~> 0.2.2"
+gem 'thin'
 
 
 

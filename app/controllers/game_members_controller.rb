@@ -170,8 +170,15 @@ class GameMembersController < ApplicationController
       :successful_checks => member.successful_checks}
     end
 
-
-    render(:json => leaderboard_stats) #+ @leaderboard_last_name + @leaderboard_first_name)
+    if leaderboard_stats == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :leaderboard => leaderboard_stats }
+        render(json: JSON.pretty_generate(true_json))
+    end
+   
   end
 
   def stakes

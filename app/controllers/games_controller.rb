@@ -71,15 +71,17 @@ class GamesController < ApplicationController
 
     diff = start - time_now
 
-    @true_string = "true"
-    @false_string = "false"
 
-    if diff <= 0 
-      then 
-      render(:json => @true_string )
-
-     else 
-      render(:json => @false_string)
+    respond_to do |format|
+      if  diff <= 0
+        #format.html { redirect_to @game, notice: 'Game was successfully created.' }
+        true_json =  { :status => "okay"}
+        format.json { render json: JSON.pretty_generate(true_json) }
+       else
+        #format.html { render action: "new" }
+        false_json = { :status => "fail."} 
+        format.json { render json: JSON.pretty_generate(false_json) }
+      end
     end
   end
 
@@ -87,17 +89,21 @@ class GamesController < ApplicationController
     players = Game.where(:id => params[:game_id]).pluck(:players)
     players = players[0]
 
-    true_string = "true"
-    false_string = "false. Sorry, you need at least 5 players to start the game."
 
+    respond_to do |format|
     if players >= 5 
-      then
+    then
       game = Game.where(:id => params[:game_id]).first
       game.is_private = true
       game.save 
-      render(:json => true_string)
+      true_json =  { :status => "okay"}
+      format.json { render json: JSON.pretty_generate(true_json) }
+      #format.html { redirect_to @game, notice: 'Game was successfully created.' }
      else 
-        render(:json => @false_string)
+      false_json = { :status => "fail."} 
+      format.json { render json: JSON.pretty_generate(false_json) }
+      #format.html { }
+      end
     end
   end
 
@@ -111,16 +117,14 @@ class GamesController < ApplicationController
 
     diff = time_now - end_date
 
-    true_string = "true"
-    false_string = "false"
-
-    if diff >= 0 
+    respond_to do |format|
+      if diff >= 0 
       then 
       players =GameMember.where(:game_id => game_id).pluck(:user_id)
       number_of_players = players.count  
 
-        @i = 0
-        @num = number_of_players
+      @i = 0
+      @num = number_of_players
 
       while @i < @num  do
       player = players[@i]
@@ -129,9 +133,12 @@ class GamesController < ApplicationController
       player_stats.save
       @i +=1
       end
-      render(:json => true_string )
+      true_json =  { :status => "okay"}
+      format.json { render json: JSON.pretty_generate(true_json) }
      else 
-      render(:json => false_string)
+      false_json = { :status => "fail."} 
+      format.json { render json: JSON.pretty_generate(false_json) }
+      end
     end
   end
 
@@ -177,9 +184,17 @@ class GamesController < ApplicationController
      variable2 = variable2.to_i
      @game.game_end_date = variable2
     
-    message = "You created a game. Next steps => Get some rest. Listen to some tunes. Invite friends to your game."
-
-    render(:json => message)
+     respond_to do |format|
+      if @game.save
+        true_json =  { :status => "okay", :game_id => @game.id }
+        format.json { render json: JSON.pretty_generate(true_json) }
+        format.html { redirect_to @game, notice: 'Game was successfully created.' }
+      else
+        false_json = { :status => "fail.", :errors => @game.errors } 
+        format.json { render json: JSON.pretty_generate(false_json) }
+        format.html { render action: "new" }
+      end
+    end
   end
 
   def public_games
@@ -193,8 +208,15 @@ class GamesController < ApplicationController
       :stakes => game.stakes}
     end
 
-    render(:json => public_games)
 
+    if public_games == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :public_games => public_games }
+        render(json: JSON.pretty_generate(true_json))
+    end
   end
 
 def winners_and_losers
@@ -251,7 +273,14 @@ def winners_and_losers
     third.third_place_finishes += 1
     third.save
 
-    render(json: leaderboard_stats)
+     if public_games == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :leaderboard_stats => leaderboard_stats }
+        render(json: JSON.pretty_generate(true_json))
+    end
 
   end 
 
@@ -276,12 +305,17 @@ def winners_and_losers
     @game = Game.where(:id => params[:game_id]).first
     @game.update_attributes(:stakes => new_stakes)
     @game.update_attributes(:players  => new_total_players)
-    #@game.save
 
-    message = "You joined a game. Loading Motivation and Good Times..."
-
-
-    render(:json => @game)
+    if @game.save
+      then 
+        true_json =  { :status => "okay" , :joined_game => @game.id }
+        render(json: JSON.pretty_generate(true_json))
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
   end
 
   def countdown
@@ -297,6 +331,13 @@ def winners_and_losers
      days_remaining = days_remaining / 60
      days_remaining = days_remaining.round
   
-    render(json: days_remaining)
+    if days_remaining == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :days_remaining => days_remaining }
+        render(json: JSON.pretty_generate(true_json))
+    end
   end
 end
