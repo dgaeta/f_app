@@ -109,6 +109,7 @@ class GamesController < ApplicationController
 
 
   def can_game_end 
+    Stripe.api_key = @stripe_api_key
     game_id = params[:game_id]
     end_date = Game.where( :id => game_id).pluck(:game_end_date)
     end_date = end_date[0]
@@ -119,20 +120,73 @@ class GamesController < ApplicationController
 
     respond_to do |format|
       if diff >= 0 
-      then 
-      players =GameMember.where(:game_id => game_id).pluck(:user_id)
-      number_of_players = players.count  
+        then 
+        players = GameMember.where(:game_id => game_id).pluck(:user_id)
+        number_of_players = players.count  
 
-      @i = 0
-      @num = number_of_players
+        @i = 0
+        @num = number_of_players 
 
-      while @i < @num  do
-      player = players[@i]
-      player_stats = Stat.where(:winners_id => player).first
-      player_stats.losses += 1
-      player_stats.save
-      @i +=1
-      end
+        while @i < @num  do
+        player = players[@i]
+        player_stats = Stat.where(:winners_id => player).first
+        player_stats.losses += 1
+        player_stats.save
+        @i +=1
+        end
+
+        ################################# STRIPE BEGIN  #############################################################################
+         #CHARGE THE LOSERS
+         
+         @losers = 3
+
+         while @losers < @num  do
+          user = players[@losers]
+          user = User.find(user)
+          loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
+           game = Game.where(:id => game_id).first
+           amount_charged = (game.wager * 100) 
+          
+           Stripe::Charge.create(
+               :amount => amount_charged, # (example: 1000 is $10)
+               :currency => "usd",
+               :customer => loser_customer_id)
+
+           UserMailer.notify_loser(user).deliver
+           
+           @losers +=1
+         end
+
+         # PAY THE WINNERS
+         winner1 = User.find(players[0])
+         winner2 = User.find(players[1])
+         winner3 = User.find(players[2])
+      
+
+         # define the payout amounts
+         @first_place_percentage = 0.50
+         @second_place_percentage = 0.20
+         @third_place_percentage = 0.15
+         @fitsby_percentage = 0.15
+
+         stakes = Game.where(:id => game_id ).pluck(:stakes).first
+         winner1_money_won = (stakes * @first_place_percentage)
+         winner2_money_won = (stakes * @second_place_percentage)
+         winner3_money_won = (stakes * @third_place_percentage)
+         fitsby_money_won = (stakes * @fitsby_percentage)
+
+
+         UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
+
+         UserMailer.congratulate_winner2(winner2, winner2_money_won).deliver
+
+         UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
+
+         UserMailer.email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won,
+         winner3, winner3_money_won, fitsby_money_won ).deliver 
+        ############################# END STRIPE ##########################################################################################
+
+
       true_json =  { :status => "okay"}
       format.json { render json: JSON.pretty_generate(true_json) }
      else 

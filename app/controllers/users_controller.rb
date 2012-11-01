@@ -98,6 +98,27 @@ require 'json'
     end
   end
 
-  
 
+
+  def get_and_save_stripe_info
+    Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
+
+    user = User.where(:id => params[:id]).first
+    user_email = user.email
+
+    # get the credit card details submitted by Android
+    credit_card_number = params[:credit_card_number]
+    credit_card_exp_month = params[:credit_card_exp_month]
+    credit_card_exp_year = params[:credit_card_exp_year]
+    credit_card_cvc = params[:credit_card_cvc]
+    
+    # create a Customer
+    customer = Stripe::Customer.create(
+      :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+      :email => user_email ) 
+
+    # Now, make a stripe column for database table 'users'
+    # save the customer ID in your database so you can use it later
+    user.update_attributes(:customer_id => customer.id)
+  end
 end

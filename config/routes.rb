@@ -44,7 +44,10 @@ FApp::Application.routes.draw do
   get "game_comments" => "comments#game_comments", :as => "game_comments"
   get "countdown" => "games#countdown", :as => "countdown"
 
-  match '/api/users' => 'users#deploy_receive', :via => [:post]
+  #stripe route
+  get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
+
+
 
 
 

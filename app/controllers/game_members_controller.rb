@@ -1,4 +1,6 @@
 class GameMembersController < ApplicationController
+
+
   # GET /game_members
   # GET /game_members.json
   def index
