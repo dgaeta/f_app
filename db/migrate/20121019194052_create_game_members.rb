@@ -6,6 +6,9 @@ class CreateGameMembers < ActiveRecord::Migration
       t.integer :checkins
       t.integer :checkouts
       t.integer :successful_checks
+      t.integer :final_standing
+      t.integer :daily_checkins
+      t.integer :total_minutes_at_gym
 
       t.timestamps
     end

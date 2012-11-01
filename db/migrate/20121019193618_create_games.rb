@@ -7,6 +7,8 @@ class CreateGames < ActiveRecord::Migration
       t.integer :wager
       t.integer :players
       t.integer :stakes
+      t.integer :game_end_date
+      t.integer :game_start_date
 
       t.timestamps
     end
