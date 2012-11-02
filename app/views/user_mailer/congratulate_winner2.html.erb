@@ -4,11 +4,19 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>Hey, <%= @user.first_name %> congrats on winning!</h1>
     <p>
-     You won the 2nd place prize of <%= @winner2_money_won %>   
+      Hey <%= @user.first_name %>,
+      <br/><br/>
+      Congrats on winning your game of Fitsby! You earned the 2nd place prize of $<%= @winner2_money_won %>. We sent you the money via PayPal. If you have a PayPal account registered with the email of <%= @user.email %>  the money will be in your account. If you don't have a PayPal account with the email of <%= @user.email %> you can create a free PayPal account using that email and once you are successfully registered, the money will be waiting for you in your account.
+      <br/><br/>
+      We hope to have helped you stay motivated to hit the gym. Keep up the good work!
+      <br/><br/>
+      If you have any questions, comments, or concerns, you can reach us at <a href="mailto:team@fitsby.com">team@fitsby.com</a>.
+      <br/><br/>
+      All the best,
+      <br/><br/>
+      Danny, Brent, and Kevin<br/>
+      The Fitsby Team
     </p>
-   
-    <p>Thanks for joining and have a great day!</p>
   </body>
 </html>

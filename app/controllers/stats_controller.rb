@@ -84,18 +84,16 @@ class StatsController < ApplicationController
   def user_stats
     user_stats = Stat.includes(:user).where(:winners_id => params[:user_id])
 
-    user_stats = user_stats.map do |member|
-      {:money_earned => member.money_earned,
-      :games_played => member.games_played,
-      :games_won => member.games_won}
-    end
+    money_earned = user_stats[0].money_earned
+    games_played = user_stats[0].games_played
+    games_won = user_stats[0].games_won
 
     if user_stats == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :user_stats => user_stats }
+        true_json =  { :status => "okay" , :money_earned => money_earned, :games_played => games_played, :games_won => games_won}
         render(json: JSON.pretty_generate(true_json))
     end
   end
