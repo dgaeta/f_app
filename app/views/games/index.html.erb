@@ -2,7 +2,9 @@
 
 <table>
   <tr>
+    <th>Game Id</th>
     <th>Creator</th>
+    <th>Creator First Name</th>
     <th>Is private</th>
     <th>Duration</th>
     <th>Wager</th>
@@ -13,7 +15,9 @@
 
 <% @games.each do |game| %>
   <tr>
+    <td><%= game.id %></td>
     <td><%= game.creator_id %></td>
+    <td><%= game.creator_first_name %></td>
     <td><%= game.is_private %></td>
     <td><%= game.duration %></td>
     <td><%= game.wager %></td>

@@ -48,7 +48,10 @@
 
     respond_to do |format|
       if user
-        true_json =  { :status => "okay"}
+        first_name = user.first_name
+        last_name = user.last_name
+        email = user.email
+        true_json =  { :status => "okay", :first_name => first_name, :last_name => last_name, :email => email}
         redirect_back_or_to root_url, :notice => "Logged in!"
         format.html {  'login successful' }
         format.json { render json: JSON.pretty_generate(true_json) }

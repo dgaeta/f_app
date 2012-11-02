@@ -131,7 +131,8 @@ class GameMembersController < ApplicationController
       @game_member = GameMember.where(:id => params[:game_member_id]).first #find the current user and then bring him and his whole data down from the cloud
       @game_member.checkins = Time.now.to_i
       @game_member.save
-      Comment.new(:game_member_id => params[:game_member_id] , :message => "Checked in at the GYM" , :stamp => Time.now)
+      comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @game_member.game_id ,:message => "Checked in at the GYM" , :stamp => Time.now)
+      comment.save
       true_json =  { :status => "okay"}
       render(json: JSON.pretty_generate(true_json))
     end
@@ -234,7 +235,14 @@ class GameMembersController < ApplicationController
     message = "You joined a game. Loading Motivation and Good Times..."
 
 
-    render(:json => game)
+    if game.save 
+      then 
+        true_json =  { :status => "okay" , :joined_game => game.id }
+        render(json: JSON.pretty_generate(true_json))
+      else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
   end
 
 

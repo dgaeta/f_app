@@ -70,18 +70,7 @@ class CommentsController < ApplicationController
     end
   end
 
-=begin  def create_comment_to_all_games
-    @comment = Comment.new(params[:comment])
-    @comment.save
 
-    user_id = params[:user_id]
-
-    all_of_users_game_members = GameMember.where(:user_id => user_id).pluck(:game_id)
-=end
-
-
-
-  end
 
   # PUT /comments/1
   # PUT /comments/1.json

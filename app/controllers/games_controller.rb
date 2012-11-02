@@ -234,8 +234,10 @@ class GamesController < ApplicationController
 
 
   def create_game
-    Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
+    @game = Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
      :duration => params[:duration], :wager => params[:wager])
+    @game.save 
+    @game.creator_first_name = User.where(:id => params[:user_id]).pluck(:first_name).first
 
 
     variable = (Time.now + 3*24*60*60) #3 days after time now
@@ -400,4 +402,24 @@ def winners_and_losers
         render(json: JSON.pretty_generate(true_json))
     end
   end
+
+  def get_private_game_info
+    @search_results = Game.where(:id => params[:game_id], :creator_first_name => params[:creator_first_name]).first
+
+    if @search_results == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        game_id = @search_results.id
+        creator_first_name = @search_results.creator_first_name
+        players = @search_results.players
+        wager = @search_results.wager
+        stakes = @search_results.stakes
+        true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
+        :wager => wager, :stakes => stakes}
+        render(json: JSON.pretty_generate(true_json))
+    end
+  end
+
 end
