@@ -1,10 +1,12 @@
 class CreateComments < ActiveRecord::Migration
   def change
     create_table :comments do |t|
-      t.integer :game_member_id
       t.text :message
       t.time :stamp
-      
+      t.text :first_name
+      t.text :last_name 
+      t.integer :from_user_id
+      t.integer :from_game_id
 
       t.timestamps
     end

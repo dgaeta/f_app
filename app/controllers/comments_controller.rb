@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  before_filter :require_login
+
   # GET /comments
   # GET /comments.json
   def index
@@ -42,6 +44,18 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(params[:comment])
+    @comment.save
+
+    @game_id = @comment.from_game_id
+    @user_id = @comment.from_user_id
+
+    user = User.where(:id => @user_id).first
+    users_game_member_info = GameMember.where(:user_id => @user_id, :game_id => @game_id).first
+
+    @comment.first_name = user.first_name
+    @comment.last_name = user.last_name
+    @comment.from_game_id = users_game_member_info.game_id
+    @comment.save
 
     respond_to do |format|
       if @comment.save
@@ -54,6 +68,19 @@ class CommentsController < ApplicationController
         ormat.json { render json: JSON.pretty_generate(false_json) }
       end
     end
+  end
+
+=begin  def create_comment_to_all_games
+    @comment = Comment.new(params[:comment])
+    @comment.save
+
+    user_id = params[:user_id]
+
+    all_of_users_game_members = GameMember.where(:user_id => user_id).pluck(:game_id)
+=end
+
+
+
   end
 
   # PUT /comments/1
@@ -86,17 +113,25 @@ class CommentsController < ApplicationController
 
 
 
-=begin  def game_comments 
-   all_comments = GameMember.includes(:user, :comments).each do |member|
-      puts  member.user.id
-      puts  member.user.first_name
-      puts  member.user.last_name
-      puts  member.comments.message
-      puts  member.comments.stamp
-    end
+def game_comments 
+   all_comments = Comment.where(:from_game_id => params[:game_id]).order("stamp DESC")
 
- 
-    render(:json => @game_member_comments)
+   all_comments = all_comments.map do |comment|
+     {:user_id => comment.from_user_id,
+      :first_name => comment.first_name,
+      :last_name => comment.last_name,
+      :message => comment.message,
+      :stamp => comment.stamp}
+    end
+    
+    if all_comments == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :all_comments => all_comments }
+        render(json: JSON.pretty_generate(true_json))
+    end
   end
-=end
+
 end

@@ -1,4 +1,6 @@
   class SessionsController < ApplicationController
+
+
    # GET /sessions
   # GET /sessions.json
   def index
@@ -41,7 +43,7 @@
   # POST /sessions.json
   def create
   
-    user = login(params[:email], params[:password])
+    user = login(params[:email], params[:password], params[:remember])
    
 
     respond_to do |format|
@@ -51,6 +53,7 @@
         format.html {  'login successful' }
         format.json { render json: JSON.pretty_generate(true_json) }
       else
+        flash.now.alert = "Email or password was invalid"
         false_json = { :status => "fail." } 
         format.html { render action: "new" }
         format.json { render json: JSON.pretty_generate(false_json) }
@@ -82,8 +85,10 @@
     
 
     respond_to do |format|
-      format.html { redirect_to sessions_url }
-      format.json { head :no_content }
+      true_json =  { :status => "okay"}
+        redirect_back_or_to root_url, :notice => "Logged out!"
+        format.html {  'logout successful' }
+        format.json { render json: JSON.pretty_generate(true_json) }
     end
   end
 end

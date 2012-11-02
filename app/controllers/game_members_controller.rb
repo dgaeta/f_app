@@ -1,4 +1,5 @@
 class GameMembersController < ApplicationController
+  before_filter :require_login
 
 
   # GET /game_members
@@ -43,6 +44,12 @@ class GameMembersController < ApplicationController
   # POST /game_members.json
   def create
     @game_member = GameMember.new(params[:game_member])
+    @game_member.save
+
+    @game = Game.where(:id => @game_member.game_id).first
+    @game.players += 1
+    @game.stakes += @game.stakes
+    @game.save
 
     respond_to do |format|
       if @game_member.save

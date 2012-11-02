@@ -45,13 +45,18 @@ require 'json'
   # POST /users.json
   def create
     @user = User.new(params[:user])
+    @user.save
+
+    stat = Stat.new(:winners_id => @user.id )
+    stat.save
 
     respond_to do |format|
       if @user.save
+        auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id }
         UserMailer.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
-        format.html { redirect_to @user, notice: 'User was successfully created.' }  
+        format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
         false_json = { :status => "fail."} 
         format.json { render json: JSON.pretty_generate(false_json) }

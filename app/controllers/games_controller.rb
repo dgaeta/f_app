@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  before_filter :require_login
+  
   # GET /games
   # GET /games.json
   def index
@@ -41,6 +43,11 @@ class GamesController < ApplicationController
   # POST /games.json
   def create
     @game = Game.new(params[:game])
+    @game.players = 1
+    @game.stakes = @game.wager
+    @game.save
+
+    GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
 
     variable = (Time.now + 3*24*60*60) #3 days after time now
     variable = variable.to_i
@@ -143,6 +150,7 @@ class GamesController < ApplicationController
          while @losers < @num  do
           user = players[@losers]
           user = User.find(user)
+          loser_checkins = GameMember.where(:user_id => user.id, :game_id => game_id).pluck(:successful_checks).first
           loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
            game = Game.where(:id => game_id).first
            amount_charged = (game.wager * 100) 
@@ -152,7 +160,7 @@ class GamesController < ApplicationController
                :currency => "usd",
                :customer => loser_customer_id)
 
-           UserMailer.notify_loser(user).deliver
+           UserMailer.notify_loser(user, amount_charged, loser_checkins).deliver
            
            @losers +=1
          end
@@ -364,8 +372,6 @@ def winners_and_losers
       then 
         true_json =  { :status => "okay" , :joined_game => @game.id }
         render(json: JSON.pretty_generate(true_json))
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
       else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
