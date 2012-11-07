@@ -58,14 +58,15 @@ class GamesController < ApplicationController
      @game.game_end_date = variable2
     
   
-
     respond_to do |format|
       if @game.save
+        true_json =  { :status => "okay" }
         format.html { redirect_to @game, notice: 'Game was successfully created.' }
-        format.json { render json: @game, status: :created, location: @game }
+        format.json { render json: JSON.pretty_generate(true_json) }
       else
+        false_json = { :status => "fail.", :errors => @user.errors }
         format.html { render action: "new" }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
+        format.json {render json: JSON.pretty_generate(false_json) }
       end
     end
   end
