@@ -84,12 +84,13 @@
   # DELETE /sessions/1
   # DELETE /sessions/1.json
   def destroy
-    logout
+    @session = Session.find(params[:id])
+    @session.destroy
     
 
     respond_to do |format|
       true_json =  { :status => "okay"}
-        redirect_back_or_to root_url, :notice => "Logged out!"
+        redirect_back_or_to @landing, :notice => "Logged out!"
         format.html {  'logout successful' }
         format.json { render json: JSON.pretty_generate(true_json) }
     end
