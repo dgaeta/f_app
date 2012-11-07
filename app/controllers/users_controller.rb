@@ -137,5 +137,14 @@ require 'json'
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
     user.update_attributes(:customer_id => customer.id)
+
+    if user.save
+      then 
+        true_json =  { :status => "okay" , :joined_game => game.id }
+        render(json: JSON.pretty_generate(true_json))
+      else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
   end
 end
