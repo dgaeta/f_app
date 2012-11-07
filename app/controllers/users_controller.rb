@@ -53,7 +53,7 @@ require 'json'
 
     respond_to do |format|
       if @user.save
-        gb = Gibbon.new
+        gb = Gibbon .new
         list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]    
         gb.list_subscribe(:id => list_id, :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
@@ -65,7 +65,7 @@ require 'json'
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
-        false_json = { :status => "fail."} 
+        false_json = { :status => "fail.", :errors => @user.errors } 
         format.json { render json: JSON.pretty_generate(false_json) }
         format.html { render action: "new" }
       end

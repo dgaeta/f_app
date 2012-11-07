@@ -57,7 +57,7 @@
         format.json { render json: JSON.pretty_generate(true_json) }
       else
         flash.now.alert = "Email or password was invalid"
-        false_json = { :status => "fail." } 
+        false_json = { :status => "fail.", :errors => @session.errors } 
         format.html { render action: "new" }
         format.json { render json: JSON.pretty_generate(false_json) }
 
