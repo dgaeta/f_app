@@ -63,11 +63,11 @@ require 'json'
           :email => @user.email }
         UserMailer.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
-        #format.html { redirect_to root_url, notice: 'User was successfully created.' }  
+        format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
         false_json = { :status => "fail.", :errors => @user.errors } 
         format.json { render json: JSON.pretty_generate(false_json) }
-        #format.html { render action: "new" }
+        format.html { render action: "new" }
       end
     end
   end
