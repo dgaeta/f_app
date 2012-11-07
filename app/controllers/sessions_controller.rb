@@ -30,7 +30,8 @@
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @session }
+      true_json =  { :status => "okay", :first_name => first_name, :last_name => last_name, :email => email}
+      format.json { render json: JSON.pretty_generate(true_json) }
     end
   end
 
