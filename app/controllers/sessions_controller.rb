@@ -84,8 +84,7 @@
   # DELETE /sessions/1
   # DELETE /sessions/1.json
   def destroy
-    @session = Session.find(params[:id])
-    @session.destroy
+    logout
     
 
     respond_to do |format|
