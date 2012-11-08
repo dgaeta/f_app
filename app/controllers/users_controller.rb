@@ -49,7 +49,7 @@ require 'json'
     @user.save
 
     stat = Stat.new(:winners_id => @user.id )
-    stat.save
+    stat.get_and_save_stripe_info
 
     respond_to do |format|
       if @user.save

@@ -29,9 +29,9 @@
     @session = Session.new
 
     respond_to do |format|
-      #format.html # new.html.erb
       format.json { render json: @session }
-    end
+      format.html # new.html.erb
+      end
   end
 
   # GET /sessions/1/edit
@@ -53,13 +53,13 @@
         email = user.email
         true_json =  { :status => "okay", :first_name => first_name, :last_name => last_name, :email => email}
         redirect_back_or_to root_url, :notice => "Logged in!"
-        #format.html {  'login successful' }
         format.json { render json: JSON.pretty_generate(true_json) }
+        format.html {  'login successful' }
       else
         flash.now.alert = "Email or password was invalid"
-        false_json = { :status => "fail.", :errors => @session.errors } 
-        #format.html { render action: "new" }
+        false_json = { :status => "fail." } 
         format.json { render json: JSON.pretty_generate(false_json) }
+         format.html { render action: "new" }
 
       end
     end
