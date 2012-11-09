@@ -53,6 +53,8 @@ FApp::Application.routes.draw do
   match "games#create_game" => "create_game#post"
   match "games#login_android" => "login_android#post"
 
+  match "login_android", :to => "sessions#login_android", :via => "post"
+
 
 
 
