@@ -237,6 +237,7 @@ class GamesController < ApplicationController
   def create_game
     @game = Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
      :duration => params[:duration], :wager => params[:wager])
+    @game.save
     @game.stakes = @game.wager
     @game.creator_id = params(:user_id)
     @game.creator_first_name = User.where(:id => params[:user_id]).pluck(:first_name).first
