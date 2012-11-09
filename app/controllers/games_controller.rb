@@ -407,11 +407,8 @@ def winners_and_losers
   def get_private_game_info
     @search_results = Game.where(:id => params[:game_id], :creator_first_name => params[:first_name_of_creator]).first
 
-    if @search_results == nil 
-      then 
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      else
+    unless @search_results == nil 
+      then
         game_id = @search_results.id
         creator_first_name = @search_results.creator_first_name
         players = @search_results.players
@@ -424,6 +421,9 @@ def winners_and_losers
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :start_date => start_date}
         render(json: JSON.pretty_generate(true_json))
+        else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
     end
   end
 
