@@ -106,7 +106,8 @@ def game_comments
    all_comments = Comment.where(:from_game_id => params[:game_id]).order("stamp DESC")
 
    all_comments = all_comments.map do |comment|
-     {:user_id => comment.from_user_id,
+     {:_id => comment.id,
+      :user_id => comment.from_user_id,
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
