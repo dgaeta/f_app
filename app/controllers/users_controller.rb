@@ -140,7 +140,7 @@ require 'json'
 
     if user.save || Stripe::CardError
       then 
-        true_json =  { :status => "okay" , :joined_game => game.id }
+        true_json =  { :status => "okay"  }
         render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail."} 
