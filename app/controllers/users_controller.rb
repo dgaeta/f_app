@@ -133,6 +133,7 @@ require 'json'
     customer = Stripe::Customer.create(
       :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
       :email => user_email ) 
+    user.update_attributes(:customer_id => customer.id)
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
@@ -142,7 +143,6 @@ require 'json'
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        user.update_attributes(:customer_id => customer.id)
         true_json =  { :status => "okay"  }
         render(json: JSON.pretty_generate(true_json))
     end
