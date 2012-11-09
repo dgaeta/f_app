@@ -58,6 +58,13 @@ FApp::Application.routes.draw do
   match "create_game", :to => "games#create_game", :via => "post"
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "join_game", :to => "games#join_game", :via => "post"
+  match "check_out_request", :to => "game_members#check_out_request", :via => "post"
+  match "check_in_request", :to => "game_members#check_in_request", :via => "post"
+  match "game_comments", :to => "comments#game_comments", :via => "get"
+  match "leaderboard", :to => "games#leaderboard", :via => "get"
+  match "number_of_players", :to => "game_members#number_of_players", :via => "get"
+  match "user_stats", :to => "stats#user_stats", :via => "get"
+
 
 
 
