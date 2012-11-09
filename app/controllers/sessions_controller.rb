@@ -100,20 +100,17 @@
 
      user = login(params[:email], params[:password], params[:remember])
 
-     respond_to do |format|
+   
       if user
         user = User.where(:email => params[:email]).first
         first_name = user.first_name
         last_name = user.last_name
         email = user.email
         true_json =  { :status => "okay", :first_name => first_name, :last_name => last_name, :email => email}
-        redirect_back_or_to root_url, :notice => "Logged in!"
-        format.json { render json: JSON.pretty_generate(true_json) }
+        render(json: JSON.pretty_generate(true_json))
       else
-        flash.now.alert = "Email or password was invalid"
         false_json = { :status => "fail." } 
-        format.json { render json: JSON.pretty_generate(false_json)}
+        render(json: JSON.pretty_generate(false_json))
       end
-    end
-  end
+ end
 end
