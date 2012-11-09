@@ -350,31 +350,31 @@ def winners_and_losers
 
   def join_game
     
-    if GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]) = nil
-    then
-    game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
-    game_member.save
-    
-    wager = Game.where(:id => params[:game_id]).pluck(:wager)
-    wager = wager[0].to_i
+    if GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first = nil
+      then
+      game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
+      game_member.save
+      
+      wager = Game.where(:id => params[:game_id]).pluck(:wager)
+      wager = wager[0].to_i
 
-    current_stakes = Game.where(:id => params[:game_id]).pluck(:stakes)
-    current_stakes = current_stakes[0].to_i
+      current_stakes = Game.where(:id => params[:game_id]).pluck(:stakes)
+      current_stakes = current_stakes[0].to_i
 
-    new_stakes = wager + current_stakes
+      new_stakes = wager + current_stakes
 
-    new_total_players = GameMember.where(:game_id => params[:game_id]).pluck(:game_id)
-    new_total_players = new_total_players.count
-    new_total_players += 1
+      new_total_players = GameMember.where(:game_id => params[:game_id]).pluck(:game_id)
+      new_total_players = new_total_players.count
+      new_total_players += 1
 
 
 
-    @game = Game.where(:id => params[:game_id]).first
-    @game.update_attributes(:stakes => new_stakes)
-    @game.update_attributes(:players  => new_total_players)
+      @game = Game.where(:id => params[:game_id]).first
+      @game.update_attributes(:stakes => new_stakes)
+      @game.update_attributes(:players  => new_total_players)
 
-        true_json =  { :status => "okay" }
-        render(json: JSON.pretty_generate(true_json))
+          true_json =  { :status => "okay" }
+          render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
