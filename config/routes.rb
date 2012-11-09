@@ -51,6 +51,7 @@ FApp::Application.routes.draw do
   get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
 
   match "create_game" => "create_game#post"
+  match "login_android" => "login_android#post"
 
 
 
