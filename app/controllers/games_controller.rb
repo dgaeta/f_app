@@ -349,7 +349,11 @@ def winners_and_losers
 
 
   def join_game
-    GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
+    
+    if GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]) = nil
+    then
+    game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
+    game_member.save
     
     wager = Game.where(:id => params[:game_id]).pluck(:wager)
     wager = wager[0].to_i
@@ -369,8 +373,6 @@ def winners_and_losers
     @game.update_attributes(:stakes => new_stakes)
     @game.update_attributes(:players  => new_total_players)
 
-    if @game.save
-      then 
         true_json =  { :status => "okay" }
         render(json: JSON.pretty_generate(true_json))
       else
