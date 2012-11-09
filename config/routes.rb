@@ -48,7 +48,7 @@ FApp::Application.routes.draw do
   get "login_android" => "sessions#login_android", :as => "login_android"
 
   #stripe route
-  get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info", :via => "post"
+  get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
 
   match "games#create_game" => "create_game#post"
   match "games#login_android" => "login_android#post"
@@ -56,6 +56,7 @@ FApp::Application.routes.draw do
   match "login_android", :to => "sessions#login_android", :via => "post"
   match "create_game", :to => "games#create_game", :via => "post"
   match "create_game", :to => "games#create_game", :via => "post"
+  match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
 
 
 
