@@ -237,7 +237,7 @@ class GamesController < ApplicationController
   def create_game
     @game = Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
      :duration => params[:duration], :wager => params[:wager])
-    #@game.save 
+    @game.save 
     @game.creator_first_name = User.where(:id => params[:user_id]).pluck(:first_name).first
 
 
@@ -248,31 +248,9 @@ class GamesController < ApplicationController
      variable2 = (Time.now + 17*24*60*60) #17 days after time now
      variable2 = variable2.to_i
      @game.game_end_date = variable2
-
-    Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
-
-    user = User.where(:id => params[:user_id]).first
-    user_email = user.email
-
-    # get the credit card details submitted by Android
-    credit_card_number = params[:credit_card_number]
-    credit_card_exp_month = params[:credit_card_exp_month]
-    credit_card_exp_year = params[:credit_card_exp_year]
-    credit_card_cvc = params[:credit_card_cvc]
-    
-    # create a Customer
-    customer = Stripe::Customer.create(
-      :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-      :email => user_email ) 
-
-    # Now, make a stripe column for database table 'users'
-    # save the customer ID in your database so you can use it later
-    user.update_attributes(:customer_id => customer.id)
-
     
      
-      if user.save
-        @game.save
+      if @game.save
         true_json =  { :status => "okay", :game_id => @game.id }
         render(json: JSON.pretty_generate(true_json) )
       else
