@@ -46,6 +46,8 @@ FApp::Application.routes.draw do
   get "countdown" => "games#countdown", :as => "countdown"
   get "get_private_game_info" => "games#get_private_game_info", :as => "get_private_game_info"
   get "login_android" => "sessions#login_android", :as => "login_android"
+  get "games_user_is_in" => "game_members#games_user_is_in", :as => "games_user_is_in"
+
 
   #stripe route
   get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"

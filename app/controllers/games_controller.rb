@@ -418,8 +418,11 @@ def winners_and_losers
         wager = @search_results.wager
         stakes = @search_results.stakes
         private_or_not = @search_results.is_private
+        start_date = @search_results.game_start_date
+        start_date =Date.new(start_date)
+        start_date = d.strftime('%a %b %d')
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
-        :wager => wager, :stakes => stakes, :is_private => private_or_not}
+        :wager => wager, :stakes => stakes, :is_private => private_or_not, :start_date => start_date}
         render(json: JSON.pretty_generate(true_json))
     end
   end
