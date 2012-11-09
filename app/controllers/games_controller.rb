@@ -240,7 +240,12 @@ class GamesController < ApplicationController
     @game.stakes = @game.wager
     @game.save
 
-    GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
+    gamemember = GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
+    gamemember.save
+    user = User.find(@game.creator_id)
+    c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
+      :message => user.first_name + "just joined the game", :from_game_id => @game.id)
+    c.save
 
     variable = (Time.now + 3*24*60*60) #3 days after time now
     variable = variable.to_i
@@ -372,6 +377,11 @@ def winners_and_losers
       @game = Game.where(:id => params[:game_id]).first
       @game.update_attributes(:stakes => new_stakes)
       @game.update_attributes(:players  => new_total_players)
+
+    user = User.find(game_member.user_id)
+    c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
+      :message => user.first_name + " just joined the game", :from_game_id => game_member.game_id)
+    c.save
 
           true_json =  { :status => "okay" }
           render(json: JSON.pretty_generate(true_json))

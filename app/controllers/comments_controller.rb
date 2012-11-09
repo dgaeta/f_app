@@ -123,4 +123,28 @@ def game_comments
     end
   end
 
+  def post_comment
+    @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message],
+     :from_game_id => :game_id)
+    @comment.save
+
+    @game_id = @comment.from_game_id
+    @user_id = @comment.from_user_id
+
+    user = User.where(:id => @user_id).first
+
+    @comment.first_name = user.first_name
+    @comment.last_name = user.last_name
+    @comment.save
+
+      if @comment.save
+        true_json =  { :status => "okay"}
+        render(json: JSON.pretty_generate(true_json))
+      else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json) )
+      end
+    end
+
+
 end

@@ -47,6 +47,7 @@ FApp::Application.routes.draw do
   get "get_private_game_info" => "games#get_private_game_info", :as => "get_private_game_info"
   get "login_android" => "sessions#login_android", :as => "login_android"
   get "games_user_is_in" => "game_members#games_user_is_in", :as => "games_user_is_in"
+  get "post_comment" => "comments#post_comment", :as => "post_comment"
 
 
   #stripe route
@@ -66,6 +67,7 @@ FApp::Application.routes.draw do
   match "leaderboard", :to => "games#leaderboard", :via => "get"
   match "number_of_players", :to => "game_members#number_of_players", :via => "get"
   match "user_stats", :to => "stats#user_stats", :via => "get"
+  match "post_comment", :to => "comments#post_comment", :via => "post"
 
 
 
