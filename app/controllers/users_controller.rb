@@ -120,7 +120,7 @@ require 'json'
   def get_and_save_stripe_info
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
-    user = User.where(:id => params[:id]).first
+    user = User.where(:id => params[:user_id]).first
     user_email = user.email
 
     # get the credit card details submitted by Android
