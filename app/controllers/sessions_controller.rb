@@ -97,7 +97,6 @@
 
   def login_android
     @session = Session.new
-    @session.save
 
      user = login(params[:email], params[:password], params[:remember])
 

@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_filter :require_login
+ 
 
   # GET /comments
   # GET /comments.json

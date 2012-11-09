@@ -1,5 +1,5 @@
 class GameMembersController < ApplicationController
-  before_filter :require_login
+
 
 
   # GET /game_members
