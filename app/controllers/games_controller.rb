@@ -249,15 +249,14 @@ class GamesController < ApplicationController
      variable2 = variable2.to_i
      @game.game_end_date = variable2
     
-     respond_to do |format|
+     
       if @game.save
         true_json =  { :status => "okay", :game_id => @game.id }
-        format.json { render json: JSON.pretty_generate(true_json) }
+        render(json: JSON.pretty_generate(true_json) )
       else
         false_json = { :status => "fail.", :errors => @game.errors } 
-        format.json { render json: JSON.pretty_generate(false_json) }
+        render(json: JSON.pretty_generate(false_json))
       end
-    end
   end
 
   def public_games

@@ -103,10 +103,11 @@
    
       if user
         user = User.where(:email => params[:email]).first
+        user_id = user.id
         first_name = user.first_name
         last_name = user.last_name
         email = user.email
-        true_json =  { :status => "okay", :first_name => first_name, :last_name => last_name, :email => email}
+        true_json =  { :status => "okay", :id => user_id, :first_name => first_name, :last_name => last_name, :email => email}
         render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail." } 
