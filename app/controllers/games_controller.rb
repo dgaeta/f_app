@@ -253,11 +253,9 @@ class GamesController < ApplicationController
       if @game.save
         true_json =  { :status => "okay", :game_id => @game.id }
         format.json { render json: JSON.pretty_generate(true_json) }
-        format.html { redirect_to @game, notice: 'Game was successfully created.' }
       else
         false_json = { :status => "fail.", :errors => @game.errors } 
         format.json { render json: JSON.pretty_generate(false_json) }
-        format.html { render action: "new" }
       end
     end
   end
