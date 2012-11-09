@@ -136,15 +136,15 @@ require 'json'
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
-    user.update_attributes(:customer_id => customer.id)
 
-    if user.save || Stripe::CardError
+    if Stripe::CardError
       then 
-        true_json =  { :status => "okay"  }
-        render(json: JSON.pretty_generate(true_json))
-      else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
+      else
+        user.update_attributes(:customer_id => customer.id)
+        true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
     end
   end
 end

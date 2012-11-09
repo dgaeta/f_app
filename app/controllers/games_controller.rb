@@ -237,17 +237,21 @@ class GamesController < ApplicationController
   def create_game
     @game = Game.create(:creator_id => params[:user_id], :is_private => params[:is_private],
      :duration => params[:duration], :wager => params[:wager])
-    @game.save 
+    @game.stakes = @game.wager
+    @game.creator_id = params(:user_id)
     @game.creator_first_name = User.where(:id => params[:user_id]).pluck(:first_name).first
+    @game.save 
 
 
     variable = (Time.now + 3*24*60*60) #3 days after time now
     variable = variable.to_i
     @game.game_start_date = variable
+    @game.save 
 
      variable2 = (Time.now + 17*24*60*60) #17 days after time now
      variable2 = variable2.to_i
      @game.game_end_date = variable2
+     @game.save 
     
      
       if @game.save
