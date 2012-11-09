@@ -138,7 +138,7 @@ require 'json'
     # save the customer ID in your database so you can use it later
     user.update_attributes(:customer_id => customer.id)
 
-    if user.save
+    if user.save || Stripe::CardError
       then 
         true_json =  { :status => "okay" , :joined_game => game.id }
         render(json: JSON.pretty_generate(true_json))
