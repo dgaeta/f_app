@@ -10,6 +10,7 @@ class CreateGames < ActiveRecord::Migration
       t.integer :game_end_date
       t.integer :game_start_date
       t.string  :creator_first_name
+      t.integer :game_initialized
 
       t.timestamps
     end
