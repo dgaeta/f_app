@@ -127,8 +127,9 @@ def game_comments
     @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message],
      :from_game_id => :game_id)
     @comment.save
+    @comment.from_game_id = params[:game_id]
+    @comment.save
 
-    @game_id = @comment.from_game_id
     @user_id = @comment.from_user_id
 
     user = User.where(:id => @user_id).first
