@@ -50,6 +50,8 @@ FApp::Application.routes.draw do
   #stripe route
   get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
 
+  match "create_game" => "create_game#post"
+
 
 
 
