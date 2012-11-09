@@ -11,6 +11,7 @@
     <div class="user_nav">
       <% if current_user %>
         Logged in as <%= current_user.email %>.
+        <%= link_to "All Users", index_path %>
         <%= link_to "Home", landings_path %>
         <%= link_to "Games", games_path %>
         <%= link_to "Newsfeed", comments_path %>
