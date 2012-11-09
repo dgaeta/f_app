@@ -350,7 +350,7 @@ def winners_and_losers
 
   def join_game
     
-    if GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first = nil
+    unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
       then
       game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
       game_member.save
