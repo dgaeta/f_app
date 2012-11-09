@@ -417,8 +417,9 @@ def winners_and_losers
         players = @search_results.players
         wager = @search_results.wager
         stakes = @search_results.stakes
+        private_or_not = @search_results.is_private
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
-        :wager => wager, :stakes => stakes}
+        :wager => wager, :stakes => stakes, :is_private => private_or_not}
         render(json: JSON.pretty_generate(true_json))
     end
   end
