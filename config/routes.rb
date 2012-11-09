@@ -57,6 +57,7 @@ FApp::Application.routes.draw do
   match "create_game", :to => "games#create_game", :via => "post"
   match "create_game", :to => "games#create_game", :via => "post"
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
+  match "join_game", :to => "games#join_game", :via => "post"
 
 
 
