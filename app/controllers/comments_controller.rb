@@ -128,6 +128,7 @@ def game_comments
      :from_game_id => :game_id)
     @comment.save
     @comment.from_game_id = params[:game_id]
+    @comment.stamp = Time.now
     @comment.save
 
     @user_id = @comment.from_user_id
