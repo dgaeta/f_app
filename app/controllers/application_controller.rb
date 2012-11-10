@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery :except => ["create"]
   before_filter :do_stripe
 
-  before_validation :downcase_email
+  before_filter :downcase_email
 
 private
 
