@@ -103,7 +103,7 @@
     down_case_email = params[:email]
     down_case_email = down_case_email.downcase
 
-     user = login(:email => down_case_email, params[:password], params[:remember])
+     user = login(params[:email => down_case_email], params[:password], params[:remember])
 
    
       if user
