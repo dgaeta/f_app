@@ -369,13 +369,14 @@ def winners_and_losers
 
       new_stakes = wager + current_stakes
 
-      total_players = GameMember.where(:game_id => params[:game_id]).pluck(:game_id)
-      new_total_players_number = total_players.count
+      total_players = GameMember.where(:game_id => params[:game_id]).pluck(:players)
+      total_players =+ 1
+
   
 
       @game = Game.where(:id => params[:game_id]).first
       @game.update_attributes(:stakes => new_stakes)
-      @game.update_attributes(:players  => new_total_players)
+      @game.update_attributes(:players  => total_players)
 
     user = User.find(game_member.user_id)
     c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
