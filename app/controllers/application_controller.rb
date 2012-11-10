@@ -2,13 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery :except => ["create"]
   before_filter :do_stripe
 
-  before_filter :downcase_email
-
-private
-
-def downcase_email
-  self.email = self.email.downcase if self.email.present?
-end
 
 
   def do_stripe

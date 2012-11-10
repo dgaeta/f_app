@@ -1,6 +1,8 @@
   class SessionsController < ApplicationController
 
 
+
+
    # GET /sessions
   # GET /sessions.json
   def index
@@ -97,6 +99,9 @@
 
   def login_android
     @session = Session.new
+
+    down_case_email = params[:email].downcase
+    down_case_email = down_case_email.downcase
 
      user = login(params[:email], params[:password], params[:remember])
 
