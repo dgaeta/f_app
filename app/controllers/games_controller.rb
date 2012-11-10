@@ -425,6 +425,7 @@ def winners_and_losers
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
     end
+   end
   end
 
   def countdown
