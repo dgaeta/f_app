@@ -107,7 +107,8 @@ class GameMembersController < ApplicationController
 
  
  def check_in_request
-    @all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id)
+    @user = User.find(params[:user_id])
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
     number_of_games = @all_of_users_games.count
  
    #########################LOOP TO GET ACTIVE GAMES USER IS IN #######################################################################  
@@ -119,7 +120,8 @@ class GameMembersController < ApplicationController
              if game_init_status == 0 
               then  @i +=1
             else
-              @init_games << number_of_games[@i]
+              @init_games = []
+              @init_games << @all_of_users_games[@i]
               @i +=1
             end
           end
@@ -127,21 +129,22 @@ class GameMembersController < ApplicationController
 
    ############IF STATEMENT TO SEE IF THEY HAVE ANY ACTIVE GAMES, THEN CHECK IF CHECKIN ALLOWED #######################################
      
-      if @init_games == nil #########GET OUT IF NO ACTIVE GAMES
+      if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
          then 
             error = "no games active"
             false_json = { :status => "fail.", :error => error }
             render(json: JSON.pretty_generate(false_json)) 
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
-                  @last_checkin = all_of_users_game_members[0].checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
+                  @game_member = GameMember.where(:user_id => @user.id, :game_id => @all_of_users_games[0]).first
+                  @last_checkin = @game_member.checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
                   if @last_checkin == 0 or @last_checkin == nil #IF NOTHING THERE THEN KEEP IT 0 
                      then
                       @last_checkin = 0
                       else   #IF THERE IS SOMETHING THERE THEN GIVE ME THE CALENDAR DAY OF THE LAST CHECKIN 
                       @last_checkin_time = Time.at(@last_checkin)
-                      @last_checkin_date = @last_checkin.to_date
-                      @last_checkin_mday = @last_checkin_cday.mday
+                      @last_checkin_date = @last_checkin_time.to_date
+                      @last_checkin_mday = @last_checkin_date.mday
                   end
                   ############ DONE GETTING INFO ON LAST CALENDAR DAY AND TODAYS CDAY ########
 
@@ -156,16 +159,16 @@ class GameMembersController < ApplicationController
                       else
               
                         @a = 0
-                        @num2 = init_games.count
+                        @num2 = @init_games.count
 
                          while @a < @num2  do
-                            @game_member = GameMember.where(:user_id => params[:user_id], :game_id => init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
+                            @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
                             @game_member.checkins = Time.now.to_i
                             @game_member.save
                             comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @game_member.game_id ,
                               :message => "Checked in at the GYM" , :stamp => Time.now)
                             comment.save
-                            @i +=1
+                            @a +=1
                           end
                         true_json =  { :status => "okay"}
                         render(json: JSON.pretty_generate(true_json))
@@ -175,10 +178,11 @@ class GameMembersController < ApplicationController
   end
 
   def check_out_request
-   @all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id) 
-   number_of_games = @all_of_users_games.count
+   @user = User.find(params[:user_id])
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+    number_of_games = @all_of_users_games.count
 
-        @i = 0
+         @i = 0
         @num = number_of_games
 
           while @i < @num  do
@@ -186,14 +190,15 @@ class GameMembersController < ApplicationController
              if game_init_status == 0 
               then  @i +=1
             else
-              @init_games << number_of_games[@i]
+              @init_games = []
+              @init_games << @all_of_users_games[@i]
               @i +=1
             end
           end
 
           
           unless @init_games == nil 
-            last_checkin = GameMember.where( :user_id => params[:user_id],:game_id => @init_games[0]).pluck(:checkins)
+            last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
             current_checkout_request_time = Time.now.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
 
@@ -214,11 +219,13 @@ class GameMembersController < ApplicationController
                  render(json: JSON.pretty_generate(true_json))
               end
               else
-                false_json = { :status => "fail."} 
+                error_string = "not enough time"
+                false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
              end
             else 
-              false_json = { :status => "fail."} 
+              error_string = "No active games"
+              false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
         end
 
