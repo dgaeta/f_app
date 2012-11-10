@@ -111,7 +111,7 @@ def game_comments
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
-      :stamp => comment.stamp}
+      :stamp => comment.stamp.strftime("%I:%M%p (%m/%d/%y)")}
     end
     
     if all_comments == nil 
