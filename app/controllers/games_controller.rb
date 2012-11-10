@@ -360,18 +360,17 @@ def winners_and_losers
       then
       game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
       game_member.save
-      
-      wager = Game.where(:id => params[:game_id]).pluck(:wager)
-      wager = wager[0].to_i
 
-      current_stakes = Game.where(:id => params[:game_id]).pluck(:stakes)
-      current_stakes = current_stakes[0].to_i
+      game = Game.where(:id => params[:game_id]).first
+      
+      wager = game.wager
+      
+      current_stakes = game.wager
 
       new_stakes = wager + current_stakes
 
-      total_players = Game.where(:game_id => params[:game_id]).pluck(:players)
+      total_players = game.players
       total_players += 1
-      game = Game.where(:id => params[:game_id]).first
       game.players = total_players
       game.stakes = new_stakes
       game.save
