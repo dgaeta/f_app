@@ -238,8 +238,8 @@ class GamesController < ApplicationController
   def create_game
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
-    user = User.where(:id => params[:user_id]).first
-    user_email = user.email
+    @user = User.where(:id => params[:user_id]).first
+    @user_email = @user.email
 
     # get the credit card details submitted by Android
     credit_card_number = params[:credit_card_number]
@@ -250,7 +250,7 @@ class GamesController < ApplicationController
     # create a Customer
     customer = Stripe::Customer.create(
       :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-      :email => user_email ) 
+      :email => @user_email ) 
     user.update_attributes(:customer_id => customer.id)
 
     # Now, make a stripe column for database table 'users'
@@ -263,11 +263,11 @@ class GamesController < ApplicationController
         @game.stakes = @game.wager
         @game.save
 
-        gamemember = GameMember.create(:user_id => params[:user_id], :game_id => @game.id )
+        gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
         gamemember.save
-        user = User.where(:id => gamemember.user_id)
-        c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + "" + "just joined the game", :from_game_id => @game.id)
+        user = User.where(:id => @user.id)
+        c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
+          :message => @user.first_name + "" + "just joined the game", :from_game_id => @game.id)
         c.save
 
         variable = (Time.now + 3*24*60*60) #3 days after time now
