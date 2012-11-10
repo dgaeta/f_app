@@ -119,7 +119,7 @@ class GameMembersController < ApplicationController
              if game_init_status == 0 
               then  @i +=1
             else
-              @init_games << number_of_games(@i)
+              @init_games << number_of_games[@i]
               @i +=1
             end
           end
@@ -127,14 +127,14 @@ class GameMembersController < ApplicationController
 
    ############IF STATEMENT TO SEE IF THEY HAVE ANY ACTIVE GAMES, THEN CHECK IF CHECKIN ALLOWED #######################################
      
-      if @init_games(0) == nil #########GET OUT IF NO ACTIVE GAMES
+      if @init_games == nil #########GET OUT IF NO ACTIVE GAMES
          then 
             error = "no games active"
             false_json = { :status => "fail.", :error => error }
             render(json: JSON.pretty_generate(false_json)) 
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
-                  @last_checkin = all_of_users_game_members(0).checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
+                  @last_checkin = all_of_users_game_members[0].checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
                   if @last_checkin == 0 or @last_checkin == nil #IF NOTHING THERE THEN KEEP IT 0 
                      then
                       @last_checkin = 0
@@ -159,7 +159,7 @@ class GameMembersController < ApplicationController
                         @num2 = init_games.count
 
                          while @a < @num2  do
-                            @game_member = GameMember.where(:user_id => params[:user_id], :game_id => init_games(@a)).first #find the current user and then bring him and his whole data down from the cloud
+                            @game_member = GameMember.where(:user_id => params[:user_id], :game_id => init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
                             @game_member.checkins = Time.now.to_i
                             @game_member.save
                             comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @game_member.game_id ,
@@ -175,46 +175,53 @@ class GameMembersController < ApplicationController
   end
 
   def check_out_request
-   all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id) 
-   number_of_games = all_of_users_games.count
+   @all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id) 
+   number_of_games = @all_of_users_games.count
 
         @i = 0
         @num = number_of_games
 
           while @i < @num  do
-             game_init_status = Game.where(:id => number_of_games(@i)).pluck(:game_initialized).first
+             game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
              if game_init_status == 0 
               then  @i +=1
             else
-              init_games << number_of_games(@i)
+              @init_games << number_of_games[@i]
               @i +=1
             end
           end
 
-          last_checkin = GameMember.where( :user_id => params[:user_id],:game_id => init_games(0)).pluck(:checkins)
-          current_checkout_request_time = Time.now.to_i
-          total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
+          
+          unless @init_games == nil 
+            last_checkin = GameMember.where( :user_id => params[:user_id],:game_id => @init_games[0]).pluck(:checkins)
+            current_checkout_request_time = Time.now.to_i
+            total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
 
-          if total_minutes_at_gym > 2700
-            then
+            if total_minutes_at_gym > 2700
+              then
 
-            @a = 0
-            @num2 = init_games
+              @a = 0
+              @num2 = init_games
 
-            while @a < @num2  do
-               game_member = Game.where( :user_id => params[:user_id], :game_id => init_games(@a)).first
-               game_member.checkouts = Time.now.to_i
-               #game_member.total_minutes_at_gym += total_minutes_at_gym
-               game_member.successful_checks += 1
-               game_member.save
-               @a +=1
-               true_json =  { :status => "okay"}
-               render(json: JSON.pretty_generate(true_json))
-            end
-            else
+              while @a < @num2  do
+                 game_member = Game.where( :user_id => params[:user_id], :game_id => init_games[@a]).first
+                 game_member.checkouts = Time.now.to_i
+                 #game_member.total_minutes_at_gym += total_minutes_at_gym
+                 game_member.successful_checks += 1
+                 game_member.save
+                 @a +=1
+                 true_json =  { :status => "okay"}
+                 render(json: JSON.pretty_generate(true_json))
+              end
+              else
+                false_json = { :status => "fail."} 
+                render(json: JSON.pretty_generate(false_json))
+             end
+            else 
               false_json = { :status => "fail."} 
-              render(json: JSON.pretty_generate(false_json))
-          end
+                render(json: JSON.pretty_generate(false_json))
+        end
+
   end
 
 
