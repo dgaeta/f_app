@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+
+  
    
   has_many :games, :class_name => "Game", :foreign_key => "creator_id", :dependent => :destroy 
   has_many :game_members,  :dependent => :destroy
@@ -10,7 +12,7 @@ class User < ActiveRecord::Base
 
   #validates :password_confirmation, :presence => :true
   validates :password, :presence => :true, :length => { :minimum => 6 }, :on => :create, :confirmation => :true
-  validates :email, :presence => :true, :uniqueness => true, :uniqueness => { :case_sensitive => false }, :length => { :minimum => 6}, :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
+  validates :email, :presence => :true, :uniqueness => true, :length => { :minimum => 6}, :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
   validates_presence_of :first_name
   validates_presence_of :last_name
 
