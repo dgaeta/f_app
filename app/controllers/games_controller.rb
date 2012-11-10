@@ -365,7 +365,7 @@ def winners_and_losers
       
       wager = game.wager
       
-      current_stakes = game.wager
+      current_stakes = game.stakes
 
       new_stakes = wager + current_stakes
 
