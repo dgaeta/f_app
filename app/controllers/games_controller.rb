@@ -263,9 +263,9 @@ class GamesController < ApplicationController
         @game.stakes = @game.wager
         @game.save
 
-        gamemember = GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
+        gamemember = GameMember.create(:user_id => params[:user_id], :game_id => @game.id )
         gamemember.save
-        user = User.find(gamemember.user_id)
+        user = User.where(:id => gamemember.user_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
           :message => user.first_name + "" + "just joined the game", :from_game_id => @game.id)
         c.save
