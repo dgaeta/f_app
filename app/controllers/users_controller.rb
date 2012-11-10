@@ -148,7 +148,7 @@ require 'json'
     end
   end
 
-  def change_email 
+=begin  def change_email 
     user = User.where(:id => params[:user_id]).first
 
     user.email = params[:new_email]
@@ -163,11 +163,12 @@ require 'json'
         render(json: JSON.pretty_generate(false_json))
     end
   end
+=end  
 
-  def change_password
-    user = User.where(:id => params[:user_id], :password => params[:password]).first
+=begin  def change_password
+    user = User.where(:id => params[:user_id], :crypted_password => params[:password]).first
 
-    user.password = params[:new_password]
+    user.crypted_password = params[:new_password]
     user.save
 
     if user.save 
@@ -178,5 +179,5 @@ require 'json'
          false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
     end
-  end
+=end  end
 end
