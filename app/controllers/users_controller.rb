@@ -147,4 +147,20 @@ require 'json'
         render(json: JSON.pretty_generate(false_json))
     end
   end
+
+  def change_email 
+    user = User.where(:id => params[:user_id]).first
+
+    user.email = params[:new_email]
+    user.save
+
+    if user.save 
+      then 
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
+  end
 end

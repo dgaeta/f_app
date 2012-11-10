@@ -60,6 +60,7 @@ class GamesController < ApplicationController
   
     respond_to do |format|
       if @game.save
+        Stalker.enqueue("game.check_status", :id => @game.id)
         true_json =  { :status => "okay" }
         format.html { redirect_to @game, notice: 'Game was successfully created.' }
         format.json { render json: JSON.pretty_generate(true_json) }

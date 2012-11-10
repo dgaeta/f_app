@@ -87,13 +87,18 @@ class StatsController < ApplicationController
     money_earned = user_stats[0].money_earned
     games_played = user_stats[0].games_played
     games_won = user_stats[0].games_won
+    joined_date = User.where(:id => params[:user_id]).pluck(:created_at).first
+    joined_month = joined_date.month
+    joined_day = joined_date.day
+    joined_year = joined_date.year
 
     if user_stats == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :money_earned => money_earned, :games_played => games_played, :games_won => games_won}
+        true_json =  { :status => "okay" , :money_earned => money_earned, :games_played => games_played, :games_won => games_won, 
+          :joined_month => joined_month, :joined_day => joined_day, :joined_year => joined_year}
         render(json: JSON.pretty_generate(true_json))
     end
   end

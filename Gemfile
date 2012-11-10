@@ -41,6 +41,7 @@ end
  gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
  gem "delayed_job"
  gem 'gibbon'
+ gem 'stalker'
 
 
 

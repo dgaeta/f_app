@@ -48,6 +48,7 @@ FApp::Application.routes.draw do
   get "login_android" => "sessions#login_android", :as => "login_android"
   get "games_user_is_in" => "game_members#games_user_is_in", :as => "games_user_is_in"
   get "post_comment" => "comments#post_comment", :as => "post_comment"
+  get "change_email" => "users#change_email", :as => "change_email"
 
 
   #stripe route
@@ -68,6 +69,7 @@ FApp::Application.routes.draw do
   match "number_of_players", :to => "game_members#number_of_players", :via => "get"
   match "user_stats", :to => "stats#user_stats", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
+  match "change_email", :to => "users#change_email", :via => "put"
 
 
 
