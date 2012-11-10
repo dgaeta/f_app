@@ -397,7 +397,6 @@ def winners_and_losers
     if user.save 
       then 
           unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
-          then
           game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
           game_member.save
 
@@ -422,8 +421,6 @@ def winners_and_losers
 
               true_json =  { :status => "okay" }
               render(json: JSON.pretty_generate(true_json))
-          
-        end
       else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
