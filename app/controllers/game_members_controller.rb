@@ -107,19 +107,19 @@ class GameMembersController < ApplicationController
 
  
  def check_in_request
-    all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id)
-    number_of_games = all_of_users_games.count
+    @all_of_users_games = GameMember.where(:user_id => params[:user_id]).pluck(:game_id)
+    number_of_games = @all_of_users_games.count
  
    #########################LOOP TO GET ACTIVE GAMES USER IS IN #######################################################################  
         @i = 0
         @num = number_of_games
 
           while @i < @num  do
-             game_init_status = Game.where(:id => number_of_games(@i)).pluck(:game_initialized).first
+             game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
              if game_init_status == 0 
               then  @i +=1
             else
-              init_games << number_of_games(@i)
+              @init_games << number_of_games(@i)
               @i +=1
             end
           end
@@ -127,7 +127,7 @@ class GameMembersController < ApplicationController
 
    ############IF STATEMENT TO SEE IF THEY HAVE ANY ACTIVE GAMES, THEN CHECK IF CHECKIN ALLOWED #######################################
      
-      if init_games(0) == nil #########GET OUT IF NO ACTIVE GAMES
+      if @init_games(0) == nil #########GET OUT IF NO ACTIVE GAMES
          then 
             error = "no games active"
             false_json = { :status => "fail.", :error => error }
