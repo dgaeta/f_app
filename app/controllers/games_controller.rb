@@ -251,21 +251,21 @@ class GamesController < ApplicationController
     customer = Stripe::Customer.create(
       :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
       :email => @user_email ) 
-    user.update_attributes(:customer_id => customer.id)
+    @user.update_attributes(:customer_id => customer.id)
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
 
-    if user.save
+    if @user.save
       then 
         @game = Game.new(params[:game])
         @game.players = 1
         @game.stakes = @game.wager
         @game.save
 
-        gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
-        gamemember.save
-        user = User.where(:id => @user.id)
+        @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
+        @gamemember.save
+        #@user = User.where(:id => @user.id)
         c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
           :message => @user.first_name + "" + "just joined the game", :from_game_id => @game.id)
         c.save
