@@ -267,7 +267,7 @@ class GamesController < ApplicationController
         gamemember.save
         user = User.find(@game.creator_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + " " + "just joined the game", :from_game_id => @game.id)
+          :message => user.first_name + "" + "just joined the game", :from_game_id => @game.id)
         c.save
 
         variable = (Time.now + 3*24*60*60) #3 days after time now
@@ -416,7 +416,7 @@ def winners_and_losers
 
         user = User.find(game_member.user_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + " " + " just joined the game", :from_game_id => game_member.game_id)
+          :message => user.first_name + "" + " just joined the game", :from_game_id => game_member.game_id)
         c.save
 
               true_json =  { :status => "okay" }

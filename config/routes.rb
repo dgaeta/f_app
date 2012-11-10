@@ -50,6 +50,7 @@ FApp::Application.routes.draw do
   get "post_comment" => "comments#post_comment", :as => "post_comment"
   get "change_email" => "users#change_email", :as => "change_email"
   get "single_game_info" => "games#single_game_info", :as => "single_game_info"
+  get "change_password" => "users#change_password", :as => "change_password"
 
 
   #stripe route
@@ -72,7 +73,7 @@ FApp::Application.routes.draw do
   match "post_comment", :to => "comments#post_comment", :via => "post"
   match "change_email", :to => "users#change_email", :via => "put"
   match "single_game_info", :to => "games#single_game_info", :via => "get"
-
+  match "change_password", :to => "users#change_password", :via => "put"  
 
 
 

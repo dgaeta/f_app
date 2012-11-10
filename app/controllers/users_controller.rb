@@ -163,4 +163,20 @@ require 'json'
         render(json: JSON.pretty_generate(false_json))
     end
   end
+
+  def change_password
+    user = User.where(:id => params[:user_id], :password => params[:password]).first
+
+    user.password = params[:new_password]
+    user.save
+
+    if user.save 
+      then 
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
+  end
 end
