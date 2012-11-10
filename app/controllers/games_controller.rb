@@ -236,35 +236,59 @@ class GamesController < ApplicationController
 
 
   def create_game
-    @game = Game.new(params[:game])
-    @game.players = 1
-    @game.stakes = @game.wager
-    @game.save
+    Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
-    gamemember = GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
-    gamemember.save
-    user = User.find(@game.creator_id)
-    c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-      :message => user.first_name + " " + "just joined the game", :from_game_id => @game.id)
-    c.save
+    user = User.where(:id => params[:user_id]).first
+    user_email = user.email
 
-    variable = (Time.now + 3*24*60*60) #3 days after time now
-    variable = variable.to_i
-    @game.game_start_date = variable
-
-     variable2 = (Time.now + 17*24*60*60) #17 days after time now
-     variable2 = variable2.to_i
-     @game.game_end_date = variable2
+    # get the credit card details submitted by Android
+    credit_card_number = params[:credit_card_number]
+    credit_card_exp_month = params[:credit_card_exp_month]
+    credit_card_exp_year = params[:credit_card_exp_year]
+    credit_card_cvc = params[:credit_card_cvc]
     
-     
-      if @game.save
-        true_json =  { :status => "okay", :game_id => @game.id }
-        render(json: JSON.pretty_generate(true_json) )
-      else
-        false_json = { :status => "fail.", :errors => @game.errors } 
+    # create a Customer
+    customer = Stripe::Customer.create(
+      :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+      :email => user_email ) 
+    user.update_attributes(:customer_id => customer.id)
+
+    # Now, make a stripe column for database table 'users'
+    # save the customer ID in your database so you can use it later
+
+    if user.save
+      then 
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      
+        @game = Game.new(params[:game])
+        @game.players = 1
+        @game.stakes = @game.wager
+        @game.save
+
+        gamemember = GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
+        gamemember.save
+        user = User.find(@game.creator_id)
+        c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
+          :message => user.first_name + " " + "just joined the game", :from_game_id => @game.id)
+        c.save
+
+        variable = (Time.now + 3*24*60*60) #3 days after time now
+        variable = variable.to_i
+        @game.game_start_date = variable
+
+         variable2 = (Time.now + 17*24*60*60) #17 days after time now
+         variable2 = variable2.to_i
+         @game.game_end_date = variable2
+         @game.save
+            true_json =  { :status => "okay"}
+            render(json: JSON.pretty_generate(true_json) )
+    
+        else
+         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
-      end
-  end
+    end
+end
 
   def public_games
     public_games = Game.where("is_private = false")
