@@ -439,4 +439,28 @@ def winners_and_losers
     end
   end
 
+  def single_game_info 
+    @search_results = Game.where(:id => params[:game_id]).first
+
+    unless @search_results == nil 
+      then
+        game_id = @search_results.id
+        creator_first_name = @search_results.creator_first_name
+        players = @search_results.players
+        wager = @search_results.wager
+        stakes = @search_results.stakes
+        private_or_not = @search_results.is_private
+        duration = @search_results.duration
+        start_date = @search_results.game_start_date
+        start_date =Date.new(start_date)
+        start_date = start_date.strftime('%a %b %d')
+        true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
+        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date}
+        render(json: JSON.pretty_generate(true_json))
+        else
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
 end

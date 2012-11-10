@@ -17,9 +17,14 @@ job "game.check_status" do |params|
   	   if  game.players >= 5 &&  diff <= 0
 			game.game_initialized = 1
 		  	game.save
-	   else
-	   	   game.game_initialized = 7
+	   elsif game.players >= 5 &&  diff > 0
+	   	   game.game_initialized = 0
 	   	   game.save
+	   elsif game.players < 5 && diff <= 0
+	   	   old_date_integer = game.game_start_date
+	   	   new_date_integer = old_date_integer + 3*24*60*60
+	   	   game_start_date = Time.at(new_date_integer)
+	   	   game.game_start_date = 0
 	   end
 	else 
   	job.delete
