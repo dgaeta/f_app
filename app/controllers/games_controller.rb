@@ -290,9 +290,9 @@ class GamesController < ApplicationController
 end
 
   def public_games
-    public_games = Game.where("is_private = false")
+    @public_games = Game.where("is_private = false")
 
-    public_games = public_games.map do |game|
+    @public_games = @public_games.map do |game|
       {:id => game.id,
       :duration => game.duration,
       :wager => game.wager,
@@ -300,13 +300,39 @@ end
       :stakes => game.stakes}
     end
 
+    @user = User.find(params[:user_id])
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+    @number_of_games = @all_of_users_games.count
 
-    if public_games == nil 
+     @a = 0
+     @b = 0
+     @num1 = @public_games.count
+     @num2 = @number_of_games
+
+
+          while @b < @num2  do
+            @a += 1
+            while @a <= @num1 do
+             if @all_of_users_games[@b] == @public_games[@a]
+              then  
+              @a +=1
+              @joinable_games = []
+            else
+              @joinable_games = []
+              @joinable_games << @public_games[@a]
+              @a +=1
+            end
+            @b += 1
+          end
+        end
+
+
+    if @joinable_games == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :public_games => public_games }
+        true_json =  { :status => "okay" , :joinable_games => @joinable_games }
         render(json: JSON.pretty_generate(true_json))
     end
   end
