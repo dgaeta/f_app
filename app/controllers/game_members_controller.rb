@@ -154,7 +154,7 @@ class GameMembersController < ApplicationController
                 
 
 
-                if @last_checkin_mday == @calendar_day_nowbdbdbd   #
+                if @last_checkin_mday == @calendar_day_now   #
                       then 
                        error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => error} 
@@ -207,7 +207,7 @@ class GameMembersController < ApplicationController
             current_checkout_request_time = Time.now.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
 
-            if total_minutes_at_gym > 0 #2700
+            if total_minutes_at_gym > 2700
               then
 
               @a = 0
