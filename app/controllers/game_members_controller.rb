@@ -211,7 +211,7 @@ class GameMembersController < ApplicationController
               then
 
               @a = 0
-              @num2 = @init_games
+              @num2 = @init_games.count
 
               while @a < @num2  do
                  game_member = Game.where( :user_id => params[:user_id], :game_id => @init_games[@a]).first
