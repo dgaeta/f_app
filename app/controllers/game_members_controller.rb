@@ -118,7 +118,8 @@ class GameMembersController < ApplicationController
           while @i < @num  do
              game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
              if game_init_status == 0 
-              then  @i +=1
+                @init_games =[]
+               @i +=1
             else
               @init_games = []
               @init_games << @all_of_users_games[@i]
@@ -136,7 +137,7 @@ class GameMembersController < ApplicationController
             render(json: JSON.pretty_generate(false_json)) 
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
-                  @game_member = GameMember.where(:user_id => @user.id, :game_id => @all_of_users_games[0]).first
+                  @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
                   @last_checkin = @game_member.checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
                   if @last_checkin == 0 or @last_checkin == nil #IF NOTHING THERE THEN KEEP IT 0 
                      then

@@ -260,6 +260,8 @@ class GamesController < ApplicationController
       then 
         @game = Game.new(params[:game])
         @game.players = 1
+        @first_name = @user.first_name.downcase
+        @game.creator_first_name = @first_name
         @game.stakes = @game.wager
         @game.save
 
@@ -452,8 +454,10 @@ def winners_and_losers
   end
 
   def get_private_game_info
-    
-    @search_results = Game.where(:id => params[:game_id], :creator_first_name => params[:first_name_of_creator]).first
+    @first_name_uncased = params[:first_name_of_creator]
+    @first_name_cased = @first_name_uncased.downcase
+
+    @search_results = Game.where(:id => params[:game_id], :creator_first_name => @first_name_cased).first
 
     unless @search_results == nil 
       then
