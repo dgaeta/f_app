@@ -151,7 +151,10 @@ class GameMembersController < ApplicationController
                   @calendar_day_now = Time.now.to_date        #WHATS THE CALENDAR DAY TODAY?
                   @calendar_day_now = @calendar_day_now.mday
                 ######################################################################################################################
-                if @last_checkin_mday == @calendar_day_now   #
+                
+
+
+                if @last_checkin_mday == @calendar_day_nowbdbdbd   #
                       then 
                        error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => error} 
@@ -165,12 +168,14 @@ class GameMembersController < ApplicationController
                             @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
                             @game_member.checkins = Time.now.to_i
                             @game_member.save
+                            @checked_in_for_games_variable = []
+                            @checked_in_for_games_variable << @game_member.game.id
                             comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @game_member.game_id ,
                               :message => "Checked in at the GYM" , :stamp => Time.now)
                             comment.save
                             @a +=1
                           end
-                        true_json =  { :status => "okay"}
+                        true_json =  { :status => "okay", :checked_in_for_games_variable => @checked_in_for_games_variable}
                         render(json: JSON.pretty_generate(true_json))
                 end
                 ######################################################################################################################
@@ -202,7 +207,7 @@ class GameMembersController < ApplicationController
             current_checkout_request_time = Time.now.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
 
-            if total_minutes_at_gym > 2700
+            if total_minutes_at_gym > 0 #2700
               then
 
               @a = 0

@@ -50,6 +50,7 @@ class Game < ActiveRecord::Base
 
 
   def self.auto_end_games 
+  	@stripe_api_key = "sk_0G8UQEXsgKNmNNdy7QRwKr7VIgjxl"
     @all_games = Game.where(:game_initialized => 1)
     @all_games_number = @all_games.count 
 
@@ -92,9 +93,9 @@ class Game < ActiveRecord::Base
              while @losers < @num  do
               user = players[@losers]
               user = User.find(user)
-              loser_checkins = GameMember.where(:user_id => user.id, :game_id => game_id).pluck(:successful_checks).first
+              loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
               loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
-               game = Game.where(:id => game_id).first
+               game = Game.where(:id => @game.id).first
                amount_charged = (game.wager * 100) 
               
                Stripe::Charge.create(
@@ -111,7 +112,32 @@ class Game < ActiveRecord::Base
              winner1 = User.find(players[0])
              winner2 = User.find(players[1])
              winner3 = User.find(players[2])
-          
+
+   
+		    first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
+		    first.final_standing = 1
+		    first.save
+		    first = Stat.where(:winners_id => winner1).first
+		    first.losses -= 1
+		    first.first_place_finishes += 1
+		    first.save
+
+		    second = GameMember.where(:user_id => winner2.id, :game_id => @game.id).first
+		    second.final_standing = 2
+		    second.save
+		    second = Stat.where(:winners_id => winner2.id).first
+		    second.losses -= 1
+		    second.second_place_finishes += 1
+		    second.save
+
+		    third = GameMember.where(:user_id => winner3.id, :game_id => @game.id).first
+		    third.final_standing = 3
+		    third.save
+		    third = Stat.where(:winners_id => winner3.id).first
+		    third.losses -= 1
+		    third.third_place_finishes += 1
+		    third.save
+
 
              # define the payout amounts
              @first_place_percentage = 0.50
@@ -119,7 +145,7 @@ class Game < ActiveRecord::Base
              @third_place_percentage = 0.15
              @fitsby_percentage = 0.15
 
-             stakes = Game.where(:id => game_id ).pluck(:stakes).first
+             stakes = Game.where(:id => @game.id ).pluck(:stakes).first
              winner1_money_won = (stakes * @first_place_percentage)
              winner2_money_won = (stakes * @second_place_percentage)
              winner3_money_won = (stakes * @third_place_percentage)
