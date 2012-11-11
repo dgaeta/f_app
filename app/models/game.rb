@@ -7,8 +7,8 @@ class Game < ActiveRecord::Base
   :game_initialized
 
 
-  def auto_start_games 
-   @all_games = Game.where(:game_initialized => 0)
+  def self.auto_start_games 
+    @all_games = Game.where(:game_initialized => 0)
     @all_games_number = @all_games.count 
 
     @i = 0 
@@ -30,28 +30,26 @@ class Game < ActiveRecord::Base
               if @game.players >= 5 and @diff <= 0 
                 then @game.game_initialized = 1
                      @game.save   
-                  json =  { :string => "changed to game init" }
-                  render(json: JSON.pretty_generate(json))
+                     puts "started game #{@game.id}"
                 elsif @game.players >= 5 and @diff > 0
-                  json =  { :string => "date not passed yet, but enough players"}
-                  render(json: JSON.pretty_generate(json))     
+                   @game.game_initialized = 0
+                   puts "game #{@game.id} time hasnt passed to start, but has enough players"
                 elsif @game.players < 5 and @diff <= 0 
-                     @new_start_date = @game.start_date + (Time.now + 3*24*60*60)
+                     @new_start_date = @start + (3*24*60*60)
                      @game.game_start_date = @new_start_date 
                      @game.save 
-                  json =  { :string => "not enough players at start date, plus 3 days" }
-                  render(json: JSON.pretty_generate(json))
+                     puts "game #{@game.id} not enough players at start date, added 3 more days to start date"
                 elsif @game.players < 5 and @diff > 0
-                  json =  { :string => "not enough players and date hasnt passed" }
-                  render(json: JSON.pretty_generate(json))
-                end
+                  @game.game_initialized = 0
+                  puts "game #{@game.id} does not have enough players and time hasnt passed"
+                 end
             @i += 1 
           end
         end
     end
 
 
-  def auto_end_games 
+  def self.auto_end_games 
     @all_games = Game.where(:game_initialized => 1)
     @all_games_number = @all_games.count 
 
@@ -136,12 +134,12 @@ class Game < ActiveRecord::Base
 
              UserMailer.email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won,
              winner3, winner3_money_won, fitsby_money_won ).deliver 
+
+             puts "sent out mail and charges for game #{@game.id}"
              
-             json =  { :string => "game ended, charged losers, sent out emails" }
-             render(json: JSON.pretty_generate(json))
+             
          else 
-            json =  { :string => "game still active" }
-            render(json: JSON.pretty_generate(json))
+           puts "the game #{@game.id} isnt ready to end"
         end
         @i += 1
       end 

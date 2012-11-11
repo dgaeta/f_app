@@ -54,6 +54,7 @@ FApp::Application.routes.draw do
   get "auto_init_games_and_end_games" => "games#auto_init_games_and_end_games", :as => "auto_init_games_and_end_games"
   get "auto_end_games" => "games#auto_end_games", :as => "auto_end_games"
   get "auto_start_games" => "games#auto_start_games", :as => "auto_start_games"
+  
 
 
   #stripe route

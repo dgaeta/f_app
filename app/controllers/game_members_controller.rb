@@ -151,7 +151,7 @@ class GameMembersController < ApplicationController
                   @calendar_day_now = Time.now.to_date        #WHATS THE CALENDAR DAY TODAY?
                   @calendar_day_now = @calendar_day_now.mday
                 ######################################################################################################################
-                if @last_checkin_cday == @calendar_day_now   #
+                if @last_checkin_mday == @calendar_day_now   #
                       then 
                        error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => error} 

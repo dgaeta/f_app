@@ -640,20 +640,14 @@ def winners_and_losers
               if @game.players >= 5 and @diff <= 0 
                 then @game.game_initialized = 1
                      @game.save   
-                  json =  { :string => "changed to game init" }
-                  render(json: JSON.pretty_generate(json))
                 elsif @game.players >= 5 and @diff > 0
-                  json =  { :string => "date not passed yet, but enough players"}
-                  render(json: JSON.pretty_generate(json))     
+                    @game.game_initialized = 0
                 elsif @game.players < 5 and @diff <= 0 
                      @new_start_date = @game.start_date + (Time.now + 3*24*60*60)
                      @game.game_start_date = @new_start_date 
                      @game.save 
-                  json =  { :string => "not enough players at start date, plus 3 days" }
-                  render(json: JSON.pretty_generate(json))
                 elsif @game.players < 5 and @diff > 0
-                  json =  { :string => "not enough players and date hasnt passed" }
-                  render(json: JSON.pretty_generate(json))
+                  @game.game_initialized = 0
                 end
             @i += 1 
           end
