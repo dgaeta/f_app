@@ -103,7 +103,7 @@ class CommentsController < ApplicationController
 
 
 def game_comments 
-   all_comments = Comment.where(:from_game_id => params[:game_id]).order("stamp DESC")
+   all_comments = Comment.where(:from_game_id => params[:game_id]).order("created_at DESC")
 
    all_comments = all_comments.map do |comment|
      {:_id => comment.id,
@@ -114,9 +114,7 @@ def game_comments
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
-    all_comments = all_comments.sort(:stamp "DESC")
 
-    
     if all_comments == nil 
       then 
         false_json = { :status => "fail."} 
