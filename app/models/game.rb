@@ -6,6 +6,8 @@ class Game < ActiveRecord::Base
   attr_accessible :creator_id, :duration, :is_private, :wager, :players, :stakes, :game_start_date, :game_end_date, :creator_first_name, 
   :game_initialized
 
+  validates_presence_of :creator_first_name, :case_sensitive => false
+
 
   def self.auto_start_games 
     @all_games = Game.where(:game_initialized => 0)
