@@ -42,6 +42,7 @@ end
  gem "delayed_job"
  gem 'gibbon'
  gem 'stalker'
+ gem 'whenever', :require => false
 
 
 

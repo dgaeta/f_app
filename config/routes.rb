@@ -51,6 +51,9 @@ FApp::Application.routes.draw do
   get "change_email" => "users#change_email", :as => "change_email"
   get "single_game_info" => "games#single_game_info", :as => "single_game_info"
   get "change_password" => "users#change_password", :as => "change_password"
+  get "auto_init_games_and_end_games" => "games#auto_init_games_and_end_games", :as => "auto_init_games_and_end_games"
+  get "auto_end_games" => "games#auto_end_games", :as => "auto_end_games"
+  get "auto_start_games" => "games#auto_start_games", :as => "auto_start_games"
 
 
   #stripe route

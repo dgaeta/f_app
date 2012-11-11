@@ -499,4 +499,262 @@ def winners_and_losers
     end
   end
 
+
+=begin def auto_init_games_and_end_games  
+    @all_games = Game.all 
+    @all_games_number = @all_games.count 
+
+    @i = 0 
+    @num = @all_games_number
+
+    while @i < @num do 
+      @game = Game.where(:id => @all_games[@i]).first
+      @start = @game.game_start_date
+
+      @time_now = Time.now.to_i
+
+      @diff = @start - @time_now
+
+      if @game.game_initialized == 0 
+        then 
+          if @game.players >= 5 and dif <= 0 
+            then @game.game_initialzed = 1
+                 @game.save   
+              json =  { :string => "changed to game init" }
+              render(json: JSON.pretty_generate(json))
+            elsif @game.players >= 5 and dif > 0
+              json =  { :string => "date not passed yet, but enough players"}
+              render(json: JSON.pretty_generate(json))     
+            elsif @game.players < 5 and diff <= 0 
+                 @new_start_date = @game.start_date + (Time.now + 3*24*60*60)
+                 @game.game_start_date = @new_start_date 
+                 @game.save 
+                 json =  { :string => "not enough players at start date, plus 3 days" }
+              render(json: JSON.pretty_generate(json))
+            elsif @game.players < 5 and diff > 0
+              json =  { :string => "not enough players and date hasnt passed" }
+              render(json: JSON.pretty_generate(json))
+          end 
+      else 
+        @time_now = Time.now.to_i
+        @diff = @time_now - @game.game_end_date  
+
+        if @diff >= 0
+          then 
+            Stripe.api_key = @stripe_api_key
+            players = GameMember.where(:game_id => @game.id).pluck(:user_id)
+            number_of_players = players.count  
+
+            @i = 0
+            @num = number_of_players 
+
+            while @i < @num  do
+            player = players[@i]
+            player_stats = Stat.where(:winners_id => player).first
+            player_stats.losses += 1
+            player_stats.save
+            @i +=1
+            end
+
+            ################################# STRIPE BEGIN  #############################################################################
+             #CHARGE THE LOSERS
+             
+             @losers = 3
+
+             while @losers < @num  do
+              user = players[@losers]
+              user = User.find(user)
+              loser_checkins = GameMember.where(:user_id => user.id, :game_id => game_id).pluck(:successful_checks).first
+              loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
+               game = Game.where(:id => game_id).first
+               amount_charged = (game.wager * 100) 
+              
+               Stripe::Charge.create(
+                   :amount => amount_charged, # (example: 1000 is $10)
+                   :currency => "usd",
+                   :customer => loser_customer_id)
+
+               UserMailer.notify_loser(user, amount_charged, loser_checkins).deliver
+               
+               @losers +=1
+             end
+
+             # PAY THE WINNERS
+             winner1 = User.find(players[0])
+             winner2 = User.find(players[1])
+             winner3 = User.find(players[2])
+          
+
+             # define the payout amounts
+             @first_place_percentage = 0.50
+             @second_place_percentage = 0.20
+             @third_place_percentage = 0.15
+             @fitsby_percentage = 0.15
+
+             stakes = Game.where(:id => game_id ).pluck(:stakes).first
+             winner1_money_won = (stakes * @first_place_percentage)
+             winner2_money_won = (stakes * @second_place_percentage)
+             winner3_money_won = (stakes * @third_place_percentage)
+             fitsby_money_won = (stakes * @fitsby_percentage)
+
+
+             UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
+
+             UserMailer.congratulate_winner2(winner2, winner2_money_won).deliver
+
+             UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
+
+             UserMailer.email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won,
+             winner3, winner3_money_won, fitsby_money_won ).deliver 
+             
+             json =  { :string => "game ended, charged losers, sent out emails" }
+             render(json: JSON.pretty_generate(json))
+         else 
+            json =  { :string => "game still active" }
+            render(json: JSON.pretty_generate(json))
+        end
+      end 
+    end
+ end
+=end
+ def auto_start_games 
+   @all_games = Game.where(:game_initialized => 0)
+    @all_games_number = @all_games.count 
+
+    @i = 0 
+    @num = @all_games_number
+
+    if @all_games[0] == nil
+      then 
+      json =  { :string => "all games active" }
+              render(json: JSON.pretty_generate(json))
+      else 
+        while @i < @num do 
+          @game = Game.where(:id => @all_games[@i]).first
+          @start = @game.game_start_date
+
+          @time_now = Time.now.to_i
+
+          @diff = @start - @time_now
+
+              if @game.players >= 5 and @diff <= 0 
+                then @game.game_initialized = 1
+                     @game.save   
+                  json =  { :string => "changed to game init" }
+                  render(json: JSON.pretty_generate(json))
+                elsif @game.players >= 5 and @diff > 0
+                  json =  { :string => "date not passed yet, but enough players"}
+                  render(json: JSON.pretty_generate(json))     
+                elsif @game.players < 5 and @diff <= 0 
+                     @new_start_date = @game.start_date + (Time.now + 3*24*60*60)
+                     @game.game_start_date = @new_start_date 
+                     @game.save 
+                  json =  { :string => "not enough players at start date, plus 3 days" }
+                  render(json: JSON.pretty_generate(json))
+                elsif @game.players < 5 and @diff > 0
+                  json =  { :string => "not enough players and date hasnt passed" }
+                  render(json: JSON.pretty_generate(json))
+                end
+            @i += 1 
+          end
+        end
+    end
+
+
+  def auto_end_games 
+    @all_games = Game.where(:game_initialized => 1)
+    @all_games_number = @all_games.count 
+
+    @i = 0 
+    @num = @all_games_number
+
+    while @i < @num do 
+      @game = Game.where(:id => @all_games[@i]).first
+      @start = @game.game_start_date
+
+      @time_now = Time.now.to_i
+
+      @diff = @start - @time_now
+      @time_now = Time.now.to_i
+      @diff = @time_now - @game.game_end_date  
+
+      
+          if @diff >= 0
+            then 
+            Stripe.api_key = @stripe_api_key
+            players = GameMember.where(:game_id => @game.id).pluck(:user_id)
+            number_of_players = players.count  
+
+            @i = 0
+            @num = number_of_players 
+
+            while @i < @num  do
+            player = players[@i]
+            player_stats = Stat.where(:winners_id => player).first
+            player_stats.losses += 1
+            player_stats.save
+            @i +=1
+            end
+
+            ################################# STRIPE BEGIN  #############################################################################
+             #CHARGE THE LOSERS
+             
+             @losers = 3
+
+             while @losers < @num  do
+              user = players[@losers]
+              user = User.find(user)
+              loser_checkins = GameMember.where(:user_id => user.id, :game_id => game_id).pluck(:successful_checks).first
+              loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
+               game = Game.where(:id => game_id).first
+               amount_charged = (game.wager * 100) 
+              
+               Stripe::Charge.create(
+                   :amount => amount_charged, # (example: 1000 is $10)
+                   :currency => "usd",
+                   :customer => loser_customer_id)
+
+               UserMailer.notify_loser(user, amount_charged, loser_checkins).deliver
+               
+               @losers +=1
+             end
+
+             # PAY THE WINNERS
+             winner1 = User.find(players[0])
+             winner2 = User.find(players[1])
+             winner3 = User.find(players[2])
+          
+
+             # define the payout amounts
+             @first_place_percentage = 0.50
+             @second_place_percentage = 0.20
+             @third_place_percentage = 0.15
+             @fitsby_percentage = 0.15
+
+             stakes = Game.where(:id => game_id ).pluck(:stakes).first
+             winner1_money_won = (stakes * @first_place_percentage)
+             winner2_money_won = (stakes * @second_place_percentage)
+             winner3_money_won = (stakes * @third_place_percentage)
+             fitsby_money_won = (stakes * @fitsby_percentage)
+
+
+             UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
+
+             UserMailer.congratulate_winner2(winner2, winner2_money_won).deliver
+
+             UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
+
+             UserMailer.email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won,
+             winner3, winner3_money_won, fitsby_money_won ).deliver 
+             
+             json =  { :string => "game ended, charged losers, sent out emails" }
+             render(json: JSON.pretty_generate(json))
+         else 
+            json =  { :string => "game still active" }
+            render(json: JSON.pretty_generate(json))
+        end
+        @i += 1
+      end 
+    end
+
 end
