@@ -114,7 +114,7 @@ def game_comments
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
-    all_comments = all_comments.sort("stamp DESC")
+    all_comments = all_comments.sort(:stamp "DESC")
 
     
     if all_comments == nil 
