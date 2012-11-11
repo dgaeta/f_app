@@ -211,10 +211,10 @@ class GameMembersController < ApplicationController
               then
 
               @a = 0
-              @num2 = init_games
+              @num2 = @init_games
 
               while @a < @num2  do
-                 game_member = Game.where( :user_id => params[:user_id], :game_id => init_games[@a]).first
+                 game_member = Game.where( :user_id => params[:user_id], :game_id => @init_games[@a]).first
                  game_member.checkouts = Time.now.to_i
                  #game_member.total_minutes_at_gym += total_minutes_at_gym
                  game_member.successful_checks += 1
