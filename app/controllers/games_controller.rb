@@ -293,7 +293,39 @@ end
   def public_games
     @public_games = Game.where("is_private = false")
 
-    @public_games = @public_games.map do |game|
+    @user = User.find(params[:user_id])
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+    
+
+     unless @all_of_users_games[0] == nil 
+          then 
+          @number_of_games = @all_of_users_games.count
+
+             @a = 0 #
+             @num1 = @number_of_games #0
+             @b = 0 #1
+             @num2 = @public_games.count #2
+
+          while @a <= @num1  do
+            @b = 0
+            while @b < @num2 do
+             if @all_of_users_games[@a] == @public_games[@b].id
+              then  
+              @unjoinable_games = []
+              @b +=1
+             else
+              @joinable_games = []
+              @joinable_games << @public_games[@b] #[12]
+              @b +=1
+            end
+          end
+          @a += 1
+        end
+      else 
+        @joinable_games = @public_games
+      end
+
+       @public_games = @public_games.map do |game|
       {:id => game.id,
       :duration => game.duration,
       :wager => game.wager,
@@ -301,34 +333,8 @@ end
       :stakes => game.stakes}
     end
 
-    @user = User.find(params[:user_id])
-    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    @number_of_games = @all_of_users_games.count
 
-     @a = 0
-     @b = 0
-     @num1 = @public_games.count
-     @num2 = @number_of_games
-
-
-          while @b < @num2  do
-            @a += 1
-            while @a <= @num1 do
-             if @all_of_users_games[@b] == @public_games[@a]
-              then  
-              @a +=1
-              @joinable_games = []
-            else
-              @joinable_games = []
-              @joinable_games << @public_games[@a]
-              @a +=1
-            end
-            @b += 1
-          end
-        end
-
-
-    if @joinable_games == nil 
+    if @joinable_games[0] == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
