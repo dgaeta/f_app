@@ -319,22 +319,7 @@ end
 
           @games_to_display = h.keys
 
-      end
-
-  
-    if @all_of_users_games[0] == nil 
-      then 
-         @public_games = @public_games.map do |game|
-        {:id => game.id,
-        :duration => game.duration,
-        :wager => game.wager,
-        :players => game.players,
-        :stakes => game.stakes}
-        true_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(true_json))
-      end
-      else
-        @c = 0 
+          @c = 0 
         @num3 = @games_to_display.count
         @public_games = []
 
@@ -353,8 +338,20 @@ end
 
         true_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(true_json))
-    end
-  end
+
+
+      else
+         @public_games = Game.where("is_private = false")
+         @public_games = @public_games.map do |game|
+        {:id => game.id,
+        :duration => game.duration,
+        :wager => game.wager,
+        :players => game.players,
+        :stakes => game.stakes}
+        true_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(true_json))
+      end
+   end
 
 def winners_and_losers
     leaderboard_stats = GameMember.includes(:user). where(:game_id => params[:game_id]).order("successful_checks DESC")
