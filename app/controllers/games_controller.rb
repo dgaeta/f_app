@@ -332,6 +332,7 @@ end
         :stakes => game.stakes}
         true_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(true_json))
+      end
       else
         @c = 0 
         @num3 = @games_to_display.count
