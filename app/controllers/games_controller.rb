@@ -325,7 +325,7 @@ end
         @joinable_games = @public_games
       end
 
-       @public_games = @public_games.map do |game|
+       @joinable_games = @joinable_games.map do |game|
       {:id => game.id,
       :duration => game.duration,
       :wager => game.wager,
