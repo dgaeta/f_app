@@ -295,7 +295,7 @@ end
 
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    @public_games = Game.where("is_private = false")
+  
 
     unless @all_of_users_games[0] == nil 
           then 
@@ -322,10 +322,16 @@ end
       end
 
   
-    if @public_games[0] == nil 
+    if @all_of_users_games[0] == nil 
       then 
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
+         @public_games = @public_games.map do |game|
+        {:id => game.id,
+        :duration => game.duration,
+        :wager => game.wager,
+        :players => game.players,
+        :stakes => game.stakes}
+        true_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(true_json))
       else
         @c = 0 
         @num3 = @games_to_display.count
