@@ -281,7 +281,7 @@ class GamesController < ApplicationController
          variable2 = variable2.to_i
          @game.game_end_date = variable2
          @game.save
-            true_json =  { :status => "okay"}
+            true_json =  { :status => "okay", :game_id => @game.id}
             render(json: JSON.pretty_generate(true_json) )
     
         else
