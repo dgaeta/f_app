@@ -335,8 +335,8 @@ end
       :stakes => game.stakes}
        end
 
-        true_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(true_json))
+        a_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(a_json))
 
 
       else
@@ -347,9 +347,10 @@ end
         :wager => game.wager,
         :players => game.players,
         :stakes => game.stakes}
-        true_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(true_json))
-        end
+      end
+        b_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(b_json))
+        
     end
   end
 
