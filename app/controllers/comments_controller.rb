@@ -127,7 +127,7 @@ def game_comments
 
   def post_comment
     @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message],
-     :from_game_id => :game_id)
+     :from_game_id => params[:game_id])
     @comment.save
     @comment.from_game_id = params[:game_id]
     t = Time.now

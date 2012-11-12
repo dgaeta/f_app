@@ -481,7 +481,7 @@ def winners_and_losers
 
 
      days_remaining = (game_end_date - game_start_date)
-     days_remaining = days_remaining / 24 
+    days_remaining = days_remaining / 24 
      days_remaining = days_remaining / 60 
      days_remaining = days_remaining / 60
      days_remaining = days_remaining.round
