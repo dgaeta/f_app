@@ -530,7 +530,7 @@ def winners_and_losers
         duration = @search_results.duration
         start_date = @search_results.game_start_date
         start_date =Date.new(start_date)
-        start_date = start_date.strftime("(%m/%d/%y)")
+        start_date = start_date.strftime("%m/%d/%y")
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date}
         render(json: JSON.pretty_generate(true_json))
