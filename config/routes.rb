@@ -54,7 +54,7 @@ FApp::Application.routes.draw do
   get "auto_init_games_and_end_games" => "games#auto_init_games_and_end_games", :as => "auto_init_games_and_end_games"
   get "auto_end_games" => "games#auto_end_games", :as => "auto_end_games"
   get "auto_start_games" => "games#auto_start_games", :as => "auto_start_games"
-  
+
 
 
   #stripe route
@@ -78,6 +78,7 @@ FApp::Application.routes.draw do
   match "change_email", :to => "users#change_email", :via => "put"
   match "single_game_info", :to => "games#single_game_info", :via => "get"
   match "change_password", :to => "users#change_password", :via => "put"  
+  match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
 
 
 
