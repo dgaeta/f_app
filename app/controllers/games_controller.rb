@@ -297,8 +297,7 @@ end
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
 
-    unless @all_of_users_games[0] == nil 
-          then 
+    unless @all_of_users_games[0] == nil  
           h = Hash.new(0)
 
              @a = 0 
@@ -307,7 +306,7 @@ end
           while @a < @num1  do
             h[@public_games[@a].id] = 0
             @a +=1
-        end
+           end
 
           @b = 0 
           @num2 = @all_of_users_games.count
@@ -315,8 +314,8 @@ end
           while @b < @num2  do
             h.delete(@all_of_users_games[@b]) 
             @b +=1
-        end
-
+           end
+   
           @games_to_display = h.keys
 
           @c = 0 
@@ -326,7 +325,7 @@ end
          while @c < @num3  do
             @public_games << Game.where(:id => @games_to_display[@c]).first
             @c +=1
-        end
+          end
 
        @public_games = @public_games.map do |game|
       {:id => game.id,
@@ -350,8 +349,9 @@ end
         :stakes => game.stakes}
         true_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(true_json))
-      end
-   end
+        end
+    end
+  end
 
 def winners_and_losers
     leaderboard_stats = GameMember.includes(:user). where(:game_id => params[:game_id]).order("successful_checks DESC")
