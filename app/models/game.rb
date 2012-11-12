@@ -32,6 +32,7 @@ class Game < ActiveRecord::Base
 
               if @game.players >= 5 and @diff <= 0 
                 then @game.game_initialized = 1
+                     @game.is_private = "TRUE" 
                      @game.save   
                      puts "started game #{@game.id}"
                 elsif @game.players >= 5 and @diff > 0
