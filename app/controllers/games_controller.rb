@@ -505,7 +505,8 @@ def winners_and_losers
         private_or_not = @search_results.is_private
         duration = @search_results.duration
         start_date = @search_results.game_start_date
-        start_date =Date.at(start_date)
+        start_date = Time.at(start_date)
+        start_date =Date.new(start_date)
         start_date = start_date.strftime('%a %b %d')
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date}
@@ -529,7 +530,8 @@ def winners_and_losers
         private_or_not = @search_results.is_private
         duration = @search_results.duration
         start_date = @search_results.game_start_date
-        start_date =Date.at(start_date)
+        start_date = Time.at(start_date)
+        start_date =Date.new(start_date)
         start_date = start_date.strftime("%-m/%-d/%-y")
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date}
