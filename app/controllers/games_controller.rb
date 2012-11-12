@@ -60,7 +60,6 @@ class GamesController < ApplicationController
   
     respond_to do |format|
       if @game.save
-        Stalker.enqueue("game.check_status", :id => @game.id)
         true_json =  { :status => "okay" }
         format.html { redirect_to @game, notice: 'Game was successfully created.' }
         format.json { render json: JSON.pretty_generate(true_json) }
@@ -272,11 +271,13 @@ class GamesController < ApplicationController
           :message => @user.first_name + "" + "just joined the game", :from_game_id => @game.id)
         c.save
 
-        variable = (Time.now + 3*24*60*60) #3 days after time now
+        variable = Time.now + 24*60*60 #1 day after time now at midnight
+        variable = Time.at(variable).midnight
         variable = variable.to_i
         @game.game_start_date = variable
 
-         variable2 = (Time.now + 17*24*60*60) #17 days after time now
+         variable2 = (Time.now + 14*24*60*60) #14 days after time now at mindnight
+         variable2 = Time.at(variable2).midnight
          variable2 = variable2.to_i
          @game.game_end_date = variable2
          @game.save

@@ -6,7 +6,7 @@ class Game < ActiveRecord::Base
   attr_accessible :creator_id, :duration, :is_private, :wager, :players, :stakes, :game_start_date, :game_end_date, :creator_first_name, 
   :game_initialized
 
-  validates_presence_of :creator_first_name, :case_sensitive => false
+
 
 
   def self.auto_start_games 
@@ -24,6 +24,7 @@ class Game < ActiveRecord::Base
         while @i < @num do 
           @game = Game.where(:id => @all_games[@i]).first
           @start = @game.game_start_date
+          @end = @game.game_end_date
 
           @time_now = Time.now.to_i
 
@@ -37,8 +38,10 @@ class Game < ActiveRecord::Base
                    @game.game_initialized = 0
                    puts "game #{@game.id} time hasnt passed to start, but has enough players"
                 elsif @game.players < 5 and @diff <= 0 
-                     @new_start_date = @start + (3*24*60*60)
+                     @new_start_date = @start +  (1*24*60*60)
+                     @new_end_date = @end + (1*24*60*60)
                      @game.game_start_date = @new_start_date 
+                     @game.game_end_date = @new_end_date
                      @game.save 
                      puts "game #{@game.id} not enough players at start date, added 3 more days to start date"
                 elsif @game.players < 5 and @diff > 0

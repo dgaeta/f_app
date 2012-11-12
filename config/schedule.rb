@@ -1,7 +1,7 @@
-every 1.day, :at => '2:03pm' do
+every 1.day, :at => '12:01 am' do
   runner "Game.auto_start_games"
 end
 
-every 1.day, :at => '2:53 pm' do
+every 1.day, :at => '12:10 am' do
   runner "Game.auto_end_games"
 end
