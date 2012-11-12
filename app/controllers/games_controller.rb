@@ -332,7 +332,7 @@ end
         @public_games = []
 
          while @c < @num3  do
-            @public_games << Game.where(:id => @games_to_display[@c])
+            @public_games << Game.where(:id => @games_to_display[@c]).first
             @c +=1
         end
 
