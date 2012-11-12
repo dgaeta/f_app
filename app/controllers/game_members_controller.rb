@@ -158,7 +158,7 @@ class GameMembersController < ApplicationController
                       then 
                        error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => error} 
-                       #render(json: JSON.pretty_generate(false_json))
+                       render(json: JSON.pretty_generate(false_json))
                       else
               
                         @a = 0
@@ -172,6 +172,8 @@ class GameMembersController < ApplicationController
                             @checked_in_for_games_variable << @game_member.game.id
                             comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @init_games[@a] ,
                               :message => "#{@user.first_name} checked in at the gym.", :stamp => Time.now)
+                            comment.first_name = @user.first_name
+                            comment.last_name = @user.last_name
                             comment.save
                             @a +=1
                           end
