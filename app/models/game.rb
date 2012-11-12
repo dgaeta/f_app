@@ -76,7 +76,7 @@ class Game < ActiveRecord::Base
           if @diff >= 0
             then 
             Stripe.api_key = @stripe_api_key
-            @players = GameMember.where(:game_id => @game.id).order("successful_checks DESC")
+            @players = GameMember.where(:game_id => @game.id).order("successful_checks DESC").pluck(:user_id)
             number_of_players = @players.count  
 
             @i = 0
@@ -84,9 +84,10 @@ class Game < ActiveRecord::Base
 
             while @i < @num  do
             @player = @players[@i]
-            @stat = Stat.where(:winners_id => @player.id).first
+            @stat = Stat.where(:winners_id => @players[@i]).first
+            @stat = @stat
             @stat.losses += 1
-            @save.save
+            @stat.save
             @i +=1
             end
 
@@ -97,7 +98,7 @@ class Game < ActiveRecord::Base
 
              while @losers < @num  do
               user = @players[@losers]
-              user = User.find(user.id)
+              user = User.find(user)
               loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
               loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
                game = Game.where(:id => @game.id).first
@@ -114,9 +115,9 @@ class Game < ActiveRecord::Base
              end
 
              # PAY THE WINNERS
-             winner1 = User.find(@players[0].id)
-             winner2 = User.find(@players[1].id)
-             winner3 = User.find(@players[2].id)
+             winner1 = User.find(@players[0])
+             winner2 = User.find(@players[1])
+             winner3 = User.find(@players[2])
 
    
 		    first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
