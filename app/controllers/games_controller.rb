@@ -542,14 +542,14 @@ def winners_and_losers
 
 
   def get_first_name 
-    @game = Game.where(:id => params[:game_id]).first
+    @game = Game.where(:id => params[:game_id]).pluck(:creator_first_name).first
 
     if @game == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :creator_first_name => @game.creator_first_name }
+        true_json =  { :status => "okay" , :creator_first_name => @game}
         render(json: JSON.pretty_generate(true_json))
     end
   end

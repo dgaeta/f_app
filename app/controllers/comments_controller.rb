@@ -111,8 +111,7 @@ def game_comments
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
-      :stamp => comment.created_at.strftime("(%m/%d/%y)")
-
+      :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
 
