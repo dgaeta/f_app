@@ -76,7 +76,7 @@ class Game < ActiveRecord::Base
           if @diff >= 0
             then 
             Stripe.api_key = @stripe_api_key
-            players = GameMember.where(:game_id => @game.id).pluck(:user_id)
+            players = GameMember.where(:game_id => @game.id).order("successful_checks DESC")
             number_of_players = players.count  
 
             @i = 0
@@ -114,9 +114,9 @@ class Game < ActiveRecord::Base
              end
 
              # PAY THE WINNERS
-             winner1 = User.find(players[0])
-             winner2 = User.find(players[1])
-             winner3 = User.find(players[2])
+             winner1 = User.find(players[0].id)
+             winner2 = User.find(players[1].id)
+             winner3 = User.find(players[2].id)
 
    
 		    first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
