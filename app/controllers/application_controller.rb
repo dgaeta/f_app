@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   def do_stripe
   	@stripe_api_key = "sk_0G8UQEXsgKNmNNdy7QRwKr7VIgjxl"
+  	# Test Secret Key: sk_0G8UQEXsgKNmNNdy7QRwKr7VIgjxl  
+  	# Live Secret Key: sk_0G8Utv86sXeIUY4EO6fif1hAypeDE    	
   end
 
   def not_authenticated
