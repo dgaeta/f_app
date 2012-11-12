@@ -114,14 +114,13 @@ class GameMembersController < ApplicationController
    #########################LOOP TO GET ACTIVE GAMES USER IS IN #######################################################################  
         @i = 0
         @num = number_of_games
+        @init_games = []
 
           while @i < @num  do
              game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
              if game_init_status == 0 
-                @init_games =[]
                @i +=1
             else
-              @init_games = []
               @init_games << @all_of_users_games[@i]
               @i +=1
             end
@@ -134,7 +133,7 @@ class GameMembersController < ApplicationController
          then 
             error = "no games active"
             false_json = { :status => "fail.", :error => error }
-            render(json: JSON.pretty_generate(false_json)) 
+            #render(json: JSON.pretty_generate(false_json)) 
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
                   @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
@@ -159,7 +158,7 @@ class GameMembersController < ApplicationController
                       then 
                        error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => error} 
-                       render(json: JSON.pretty_generate(false_json))
+                       #render(json: JSON.pretty_generate(false_json))
                       else
               
                         @a = 0
@@ -177,7 +176,7 @@ class GameMembersController < ApplicationController
                             @a +=1
                           end
                         true_json =  { :status => "okay", :checked_in_for_games_variable => @checked_in_for_games_variable}
-                        render(json: JSON.pretty_generate(true_json))
+                        #render(json: JSON.pretty_generate(true_json))
                 end
                 ######################################################################################################################
        end
