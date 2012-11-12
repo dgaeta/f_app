@@ -176,7 +176,7 @@ class GameMembersController < ApplicationController
                             @a +=1
                           end
                         true_json =  { :status => "okay", :checked_in_for_games_variable => @checked_in_for_games_variable}
-                        #render(json: JSON.pretty_generate(true_json))
+                        render(json: JSON.pretty_generate(true_json))
                 end
                 ######################################################################################################################
        end
