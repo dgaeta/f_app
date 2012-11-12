@@ -295,37 +295,40 @@ end
 
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    
+    @public_games = Game.where("is_private = false")
 
-     unless @all_of_users_games[0] == nil 
+=begin     unless @all_of_users_games[0] == nil 
           then 
           @number_of_games = @all_of_users_games.count
 
-             @a = 0 #
-             @num1 = @number_of_games #0
-             @b = 0 #1
-             @num2 = @public_games.count #2
+             @a = 0 
+             @num1 = @number_of_games 
+             @b = 0 
+             @num2 = @public_games.count 
+             @joinable_games = []
+             @unjoinable_games = []
+
+              @public_games = Game.where("is_private = false")
 
           while @a <= @num1  do
-            @b = 0
+            @b=0
             while @b < @num2 do
-             if @all_of_users_games[@a] == @public_games[@b].id
-              then  
-              @unjoinable_games = []
+             if @all_of_users_games[@b] == @public_games[@a].id
+              then 
+              @unjoinable_games << @public_games[@a]
               @b +=1
              else
-              @joinable_games = []
-              @joinable_games << @public_games[@b] #[12]
+              @joinable_games << @public_games[@a] #[12]
               @b +=1
             end
           end
-          @a += 1
+          @b += 1
         end
       else 
         @joinable_games = @public_games
       end
-
-       @joinable_games = @joinable_games.map do |game|
+=end
+       @public_games = @public_games.map do |game|
       {:id => game.id,
       :duration => game.duration,
       :wager => game.wager,
@@ -334,12 +337,12 @@ end
     end
 
 
-    if @joinable_games[0] == nil 
+    if @public_games[0] == nil 
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :joinable_games => @joinable_games }
+        true_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(true_json))
     end
   end
