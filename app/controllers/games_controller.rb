@@ -297,51 +297,53 @@ end
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
     @public_games = Game.where("is_private = false")
 
-=begin     unless @all_of_users_games[0] == nil 
+    unless @all_of_users_games[0] == nil 
           then 
-          @number_of_games = @all_of_users_games.count
+          h = Hash.new(0)
 
              @a = 0 
-             @num1 = @number_of_games 
-             @b = 0 
-             @num2 = @public_games.count 
-             @joinable_games = []
-             @unjoinable_games = []
-
-              @public_games = Game.where("is_private = false")
-
-          while @a <= @num1  do
-            @b=0
-            while @b < @num2 do
-             if @all_of_users_games[@b] == @public_games[@a].id
-              then 
-              @unjoinable_games << @public_games[@a]
-              @b +=1
-             else
-              @joinable_games << @public_games[@a] #[12]
-              @b +=1
-            end
-          end
-          @b += 1
+             @num1 = @public_games.count
+        
+          while @a < @num1  do
+            h[@public_games[@a].id] = 0
+            @a +=1
         end
-      else 
-        @joinable_games = @public_games
+
+          @b = 0 
+          @num2 = @all_of_users_games.count
+        
+          while @b < @num2  do
+            h.delete(@all_of_users_games[@b]) 
+            @b +=1
+        end
+
+          @games_to_display = h.keys
+
       end
-=end
+
+  
+    if @public_games[0] == nil 
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        @c = 0 
+        @num3 = @games_to_display.count
+        @public_games = []
+
+         while @c < @num3  do
+            @public_games << Game.where(:id => @games_to_display[@c])
+            @c +=1
+        end
+
        @public_games = @public_games.map do |game|
       {:id => game.id,
       :duration => game.duration,
       :wager => game.wager,
       :players => game.players,
       :stakes => game.stakes}
-    end
+       end
 
-
-    if @public_games[0] == nil 
-      then 
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      else
         true_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(true_json))
     end
