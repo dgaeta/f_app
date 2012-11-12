@@ -355,7 +355,7 @@ end
   end
 
 def winners_and_losers
-    leaderboard_stats = GameMember.includes(:user). where(:game_id => params[:game_id]).order("successful_checks DESC")
+    leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
 
 
        
