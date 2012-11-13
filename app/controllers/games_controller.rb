@@ -515,7 +515,7 @@ def winners_and_losers
 
   def get_private_game_info
 
-    @search_results = Game.where(:id => params[:game_id], :creator_first_name => params[:first_name_of_creator].downcase).first
+    @search_results = Game.where(:id => params[:game_id], :creator_first_name.downcase => params[:first_name_of_creator].downcase).first
 
     unless @search_results == nil 
       then
