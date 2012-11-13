@@ -118,8 +118,8 @@ class Game < ActiveRecord::Base
               user = User.find(user)
               loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
               loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
-               game = Game.where(:id => @game.id).first
-               amount_charged = (game.wager * 100) 
+               @game = Game.where(:id => @game.id).first
+               amount_charged = (@game.wager * 100) 
               
                Stripe::Charge.create(
                    :amount => amount_charged, # (example: 1000 is $10)
