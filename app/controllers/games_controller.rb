@@ -474,13 +474,13 @@ def winners_and_losers
   end
 
   def countdown
-    game = Game.where(:id => params[:game_id])
-    game_end_date = game.game_end_date
-    game_start_date = game.game_start_date
-    game_start_date = game_start_date[0]
+    @game = Game.where(:id => params[:game_id]).first
+    game_end_date = @game.game_end_date
+    game_start_date = @game.game_start_date
+    game_start_date = @game.game_start_date
 
 
-     if game.game_initialized == 0 
+     if @game.game_initialized == 0 
       then 
 
      days_remaining = (game_end_date - game_start_date)
