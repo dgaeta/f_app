@@ -487,7 +487,7 @@ def winners_and_losers
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
            days_remaining = days_remaining.round
-              @string = "Days left untill game begins: #{days_remaining}"
+              @string = "Days left until game begins: #{days_remaining}"
        else 
      days_remaining = (game_end_date - game_start_date)
      days_remaining = days_remaining / 24 
@@ -498,7 +498,7 @@ def winners_and_losers
             then 
            @string = "Game Ended"
             else 
-              @string = "Days left untill game ends: #{days_remaining}"
+              @string = "Days left until game ends: #{days_remaining}"
           end
 
   end
