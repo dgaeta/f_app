@@ -155,7 +155,9 @@ def change_email
     user.email = params[:new_email]
     user.save
 
-    # UPDATE USER'S EMAIL ON STRIPE TOO:
+    if user.save 
+      then 
+      # UPDATE USER'S EMAIL ON STRIPE TOO:
     Stripe.api_key = @stripe_api_key
     unless user.customer_id.nil?
       cu = Stripe::Customer.retrieve(user.customer_id) 
@@ -163,9 +165,6 @@ def change_email
       cu.save
     end
     # END
-
-    if user.save 
-      then 
        true_json =  { :status => "okay"  }
         render(json: JSON.pretty_generate(true_json))
       else
