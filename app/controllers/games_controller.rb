@@ -482,24 +482,25 @@ def winners_and_losers
 
      if @game.game_initialized == 0 
       then 
-          days_remaining = (game_end_date - Time.now.to_i)
+          days_remaining = (game_start_date - Time.now.to_i)
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
            days_remaining = days_remaining.round
-          if days_remaining < 0 
-            then 
-           @string = "Game Ended"
-            else 
               @string = "Days left untill game begins: #{days_remaining}"
-          end
        else 
      days_remaining = (game_end_date - game_start_date)
      days_remaining = days_remaining / 24 
      days_remaining = days_remaining / 60 
      days_remaining = days_remaining / 60
      days_remaining = days_remaining.round
-     @string = "Days left untill game ends: #{days_remaining}"
+     if days_remaining < 0 
+            then 
+           @string = "Game Ended"
+            else 
+              @string = "Days left untill game ends: #{days_remaining}"
+          end
+
   end
   
     if days_remaining == nil 
