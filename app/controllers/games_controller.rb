@@ -490,6 +490,12 @@ def winners_and_losers
      days_remaining = days_remaining.round
    else 
     days_remaining = (game_end_date - Time.now.to_i)
+    if days_remaining < 0 
+      then days_remaining = 0 
+    else 
+      days_remaining = (game_end_date - Time.now.to_i)
+    end
+  end
   
     if days_remaining == nil 
       then 
