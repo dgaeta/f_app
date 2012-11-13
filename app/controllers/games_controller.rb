@@ -477,24 +477,24 @@ def winners_and_losers
     @game = Game.where(:id => params[:game_id]).first
     game_end_date = @game.game_end_date
     game_start_date = @game.game_start_date
-    game_start_date = @game.game_start_date
+    
 
 
      if @game.game_initialized == 0 
       then 
-
-     days_remaining = (game_end_date - game_start_date)
-     days_remaining = days_remaining / 24 
-     days_remaining = days_remaining / 60 
-     days_remaining = days_remaining / 60
-     days_remaining = days_remaining.round
-   else 
-    days_remaining = (game_end_date - Time.now.to_i)
+      days_remaining = (game_end_date - Time.now.to_i)
     if days_remaining < 0 
       then days_remaining = 0 
     else 
       days_remaining = (game_end_date - Time.now.to_i)
     end
+     
+   else 
+     days_remaining = (game_end_date - game_start_date)
+     days_remaining = days_remaining / 24 
+     days_remaining = days_remaining / 60 
+     days_remaining = days_remaining / 60
+     days_remaining = days_remaining.round
   end
   
     if days_remaining == nil 
