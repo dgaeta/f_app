@@ -474,17 +474,22 @@ def winners_and_losers
   end
 
   def countdown
-    game_end_date = Game.where(:id => params[:game_id]).pluck(:game_end_date)
-    game_end_date = game_end_date[0]
-    game_start_date = Game.where(:id => params[:game_id]).pluck(:game_start_date)
+    game = Game.where(:id => params[:game_id])
+    game_end_date = game.game_end_date
+    game_start_date = game.game_start_date
     game_start_date = game_start_date[0]
 
+
+     if game.game_initialized == 0 
+      then 
 
      days_remaining = (game_end_date - game_start_date)
      days_remaining = days_remaining / 24 
      days_remaining = days_remaining / 60 
      days_remaining = days_remaining / 60
      days_remaining = days_remaining.round
+   else 
+    days_remaining = (game_end_date - Time.now.to_i)
   
     if days_remaining == nil 
       then 
