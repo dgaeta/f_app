@@ -483,6 +483,10 @@ def winners_and_losers
      if @game.game_initialized == 0 
       then 
           days_remaining = (game_end_date - Time.now.to_i)
+           days_remaining = days_remaining / 24 
+           days_remaining = days_remaining / 60 
+           days_remaining = days_remaining / 60
+           days_remaining = days_remaining.round
           if days_remaining < 0 
             then 
            @string = "Game Ended"
