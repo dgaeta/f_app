@@ -17,9 +17,9 @@ class PasswordResetsController < ApplicationController
     # This is to not leak information to attackers about which emails exist in the system.
 
     
-         true_json =  { :status => "okay"}
+        true_json =  { :status => "okay"}
         render(json: JSON.pretty_generate(true_json))
-        redirect_to(root_path, :notice => 'Instructions have been sent to your email.')
+        
       end
   end
     
