@@ -482,19 +482,20 @@ def winners_and_losers
 
      if @game.game_initialized == 0 
       then 
-      days_remaining = (game_end_date - Time.now.to_i)
-    if days_remaining < 0 
-      then days_remaining = 0 
-    else 
-      days_remaining = (game_end_date - Time.now.to_i)
-    end
-     
-   else 
+          days_remaining = (game_end_date - Time.now.to_i)
+          if days_remaining < 0 
+            then 
+           @string = "Game Ended"
+            else 
+              @string = "Days left untill game begins: #{days_remaining}"
+          end
+       else 
      days_remaining = (game_end_date - game_start_date)
      days_remaining = days_remaining / 24 
      days_remaining = days_remaining / 60 
      days_remaining = days_remaining / 60
      days_remaining = days_remaining.round
+     @string = "Days left untill game ends: #{days_remaining}"
   end
   
     if days_remaining == nil 
@@ -502,7 +503,7 @@ def winners_and_losers
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :days_remaining => days_remaining }
+        true_json =  { :status => "okay" , :string => @string }
         render(json: JSON.pretty_generate(true_json))
     end
   end
