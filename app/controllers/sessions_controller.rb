@@ -100,14 +100,14 @@
   def login_android
     @session = Session.new
 
-     user = login(params[:email].downcase, params[:password], params[:remember])
+     @user = login(params[:email].downcase, params[:password], params[:remember])
 
    
-      unless user.email == nil
-        user_id = user.id
-        first_name = user.first_name
-        last_name = user.last_name
-        email = user.email
+      unless @user.email == nil
+        @user_id = @user.id
+        first_name = @user.first_name
+        last_name = @user.last_name
+        email = @user.email
         true_json =  { :status => "okay", :id => user_id, :first_name => first_name, :last_name => last_name, :email => email}
         render(json: JSON.pretty_generate(true_json))
       else
