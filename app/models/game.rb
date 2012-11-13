@@ -56,7 +56,7 @@ class Game < ActiveRecord::Base
 
 
   def self.auto_end_games 
-  	@stripe_api_key = "sk_0G8UQEXsgKNmNNdy7QRwKr7VIgjxl"
+  	@stripe_api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
     @all_games = Game.where(:game_initialized => 1)
     @all_games_number = @all_games.count 
 
