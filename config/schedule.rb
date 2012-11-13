@@ -1,4 +1,4 @@
-every 1.day, :at => '4:07 am' do
+every 1.day, :at => '4:30 am' do
   runner "Game.auto_start_games"
 end
 
