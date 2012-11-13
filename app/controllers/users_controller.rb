@@ -53,10 +53,12 @@ require 'json'
 
     respond_to do |format|
       if @user.save
-        gb = Gibbon .new
+        gb = Gibbon.new
         list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]    
         gb.list_subscribe(:id => list_id, :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
+
+        @user.email = params[:email].downcase
 
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
