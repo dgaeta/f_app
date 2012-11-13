@@ -59,6 +59,7 @@ require 'json'
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
 
         @user.email = params[:email].downcase
+        @user.save
 
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
