@@ -209,7 +209,7 @@ class GameMembersController < ApplicationController
             current_checkout_request_time = Time.now.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
 
-            if total_minutes_at_gym > 2700
+            if (total_minutes_at_gym > 2700) & (total_minutes_at_gym <  10800 )
               then
 
               @a = 0
@@ -228,7 +228,7 @@ class GameMembersController < ApplicationController
               else
                 game_member.checkins = 0
                 game_member.save
-                error_string = "not enough time"
+                error_string = "not enough time or greater than 3 hours"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
              end

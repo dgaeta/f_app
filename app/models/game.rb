@@ -85,7 +85,7 @@ class Game < ActiveRecord::Base
             @num4 = number_of_players
               while @e < @num4 do
                   @game_member = @players[@e]
-                  checks = @game_member.successful_checks * 100000
+                  checks = @game_member.successful_checks * 1000000
                   total_minutes = @game_member.total_minutes_at_gym / 60 
                   checks_and_minutes = checks + total_minutes
                   @game_member.end_game_checks_evaluation = checks_and_minutes
