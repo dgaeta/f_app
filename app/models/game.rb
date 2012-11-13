@@ -77,9 +77,25 @@ class Game < ActiveRecord::Base
           if @diff >= 0
             then 
             Stripe.api_key = @stripe_api_key
-            @players = GameMember.where(:game_id => @game.id).order("successful_checks DESC").pluck(:user_id)
+            
+            @players = GameMember.where(:game_id => @game.id)
             number_of_players = @players.count  
 
+            @e = 0
+            @num4 = number_of_players
+              while @e < @num4 do
+                  @game_member = @players[@e]
+                  checks = @game_member.successful_checks * 100000
+                  total_minutes = @game_member.total_minutes_at_gym / 60 
+                  checks_and_minutes = checks + total_minutes
+                  @game_member.end_game_checks_evaluation = checks_and_minutes
+                  @game_member.save
+                  @e += 1
+              end
+
+            @players = GameMember.where(:game_id => @game.id).order("end_game_checks_evaluation DESC")
+
+           
             @i = 0
             @num = number_of_players 
 

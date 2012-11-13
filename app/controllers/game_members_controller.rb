@@ -218,7 +218,7 @@ class GameMembersController < ApplicationController
               while @a < @num2  do
                  game_member = GameMember.where( :user_id => params[:user_id], :game_id => @init_games[@a]).first
                  game_member.checkouts = Time.now.to_i
-                 game_member.total_minutes_at_gym += total_minutes_at_gym
+                 game_member.total_minutes_at_gym += (total_minutes_at_gym 
                  game_member.successful_checks += 1
                  game_member.save
                  @a +=1
@@ -226,6 +226,8 @@ class GameMembersController < ApplicationController
                  render(json: JSON.pretty_generate(true_json))
               end
               else
+                game_member.checkins = 0
+                game_member.save
                 error_string = "not enough time"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))

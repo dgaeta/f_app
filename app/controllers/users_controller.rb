@@ -148,11 +148,21 @@ require 'json'
     end
   end
 
-=begin  def change_email 
+
+def change_email 
     user = User.where(:id => params[:user_id]).first
 
     user.email = params[:new_email]
     user.save
+
+    # UPDATE USER'S EMAIL ON STRIPE TOO:
+    Stripe.api_key = @stripe_api_key
+    unless user.customer_id.nil?
+      cu = Stripe::Customer.retrieve(user.customer_id) 
+      cu.email = user.email
+      cu.save
+    end
+    # END
 
     if user.save 
       then 
@@ -163,7 +173,7 @@ require 'json'
         render(json: JSON.pretty_generate(false_json))
     end
   end
-=end  
+ 
 
 =begin  def change_password
     user = User.where(:id => params[:user_id], :crypted_password => params[:password]).first
