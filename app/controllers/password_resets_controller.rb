@@ -12,13 +12,13 @@ class PasswordResetsController < ApplicationController
     # Tell the user instructions have been sent whether or not email was found.
     # This is to not leak information to attackers about which emails exist in the system.
 
-    if @user
-        true_json =  { :status => "okay"}
+    if @user == nil 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json) ) 
+      else
+         true_json =  { :status => "okay"}
         render(json: JSON.pretty_generate(true_json))
         redirect_to(root_path, :notice => 'Instructions have been sent to your email.')
-      else
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json) )
       end
   end
     
