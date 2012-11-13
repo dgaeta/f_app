@@ -56,6 +56,7 @@ FApp::Application.routes.draw do
   get "auto_start_games" => "games#auto_start_games", :as => "auto_start_games"
   get "get_first_name" => "games#get_first_name", :as => "get_first_name"
   get "reset_password" => "password_resets#create", :as => "reset_password"
+  get "change_email" => "users#change_email", :as => "change_email"
 
 
 
@@ -84,6 +85,7 @@ FApp::Application.routes.draw do
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
+  match "change_email", :to => "users#change_email", :via => "put"
 
 
 
