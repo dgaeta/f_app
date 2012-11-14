@@ -291,7 +291,7 @@ class GamesController < ApplicationController
 end
 
   def public_games
-    @public_games = Game.where("is_private = false")
+    @public_games = Game.where(:is_private => "false", :game_active => 1)
 
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
@@ -515,9 +515,14 @@ def winners_and_losers
 
   def get_private_game_info
 
-    @search_results = Game.where(:id => params[:game_id], :creator_first_name.downcase => params[:first_name_of_creator].downcase).first
+    @search_results = Game.where(:id => params[:game_id], :creator_first_name.downcase => params[:first_name_of_creator].downcase, 
+      :game_active => 1).first
 
-    unless @search_results == nil 
+    @user = User.find(params[:user_id])
+
+    @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
+
+    unless (@game_member != nil) or (@search_results == nil) 
       then
         game_id = @search_results.id
         creator_first_name = @search_results.creator_first_name
@@ -539,7 +544,7 @@ def winners_and_losers
   end
 
   def single_game_info 
-    @search_results = Game.where(:id => params[:game_id]).first
+    @search_results = Game.where(:id => params[:game_id], :game_active => 1 ).first
 
     unless @search_results == nil 
       then

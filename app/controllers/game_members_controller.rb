@@ -117,7 +117,7 @@ class GameMembersController < ApplicationController
         @init_games = []
 
           while @i < @num  do
-             game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
+             game_init_status = Game.where(:id => @all_of_users_games[@i], :game_active => 1).pluck(:game_initialized).first
              if game_init_status == 0 
                @i +=1
             else
@@ -193,7 +193,7 @@ class GameMembersController < ApplicationController
         @num = number_of_games
 
           while @i < @num  do
-             game_init_status = Game.where(:id => @all_of_users_games[@i]).pluck(:game_initialized).first
+             game_init_status = Game.where(:id => @all_of_users_games[@i], :game_active => 1).pluck(:game_initialized).first
              if game_init_status == 0 
               then  @i +=1
             else
@@ -321,7 +321,7 @@ class GameMembersController < ApplicationController
   end
 
   def games_user_is_in 
-    g = GameMember.where(:user_id => params[:user_id]).pluck(:game_id)
+    g = GameMember.where(:user_id => params[:user_id], :game_active => 1).pluck(:game_id)
 
     unless g[0] == nil
       then
