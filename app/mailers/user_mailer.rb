@@ -55,6 +55,8 @@ class UserMailer < ActionMailer::Base
   @url  = "http://0.0.0.0:3000/password_resets/#{user.reset_password_token}/edit"
   mail(:to => user.email,
        :subject => "Your password has been reset")
+  end
+
 end
 
 =begin def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, checklocation.gym_name
