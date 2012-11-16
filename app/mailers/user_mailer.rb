@@ -70,7 +70,7 @@ def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, c
 
 end
 
-def decided_location_mailer(user, decidedlocations.geo_lat, decidedlocations.geo_long, gym_name
+=begin def decided_location_mailer(user, decidedlocations.geo_lat, decidedlocations.geo_long, gym_name
       , user_email, string, decidedlocations.decision)
     @user = user
     @user_email = user_email
@@ -83,4 +83,4 @@ def decided_location_mailer(user, decidedlocations.geo_lat, decidedlocations.geo
     mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
 
 end
-
+=end

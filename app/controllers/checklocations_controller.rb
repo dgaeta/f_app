@@ -119,6 +119,7 @@ class ChecklocationsController < ApplicationController
       #UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
       #, @user_email, @string, @decidedlocations.decision ).deliver 
     end
+  end
     
   end
 end
