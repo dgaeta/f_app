@@ -9,6 +9,8 @@ class CreateStats < ActiveRecord::Migration
       t.integer :second_place_finishes, :default => 0
       t.integer :third_place_finishes, :default => 0
       t.integer :losses, :default => 0
+      t.integer :total_minutes_at_gym , :default => 0
+      t.integer :successful_checks, :default => 0
 
       t.timestamps
     end

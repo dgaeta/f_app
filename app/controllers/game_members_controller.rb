@@ -208,6 +208,9 @@ class GameMembersController < ApplicationController
             last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
             current_checkout_request_time = Time.now.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
+            @stat = Stat.where(:winners_id => @user.id).first
+            @stat.total_minutes_at_gym += total_minutes_at_gym
+            @stat.save
 
             if (total_minutes_at_gym > 2700) & (total_minutes_at_gym <  10800 )
               then
@@ -222,6 +225,8 @@ class GameMembersController < ApplicationController
                  game_member.successful_checks += 1
                  game_member.save
                  @a +=1
+                 @stat.successful_checks += 1
+                 @stat.save
                  true_json =  { :status => "okay"}
                  render(json: JSON.pretty_generate(true_json))
               end
