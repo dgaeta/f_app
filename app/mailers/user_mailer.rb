@@ -57,12 +57,28 @@ class UserMailer < ActionMailer::Base
        :subject => "Your password has been reset")
 end
 
-def location_mailer(geo_lat, geo_long, user, gym_name, decided_locations, check_location, user_email)
+def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, checklocation.gym_name
+      , user_email, string)
     @user = user
     @user_email = user_email
-    @geo_lat = geo_lat
-    @geo_long = geo_long
+    @geo_lat = checklocation.geo_lat
+    @geo_long = checklocation.geo_long
     @gym_name = gym_name
+    @string = string 
+    @url  = "http://fitsby.com"
+    mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
+
+end
+
+def decided_location_mailer(user, decidedlocations.geo_lat, decidedlocations.geo_long, gym_name
+      , user_email, string, decidedlocations.decision)
+    @user = user
+    @user_email = user_email
+    @decision = decidedlocations.decision
+    @geo_lat = decidedlocations.geo_lat
+    @geo_long = decidedlocations.geo_long
+    @gym_name = gym_name
+    @string = string 
     @url  = "http://fitsby.com"
     mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
 

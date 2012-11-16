@@ -86,6 +86,7 @@ class ChecklocationsController < ApplicationController
     @decidedlocations = Decidedlocation.where(:gym_name => params[:gym_name].downcase)
     @user = User.find(params[:user_id])
     @user_email = @user.email
+    @gym_name = params[:gym_name]
 
    if  @decidedlocations[0] == nil 
     then  
@@ -100,20 +101,23 @@ class ChecklocationsController < ApplicationController
     @string = "checking location"
      true_json =  { :status => "okay", :string => @string }
           render(json: JSON.pretty_generate(true_json))
-     UserMailer.location_mailer(@user, @checklocation).deliver
+     UserMailer.check_location_mailer(@user, @checklocation.geo_lat, @checklocation.geo_long, @gym_name
+      , @user_email, @string ).deliver
     
     elsif @decidedlocations.decision == 1  
-      @string = "locationd black listed"
+      @string = "location black listed"
       false_json = { :status => "fail.", :string => @string} 
       render(json: JSON.pretty_generate(false_json))
-      UserMailer.location_mailer(@user, @decidedlocations).deliver
+      UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
+      , @user_email, @string, @decidedlocations.decision ).deliver
        
     elsif @decidedlocations.decision == 0 
     
      @string = "location good to go"
       true_json = { :status => "okay", :string => @string} 
       render(json: JSON.pretty_generate(true_json))
-      UserMailer.location_mailer(@user, @decidedlocations).deliver
+      UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
+      , @user_email, @string, @decidedlocations.decision ).deliver
     
   end
 end
