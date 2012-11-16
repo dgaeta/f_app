@@ -57,7 +57,7 @@ class UserMailer < ActionMailer::Base
        :subject => "Your password has been reset")
 end
 
-def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, checklocation.gym_name
+=begin def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, checklocation.gym_name
       , user_email, string)
     @user = user
     @user_email = user_email
