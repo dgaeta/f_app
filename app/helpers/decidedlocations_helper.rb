@@ -1,0 +1,2 @@
+module DecidedlocationsHelper
+end

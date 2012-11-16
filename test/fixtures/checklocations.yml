@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  requester_id: 1
+  gym_name: MyString
+  geo_lat: 
+  geo_long: 
+
+two:
+  requester_id: 1
+  gym_name: MyString
+  geo_lat: 
+  geo_long: 

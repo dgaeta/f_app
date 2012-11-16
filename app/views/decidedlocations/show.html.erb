@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Geo lat:</b>
+  <%= @decidedlocation.geo_lat %>
+</p>
+
+<p>
+  <b>Geo long:</b>
+  <%= @decidedlocation.geo_long %>
+</p>
+
+<p>
+  <b>Gym name:</b>
+  <%= @decidedlocation.gym_name %>
+</p>
+
+<p>
+  <b>Decision:</b>
+  <%= @decidedlocation.decision %>
+</p>
+
+
+<%= link_to 'Edit', edit_decidedlocation_path(@decidedlocation) %> |
+<%= link_to 'Back', decidedlocations_path %>

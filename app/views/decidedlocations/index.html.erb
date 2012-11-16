@@ -1,0 +1,29 @@
+<h1>Listing decidedlocations</h1>
+
+<table>
+  <tr>
+    <th>Geo lat</th>
+    <th>Geo long</th>
+    <th>Gym name</th>
+    <th>Decision</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @decidedlocations.each do |decidedlocation| %>
+  <tr>
+    <td><%= decidedlocation.geo_lat %></td>
+    <td><%= decidedlocation.geo_long %></td>
+    <td><%= decidedlocation.gym_name %></td>
+    <td><%= decidedlocation.decision %></td>
+    <td><%= link_to 'Show', decidedlocation %></td>
+    <td><%= link_to 'Edit', edit_decidedlocation_path(decidedlocation) %></td>
+    <td><%= link_to 'Destroy', decidedlocation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Decidedlocation', new_decidedlocation_path %>

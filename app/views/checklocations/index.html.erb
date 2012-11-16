@@ -1,0 +1,29 @@
+<h1>Listing checklocations</h1>
+
+<table>
+  <tr>
+    <th>Requester</th>
+    <th>Gym name</th>
+    <th>Geo lat</th>
+    <th>Geo long</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @checklocations.each do |checklocation| %>
+  <tr>
+    <td><%= checklocation.requester_id %></td>
+    <td><%= checklocation.gym_name %></td>
+    <td><%= checklocation.geo_lat %></td>
+    <td><%= checklocation.geo_long %></td>
+    <td><%= link_to 'Show', checklocation %></td>
+    <td><%= link_to 'Edit', edit_checklocation_path(checklocation) %></td>
+    <td><%= link_to 'Destroy', checklocation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Checklocation', new_checklocation_path %>

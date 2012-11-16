@@ -61,6 +61,7 @@ FApp::Application.routes.draw do
   get "reset_password" => "password_resets#create", :as => "reset_password"
   get "change_password" => "password_resets#change_password", :as => "change_password"
   get "change_email" => "password_resets#change_email", :as => "change_email"
+  get "change_location" => "checklocations#check_location", :as => "check_location"
 
 
 
@@ -89,6 +90,7 @@ FApp::Application.routes.draw do
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
   match "change_email", :to => "password_resets#change_email", :via => "put"
+  match "change_location", :to => "checklocations#check_location", :via => "post"
 
 
 
