@@ -117,7 +117,8 @@ class ChecklocationsController < ApplicationController
       true_json = { :status => "okay", :string => @string} 
       render(json: JSON.pretty_generate(true_json))
       #UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
-      #, @user_email, @string, @decidedlocations.decision ).deliver
+      #, @user_email, @string, @decidedlocations.decision ).deliver 
+    end
     
   end
 end
