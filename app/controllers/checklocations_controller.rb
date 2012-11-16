@@ -85,7 +85,8 @@ class ChecklocationsController < ApplicationController
   def validate_gym
     @decidedlocations = Decidedlocation.where(:gym_name => params[:gym_name].downcase)
     @user = User.find(params[:user_id])
-   
+    @user_email = @user.email
+
    if  @decidedlocations[0] == nil 
     then  
     @checklocation = Checklocation.new
