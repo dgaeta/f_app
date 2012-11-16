@@ -11,33 +11,52 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102005442) do
+ActiveRecord::Schema.define(:version => 20121116041338) do
+
+  create_table "checklocations", :force => true do |t|
+    t.integer  "requester_id"
+    t.string   "gym_name"
+    t.float    "geo_lat"
+    t.float    "geo_long"
+    t.integer  "number_of_requests"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
 
   create_table "comments", :force => true do |t|
-    t.integer  "game_member_id"
+    t.integer  "from_user_id"
     t.text     "message"
     t.time     "stamp"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "from_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.text     "first_name"
     t.text     "last_name"
     t.integer  "from_game_id"
   end
 
-  add_index "comments", ["game_member_id"], :name => "fki_from_id"
+  add_index "comments", ["from_user_id"], :name => "fki_from_id"
+
+  create_table "decidedlocations", :force => true do |t|
+    t.float    "geo_lat"
+    t.float    "geo_long"
+    t.string   "gym_name"
+    t.integer  "decision"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "game_members", :force => true do |t|
     t.integer  "game_id"
     t.integer  "user_id"
-    t.integer  "successful_checks"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-    t.integer  "checkins",             :default => 0
-    t.integer  "checkouts",            :default => 0
-    t.integer  "final_standing",       :default => 0
-    t.integer  "total_minutes_at_gym"
-    t.integer  "daily_checkins"
+    t.integer  "successful_checks",          :default => 0
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.integer  "checkins",                   :default => 0
+    t.integer  "checkouts",                  :default => 0
+    t.integer  "final_standing",             :default => 0
+    t.integer  "total_minutes_at_gym",       :default => 0
+    t.integer  "daily_checkins",             :default => 0
+    t.integer  "end_game_checks_evaluation", :default => 0
   end
 
   add_index "game_members", ["game_id"], :name => "fki_game_id"
@@ -48,12 +67,15 @@ ActiveRecord::Schema.define(:version => 20121102005442) do
     t.boolean  "is_private"
     t.integer  "duration"
     t.integer  "wager"
-    t.datetime "created_at",      :null => false
-    t.time     "updated_at",      :null => false
+    t.datetime "created_at",                        :null => false
+    t.time     "updated_at",                        :null => false
     t.integer  "players"
     t.integer  "stakes"
     t.integer  "game_start_date"
     t.integer  "game_end_date"
+    t.text     "creator_first_name"
+    t.integer  "game_initialized",   :default => 0
+    t.integer  "game_active",        :default => 1
   end
 
   add_index "games", ["creator_id"], :name => "fki_creator_id"
@@ -79,6 +101,8 @@ ActiveRecord::Schema.define(:version => 20121102005442) do
     t.integer  "second_place_finishes", :default => 0
     t.integer  "third_place_finishes",  :default => 0
     t.integer  "losses",                :default => 0
+    t.integer  "total_minutes_at_gym",  :default => 0
+    t.integer  "successful_checks",     :default => 0
   end
 
   add_index "stats", ["winners_id"], :name => "fki_winners_id"

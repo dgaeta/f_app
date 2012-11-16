@@ -1,4 +1,8 @@
 FApp::Application.routes.draw do
+  resources :decidedlocations
+
+  resources :checklocations
+
   get "password_resets/create"
 
   get "password_resets/edit"
