@@ -321,11 +321,27 @@ class GameMembersController < ApplicationController
   end
 
   def games_user_is_in 
-    g = GameMember.where(:user_id => params[:user_id], :game_active => 1).pluck(:game_id)
+    g = GameMember.where(:user_id => params[:user_id],).pluck(:game_id)
+    g_number = g.count 
+
+    @a = 0 
+    @num = g_number 
+    @array = []
+
+    while @a < @num do 
+      b = Game.find(g[@a])
+      if b.game_active == 1
+        then @array << b.id 
+        @a += 1
+      else 
+        @a +=1
+      end
+    end
+
 
     unless g[0] == nil
       then
-      true_json =  { :status => "okay" , :games_user_is_in => g }
+      true_json =  { :status => "okay" , :games_user_is_in => @array }
         render(json: JSON.pretty_generate(true_json)) 
       else
         false_json = { :status => "fail."} 

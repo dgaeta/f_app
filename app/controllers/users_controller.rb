@@ -58,7 +58,7 @@ require 'json'
         gb.list_subscribe(:id => list_id, :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
 
-        @user.email = params[:email].downcase
+        @user.email = @user.email.downcase
         @user.save
 
         auto_login(@user)
@@ -74,6 +74,7 @@ require 'json'
       end
     end
   end
+
 
   # PUT /users/1
   # PUT /users/1.json

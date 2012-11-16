@@ -1,4 +1,4 @@
-  class SessionsController < ApplicationController
+ class SessionsController < ApplicationController
 
 
 
@@ -66,6 +66,7 @@
       end
     end
   end
+
 
   # PUT /sessions/1
   # PUT /sessions/1.json

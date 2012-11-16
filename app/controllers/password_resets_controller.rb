@@ -1,5 +1,6 @@
+require 'bcrypt'
 class PasswordResetsController < ApplicationController
-
+include BCrypt
     
   # request password reset.
   # you get here when the user entered his email in the reset password form and submitted it.
@@ -44,4 +45,60 @@ class PasswordResetsController < ApplicationController
       render :action => "edit"
     end
   end
+
+  def change_password 
+    @user = login(params[:email].downcase, params[:password])
+    @new_password = params[:new_password]
+    @new_password_confirmation = params[:new_password_confirmation]
+   
+  
+    if @user
+      then 
+       if @new_password == @new_password_confirmation
+        then 
+          @user.change_password!(params[:user][:new_password])
+          @user.save
+          true_json =  { :status => "okay"  }
+          render(json: JSON.pretty_generate(true_json))
+        else 
+          @string = "passwords dont match"
+          false_json = { :status => "fail.", :string => @string} 
+          render(json: JSON.pretty_generate(false_json))
+        end
+      else 
+          @string = "wrong user password"
+          false_json = { :status => "fail.", :string => @string} 
+          render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
+  def change_email 
+    @user = User.where(:user_id).first
+    @game_member = GameMember.where(:user_id => params[:user_id])
+
+    if @user 
+      then 
+      @user.email = params[:new_email].downcase
+      @user.save 
+       unless @game_member[0] == nil 
+           # UPDATE USER'S EMAIL ON STRIPE TOO:
+          Stripe.api_key = @stripe_api_key
+          unless user.customer_id.nil?
+            cu = Stripe::Customer.retrieve(user.customer_id) 
+            cu.email = user.email
+            cu.save
+          end
+          # END
+        end
+
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else
+       false_json = { :status => "fail."} 
+          render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
+
+
 end

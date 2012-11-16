@@ -260,7 +260,7 @@ class GamesController < ApplicationController
         @game = Game.new(params[:game])
         @game.players = 1
         @first_name = @user.first_name.downcase
-        @game.creator_first_name = @first_name
+        @game.creator_first_name = @user.first_name
         @game.stakes = @game.wager
         @game.save
 
@@ -464,7 +464,7 @@ def winners_and_losers
           :message => user.first_name + "" + " just joined the game", :from_game_id => game_member.game_id)
         c.save
 
-              true_json =  { :status => "okay" }
+              true_json =  { :status => "okay", :game_id => game.id, :creator_first_name => game.creator_first_name }
               render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail."} 
@@ -475,35 +475,42 @@ def winners_and_losers
 
   def countdown
     @game = Game.where(:id => params[:game_id]).first
-    game_end_date = @game.game_end_date
-    game_start_date = @game.game_start_date
+    
     
 
 
-     if @game.game_initialized == 0 
-      then 
-          days_remaining = (game_start_date - Time.now.to_i)
+     unless @game == nil
+      then
+        if @game.game_initialized == 0 
+           game_start_date = @game.game_start_date
+           days_remaining = (game_start_date - Time.now.to_i)
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
+           days_remaining = days_remaining - 1
            days_remaining = days_remaining.round
               @string = "Days left until game begins: #{days_remaining}"
        else 
-     days_remaining = (game_end_date - game_start_date)
-     days_remaining = days_remaining / 24 
-     days_remaining = days_remaining / 60 
-     days_remaining = days_remaining / 60
-     days_remaining = days_remaining.round
-     if days_remaining < 0 
+           game_end_date = @game.game_end_date
+           game_start_date = @game.game_start_date
+           days_remaining = (game_end_date - game_start_date)
+           days_remaining = days_remaining / 24 
+           days_remaining = days_remaining / 60 
+           days_remaining = days_remaining / 60
+           days_remaining = days_remaining - 1
+           days_remaining = days_remaining.round
+          if days_remaining < 0 
             then 
            @string = "Game Ended"
             else 
               @string = "Days left until game ends: #{days_remaining}"
           end
-
-  end
+        end
+      else 
+        @string = "Get started by creating or join a game!"
+      end
   
-    if days_remaining == nil 
+    if (@game == nil) or (days_remaining == nil)
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))

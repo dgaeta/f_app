@@ -43,6 +43,7 @@ end
  gem 'gibbon'
  gem 'stalker'
  gem 'whenever', :require => false
+ gem "bcrypt-ruby", "~> 3.0.1"
 
 
 
