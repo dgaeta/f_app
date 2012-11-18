@@ -176,7 +176,7 @@ class Game < ActiveRecord::Base
              winner1_money_won = ((stakes - (@game.wager * 3)) * @first_place_percentage)
              winner2_money_won = ((stakes - (@game.wager * 3)) * @second_place_percentage)
              winner3_money_won = ((stakes - (@game.wager * 3)) *  @third_place_percentage)
-             fitsby_money_won = ((stakes - (@game.wager * 3)) * @fitsby_percentage) + (.50 * (@number_of_players - 3))
+             fitsby_money_won = ((stakes - (@game.wager * 3)) * @fitsby_percentage) + (0.50 * (@number_of_players - 3))
 
 
              UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
