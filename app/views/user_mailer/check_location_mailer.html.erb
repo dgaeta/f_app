@@ -4,23 +4,18 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h4 style="color: red">FOR FITSBY EMPLOYEES ONLY</h4>
-    <p>Pay the winners of this game:</p>
+    <h2 style="color: red">FOR FITSBY EMPLOYEES ONLY</h2><br/>
+    <h3>This user just worked out at an unverified gym and requested that we verify it:</h3>
     <p>
-      You owe <strong><%= @winner1.email %></strong>: <span style="color:red">$<%= @winner1_money_won %></span>.<br/>
-      You owe <strong><%= @winner2.email %></strong>: <span style="color:red">$<%= @winner2_money_won %></span>.<br/>
-      You owe <strong><%= @winner3.email %></strong>: <span style="color:red">$<%= @winner3_money_won %></span>.
-    </p>
-
-    <br/>
+      <strong>Description</strong>: <%= @string %><br/>
+      <strong>User ID</strong>: <%= @user.id %><br/>
+      <strong>User Email</strong>: <%= @user_email %><br/>
+      <strong>Gym Name (downcased)</strong>: <%= @gym_name %><br/>
+      <strong>Geo Latitude</strong>: <%= @geo_lat %><br/>
+      <strong>Geo Longitude</strong>: <%= @geo_long %><br/>
+      <strong>Number of requests this user has made for this gym</strong>: <%= @number_of_requests %><br/>
+    </p><br/>
     
-    Use <a href="https://www.paypal.com/webapps/mpp/send-money-online">PayPal Send Money Online</a>.
-
-    <p>
-      Fitsby made this much money: <span style="color: green">$<%= @fitsby_money_won %></span>
-      <br/><br/>
-      Remember to check this email as a green checkmark so we know that we paid these people! Thanks guy.
-    </p>
-    
+    <span>Go into PGAdmin and change the column called "decision" in the table called "decidedlocations" (where 1 means "blacklisted" and is not a real gym, and 0 means "whitelisted" and means that the gym is good to go.</span>
   </body>
 </html>

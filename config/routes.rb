@@ -61,7 +61,7 @@ FApp::Application.routes.draw do
   get "reset_password" => "password_resets#create", :as => "reset_password"
   get "change_password" => "password_resets#change_password", :as => "change_password"
   get "change_email" => "password_resets#change_email", :as => "change_email"
-  get "change_location" => "checklocations#check_location", :as => "check_location"
+  get "validate_gym" => "checklocations#validate_gym", :as => "validate_gym"
   get "logout" => "sessions#destroy", :as => "logout"
 
 

@@ -5,6 +5,7 @@ class CreateDecidedlocations < ActiveRecord::Migration
       t.float :geo_long
       t.string :gym_name
       t.integer :decision
+      t.integer :number_of_requests, :default => 1
 
       t.timestamps
     end

@@ -83,41 +83,94 @@ class ChecklocationsController < ApplicationController
 
 
   def validate_gym
-    @decidedlocations = Decidedlocation.where(:gym_name => params[:gym_name].downcase)
+    @decidedlocations = Decidedlocation.where(:gym_name => params[:gym_name].downcase).first
     @user = User.find(params[:user_id])
     @user_email = @user.email
     @gym_name = params[:gym_name]
 
-   if  @decidedlocations[0] == nil 
+   if  @decidedlocations == nil 
     then  
     @checklocation = Checklocation.new
-    @checklocation = Checklocation.new(params[:checklocation])
-
-
-    @checklocation.requester_id = params[:user_id]
-    @checklocation.number_of_requests += 1
+    @checklocation = Checklocation.new(:requester_id => params[:user_id], :gym_name => params[:gym_name], :geo_lat => params[:geo_lat],
+     :geo_long => params[:geo_long])
     @checklocation.save
+    @user.number_of_requests += 1
+    @number_of_requests = @user.number_of_requests
 
-    @string = "checking location"
+    @decidedlocation = Decidedlocation.new(:gym_name => params[:gym_name], :geo_lat => params[:geo_lat],
+     :geo_long => params[:geo_long])
+    @decidedlocation.save
+
+    @user.number_of_requests += 1
+    @user.save
+
+    @geo_lat = @checklocation.geo_lat
+    @geo_long = @checklocation.geo_long
+
+    @string = "checking location, check in allowed."
      true_json =  { :status => "okay", :string => @string }
           render(json: JSON.pretty_generate(true_json))
-        #UserMailer.check_location_mailer(@user, @checklocation.geo_lat, @checklocation.geo_long, @gym_name
-      #, @user_email, @string ).deliver
-    
-    elsif @decidedlocations.decision == 1  
-      @string = "location black listed"
-      false_json = { :status => "fail.", :string => @string} 
-      render(json: JSON.pretty_generate(false_json))
-      #UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
-      #, @user_email, @string, @decidedlocations.decision ).deliver
-       
-    elsif @decidedlocations.decision == 0 
-    
-     @string = "location good to go"
+        UserMailer.check_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string , @number_of_requests).deliver
+
+     elsif @decidedlocations.decision.nil?
+      @decidedlocations.number_of_requests += 1
+      @number_of_requests_for_gym = @decidedlocations.number_of_requests
+      @decidedlocations_id = @decidedlocations.id
+      @user.number_of_requests += 1
+      @user.save
+
+      @number_of_requests_by_user = @user.number_of_requests
+      @number_of_requests_for_gym = @decidedlocations.number_of_requests
+
+  
+
+      @string = "still working on location, check in allowed."
       true_json = { :status => "okay", :string => @string} 
       render(json: JSON.pretty_generate(true_json))
-      #UserMailer.decided_location_mailer(@user, @decidedlocations.geo_lat, @checklocation.geo_long, @gym_name
-      #, @user_email, @string, @decidedlocations.decision ).deliver 
+      UserMailer.additional_request_for_undecided_location(@user, @gym_name, @user_email, @string, @number_of_requests_for_gym, 
+        @decidedlocations_id, @number_of_requests_by_user ).deliver     
+    
+    elsif @decidedlocations.decision == 1 
+       @geo_lat = @decidedlocations.geo_lat
+       @geo_long = @decidedlocations.geo_long
+       @decision = @decidedlocations.decision
+
+       @checklocation = Checklocation.new(params[:checklocation])
+       @checklocation.save
+       @checklocation.requester_id = @user.id
+
+       @user.number_of_requests += 1
+      @user.save
+      
+
+       @number_of_requests = @user.number_of_requests
+
+      @string = "location black listed. Sorry."
+      false_json = { :status => "fail.", :string => @string} 
+      render(json: JSON.pretty_generate(false_json))
+      UserMailer.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver
+       
+    elsif @decidedlocations.decision == 0 
+      @geo_lat = @decidedlocations.geo_lat
+       @geo_long = @decidedlocations.geo_long
+       @decision = @decidedlocations.decision
+
+       @checklocation = Checklocation.new(params[:checklocation])
+       @checklocation.save
+       @checklocation.requester_id = @user.id
+       @checklocation.number_of_requests += 1
+
+       @user.number_of_requests += 1
+       @user.save
+
+       @number_of_requests = @user.number_of_requests
+
+      @string = "location good to go."
+      true_json = { :status => "okay", :string => @string} 
+      render(json: JSON.pretty_generate(true_json))
+      UserMailer.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver 
+
+   
     end
     
   end

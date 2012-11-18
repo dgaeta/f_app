@@ -37,8 +37,9 @@ class UserMailer < ActionMailer::Base
     mail(:to => user.email, :subject => "Oh no #{@user.first_name}! You just lost a game of Fitsby")
   end
 
-  def email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won, 
-         winner3, winner3_money_won, fitsby_money_won)   ##make view
+  def email_ourselves_to_pay_winners(game_id, winner1, winner1_money_won, winner2, winner2_money_won, 
+         winner3, winner3_money_won, fitsby_money_won, total_amount_charged_to_losers)   ##make view
+    @game_id = game_id
     @winner1 = winner1
     @winner1_money_won = sprintf("%.2f", winner1_money_won)
     @winner2 = winner2
@@ -46,6 +47,7 @@ class UserMailer < ActionMailer::Base
     @winner3 = winner3
     @winner3_money_won = sprintf("%.2f", winner3_money_won)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
+    @total_amount_charged_to_losers = total_amount_charged_to_losers
     @url  = "http://fitsby.com"
     mail(:to => "payments@fitsby.com", :subject => "You owe people money!")
   end
@@ -57,14 +59,12 @@ class UserMailer < ActionMailer::Base
        :subject => "Your password has been reset")
   end
 
-end
 
-=begin def check_location_mailer(user, checklocation.geo_lat, checklocation.geo_long, checklocation.gym_name
-      , user_email, string)
+def check_location_mailer(user, geo_lat, geo_long, gym_name, user_email, string, number_of_requests)
     @user = user
     @user_email = user_email
-    @geo_lat = checklocation.geo_lat
-    @geo_long = checklocation.geo_long
+    @geo_lat = geo_lat
+    @geo_long = geo_long
     @gym_name = gym_name
     @string = string 
     @url  = "http://fitsby.com"
@@ -72,17 +72,29 @@ end
 
 end
 
-=begin def decided_location_mailer(user, decidedlocations.geo_lat, decidedlocations.geo_long, gym_name
-      , user_email, string, decidedlocations.decision)
+def decided_location_mailer(user, geo_lat, geo_long, gym_name, user_email, string, decision)
     @user = user
     @user_email = user_email
-    @decision = decidedlocations.decision
-    @geo_lat = decidedlocations.geo_lat
-    @geo_long = decidedlocations.geo_long
+    @decision = decision
+    @geo_lat = geo_lat
+    @geo_long = geo_long
     @gym_name = gym_name
     @string = string 
     @url  = "http://fitsby.com"
     mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
 
 end
-=end
+
+def additional_request_for_undecided_location(user, user_email, string, gym_name, number_of_requests_for_gym, decidedlocations_id, number_of_requests_by_user)
+    @user = user
+    @user_email = user_email
+    @gym_name = gym_name
+    @string = string 
+    @number_of_requests_for_gym = number_of_requests_for_gym
+    @number_of_requests_by_user = number_of_requests_by_user
+    @decidedlocations_id = decidedlocations_id
+    @url  = "http://fitsby.com"
+    mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
+  end
+
+end

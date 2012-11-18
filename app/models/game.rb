@@ -59,12 +59,14 @@ class Game < ActiveRecord::Base
   	@stripe_api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
     @all_games = Game.where(:game_initialized => 1)
     @all_games_number = @all_games.count 
+    @total_amount_charged_to_losers = 0 
 
     @i = 0 
     @num = @all_games_number
 
     while @i < @num do 
       @game = Game.where(:id => @all_games[@i]).first
+      @game_id = @game.id
       @start = @game.game_start_date
 
       @time_now = Time.now.to_i
@@ -120,6 +122,7 @@ class Game < ActiveRecord::Base
               loser_customer_id = user.customer_id   # if we saved user as a user's email, we need to call it now. Brent needs to send us all params of the losers
                @game = Game.where(:id => @game.id).first
                amount_charged = (@game.wager * 100) + 50
+               @total_amount_charged_to_losers += amount_charged
 
               
                Stripe::Charge.create(
@@ -173,7 +176,7 @@ class Game < ActiveRecord::Base
              winner1_money_won = ((stakes - (@game.wager * 3)) * @first_place_percentage)
              winner2_money_won = ((stakes - (@game.wager * 3)) * @second_place_percentage)
              winner3_money_won = ((stakes - (@game.wager * 3)) *  @third_place_percentage)
-             fitsby_money_won = ((stakes - (@game.wager * 3)) * @fitsby_percentage)
+             fitsby_money_won = ((stakes - (@game.wager * 3)) * @fitsby_percentage) + (.50 * (@number_of_players - 3))
 
 
              UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
@@ -182,8 +185,8 @@ class Game < ActiveRecord::Base
 
              UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
 
-             UserMailer.email_ourselves_to_pay_winners(winner1, winner1_money_won, winner2, winner2_money_won,
-             winner3, winner3_money_won, fitsby_money_won ).deliver 
+             UserMailer.email_ourselves_to_pay_winners(@game_id, winner1, winner1_money_won, winner2, winner2_money_won,
+             winner3, winner3_money_won, fitsby_money_won, @total_amount_charged_to_losers ).deliver 
 
              @game.game_active = 0
              @game.save
