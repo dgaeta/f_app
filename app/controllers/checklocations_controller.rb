@@ -113,6 +113,7 @@ class ChecklocationsController < ApplicationController
 
      elsif @decidedlocations.decision.nil?
       @decidedlocations.number_of_requests += 1
+      @decidedlocations.save
       @number_of_requests_for_gym = @decidedlocations.number_of_requests
       @decidedlocations_id = @decidedlocations.id
       @user.number_of_requests += 1
