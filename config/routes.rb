@@ -90,7 +90,7 @@ FApp::Application.routes.draw do
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
-  match "change_email", :to => "password_resets#change_email", :via => "put"
+  match "change_email", :to => "password_resets#change_email", :via => "post"
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"
 
 
