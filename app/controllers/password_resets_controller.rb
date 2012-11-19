@@ -83,7 +83,7 @@ include BCrypt
        unless @game_member[0] == nil 
            # UPDATE USER'S EMAIL ON STRIPE TOO:
           Stripe.api_key = @stripe_api_key
-          unless user.customer_id.nil?
+          unless @user.customer_id.nil?
             cu = Stripe::Customer.retrieve(user.customer_id) 
             cu.email = user.email
             cu.save
