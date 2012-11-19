@@ -146,7 +146,7 @@ class GamesController < ApplicationController
         variable = variable.to_i
         @game.game_start_date = variable
 
-         variable2 = (Time.now + 14*24*60*60) #14 days after time now at mindnight
+         variable2 = (Time.now + 15*24*60*60) #14 days after time now at mindnight
          variable2 = Time.at(variable2).midnight
          variable2 = variable2.to_i
          @game.game_end_date = variable2
@@ -357,7 +357,7 @@ def winners_and_losers
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
-           days_remaining = days_remaining - 1
+           days_remaining = days_remaining + 1
            days_remaining = days_remaining.round
               @string = "Days left until game begins: #{days_remaining}"
        else 
