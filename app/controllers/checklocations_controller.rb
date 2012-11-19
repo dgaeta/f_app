@@ -96,13 +96,12 @@ class ChecklocationsController < ApplicationController
     @checklocation.save
     @user.number_of_requests += 1
     @number_of_requests = @user.number_of_requests
+    @user.save
 
     @decidedlocation = Decidedlocation.new(:gym_name => params[:gym_name], :geo_lat => params[:geo_lat],
      :geo_long => params[:geo_long])
     @decidedlocation.save
-
-    @user.number_of_requests += 1
-    @user.save
+  
 
     @geo_lat = @checklocation.geo_lat
     @geo_long = @checklocation.geo_long
