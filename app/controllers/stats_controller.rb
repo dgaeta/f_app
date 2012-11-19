@@ -84,9 +84,9 @@ class StatsController < ApplicationController
   def user_stats
     user_stats = Stat.includes(:user).where(:winners_id => params[:user_id]).first
 
-    money_earned = user_stats[0].money_earned
-    games_played = user_stats[0].games_played
-    games_won = user_stats[0].games_won
+    money_earned = user_stats.money_earned
+    games_played = user_stats.games_played
+    games_won = user_stats.games_won
     joined_date = User.where(:id => params[:user_id]).pluck(:created_at).first
     joined_month = joined_date.month
     joined_day = joined_date.day
