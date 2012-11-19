@@ -364,7 +364,7 @@ def winners_and_losers
            game_end_date = @game.game_end_date
            time_now = Time.now
            time_now = time_now.to_i
-           days_remaining = (game_end_date - Time_now)
+           days_remaining = (game_end_date - time_now)
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
