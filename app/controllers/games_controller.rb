@@ -368,6 +368,7 @@ def winners_and_losers
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
+           days_remaining = days_remaining + 1
            days_remaining = days_remaining.round
           if days_remaining < 0 
             then 
