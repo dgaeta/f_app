@@ -73,7 +73,7 @@ include BCrypt
   end
 
   def change_email 
-    @user = User.where(:id => :user_id).first
+    @user = User.where(:id => params[:user_id]).first
     @game_member = GameMember.where(:user_id => params[:user_id])
 
     if @user 
