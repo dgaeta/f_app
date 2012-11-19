@@ -362,8 +362,8 @@ def winners_and_losers
               @string = "Days left until game begins: #{days_remaining}"
        else 
            game_end_date = @game.game_end_date
-           game_start_date = @game.game_start_date
-           days_remaining = (game_end_date - game_start_date)
+           Time_now = Time.now.to_i
+           days_remaining = (game_end_date - Time_now)
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
