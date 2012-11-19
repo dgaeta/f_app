@@ -82,7 +82,7 @@ class StatsController < ApplicationController
   end
 
   def user_stats
-    user_stats = Stat.includes(:user).where(:winners_id => params[:user_id])
+    user_stats = Stat.includes(:user).where(:winners_id => params[:user_id]).first
 
     money_earned = user_stats[0].money_earned
     games_played = user_stats[0].games_played
