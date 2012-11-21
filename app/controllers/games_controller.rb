@@ -84,11 +84,14 @@ class GamesController < ApplicationController
         variable = variable.to_i
         @game.game_start_date = variable
 
-         variable2 = (Time.now + ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
+         
+          @game = Game.where(:id => @game_ids[@a]).first #a 
+         variable2 = ( Time.now + (@game.duration * (24*60*60))) #14 days after time now at mindnight
          variable2 = Time.at(variable2).midnight
          variable2 = variable2.to_i
          @game.game_end_date = variable2
          @game.save
+      
             true_json =  { :status => "okay", :game_id => @game.id}
             render(json: JSON.pretty_generate(true_json) )
     
