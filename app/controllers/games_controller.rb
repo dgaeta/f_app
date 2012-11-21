@@ -42,10 +42,30 @@ class GamesController < ApplicationController
   # POST /games
   # POST /games.json
   def create
-    @user = User.where(:id => params[:user_id]).first
+    @game = Game.new(params[:game])
+    @user_id = @game.creator_id
+
+    @user = User.where(:id => @user_id).first
     @user_email = @user.email
 
-     @game = Game.new(params[:game])
+     @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
+     @gamemember.save
+
+     c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
+          :message => @user.first_name + "" + " just joined the game.", :from_game_id => @game.id)
+        c.save
+
+        @game = Game.new(params[:game])
+        @game.players = 1
+        @first_name = @user.first_name.downcase
+        @game.creator_first_name = @user.first_name
+        @game.stakes = @game.wager
+        @game.save
+
+    
+         if @user.save
+        then 
+       
         @game.players = 1
         @first_name = @user.first_name.downcase
         @game.creator_first_name = @user.first_name
@@ -69,7 +89,13 @@ class GamesController < ApplicationController
          variable2 = variable2.to_i
          @game.game_end_date = variable2
          @game.save
-
+            true_json =  { :status => "okay", :game_id => @game.id}
+            render(json: JSON.pretty_generate(true_json) )
+    
+        else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
 
   end
 
