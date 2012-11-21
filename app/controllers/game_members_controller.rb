@@ -48,7 +48,7 @@ class GameMembersController < ApplicationController
 
     @game = Game.where(:id => @game_member.game_id).first
     @game.players += 1
-    @game.stakes += @game.stakes
+    @game.stakes += @game.wager
     @game.save
 
     respond_to do |format|

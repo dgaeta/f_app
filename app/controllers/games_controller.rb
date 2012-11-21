@@ -42,33 +42,35 @@ class GamesController < ApplicationController
   # POST /games
   # POST /games.json
   def create
-    @game = Game.new(params[:game])
-    @game.players = 1
-    @game.stakes = @game.wager
-    @game.save
+    @user = User.where(:id => params[:user_id]).first
+    @user_email = @user.email
 
-    GameMember.create(:user_id => @game.creator_id, :game_id => @game.id )
+     @game = Game.new(params[:game])
+        @game.players = 1
+        @first_name = @user.first_name.downcase
+        @game.creator_first_name = @user.first_name
+        @game.stakes = @game.wager
+        @game.save
 
-    variable = (Time.now + 3*24*60*60) #3 days after time now
-    variable = variable.to_i
-    @game.game_start_date = variable
+        @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
+        @gamemember.save
+        #@user = User.where(:id => @user.id)
+        c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
+          :message => @user.first_name + "" + " just joined the game.", :from_game_id => @game.id)
+        c.save
 
-     variable2 = (Time.now + 17*24*60*60) #17 days after time now
-     variable2 = variable2.to_i
-     @game.game_end_date = variable2
-    
-  
-    respond_to do |format|
-      if @game.save
-        true_json =  { :status => "okay" }
-        format.html { redirect_to @game, notice: 'Game was successfully created.' }
-        format.json { render json: JSON.pretty_generate(true_json) }
-      else
-        false_json = { :status => "fail.", :errors => @user.errors }
-        format.html { render action: "new" }
-        format.json {render json: JSON.pretty_generate(false_json) }
-      end
-    end
+        variable = Time.now + 24*60*60 #1 day after time now at midnight
+        variable = Time.at(variable).midnight
+        variable = variable.to_i
+        @game.game_start_date = variable
+
+         variable2 = (Time.now + ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
+         variable2 = Time.at(variable2).midnight
+         variable2 = variable2.to_i
+         @game.game_end_date = variable2
+         @game.save
+
+
   end
 
 
