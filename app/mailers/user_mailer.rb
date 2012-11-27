@@ -97,4 +97,30 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     mail(:to => "gyms@fitsby.com", :subject => "location related request from user #{@user_id}!")
   end
 
+  def notify_game_start(game_member_id, user_email, game_id)
+    @user = game_member_id
+    @user_email = user_email
+    @game_id = game_id
+    @url  = "http://fitsby.com"
+    mail(:to => @user_email, :subject => "Your Fitsby game number #{@user_id} has started!")
+  end
+
+   def notify_new_game_start(game_member_id, user_email, game_id, new_start_date)
+    @user = game_member_id
+    @user_email = user_email
+    @game_id = game_id
+    @new_start_date = new_start_date
+    @url  = "http://fitsby.com"
+    mail(:to => @user_email, :subject => "Your Fitsby game number #{@user_id} start date has been moved!")
+  end
+
+  def reset_password_email(user)
+  @user = user
+  @url  = "http://0.0.0.0:3000/password_resets/#{user.reset_password_token}/edit"
+  mail(:to => user.email,
+       :subject => "Your password has been reset")
+  end
+
 end
+
+

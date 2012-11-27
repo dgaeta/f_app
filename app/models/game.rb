@@ -35,6 +35,18 @@ class Game < ActiveRecord::Base
                      @game.is_private = "TRUE" 
                      @game.save   
                      puts "started game #{@game.id}"
+
+                     player_ids = GameMember.where(:game_id => @game.id)
+                     @u = 0 
+                     @num6 = player_ids.count
+                     while @u < @num6 do 
+                     @game_member_id = player_ids[@u]
+                     @user_email = User.where(:id => @game_member_id).pluck(:email)
+                     @game_id = @game.id
+                     UserMailer.notify_game_start(@game_member_id, @game_id).deliver
+                     @u += 1 
+                     end 
+
                 elsif @game.players >= 5 and @diff > 0
                    @game.game_initialized = 0
                    puts "game #{@game.id} time hasnt passed to start, but has enough players"
@@ -44,7 +56,19 @@ class Game < ActiveRecord::Base
                      @game.game_start_date = @new_start_date 
                      @game.game_end_date = @new_end_date
                      @game.save 
-                     puts "game #{@game.id} not enough players at start date, added 3 more days to start date"
+                     puts "game #{@game.id} not enough players at start date, added 1 more days to start date"
+                    
+                     player_ids = GameMember.where(:game_id => @game.id)
+                     @u = 0 
+                     @num6 = player_ids.count
+                     while @u < @num6 do 
+                     @game_member_id = player_ids[@u]
+                     @user_email = User.where(:id => @game_member_id).pluck(:email)
+                     @game_id = @game.id
+                     UserMailer.notify_new_game_start(@game_member_id, @game_id, @new_start_date ).deliver
+                     @u += 1 
+                   end
+
                 elsif @game.players < 5 and @diff > 0
                   @game.game_initialized = 0
                   puts "game #{@game.id} does not have enough players and time hasnt passed"
