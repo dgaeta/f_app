@@ -166,7 +166,8 @@ class GameMembersController < ApplicationController
 
                          while @a < @num2  do
                             @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
-                            @game_member.checkins = Time.now.to_i
+                            @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
+                            @game_member.checkins = @time.to_i
                             @game_member.save
                             @checked_in_for_games_variable = []
                             @checked_in_for_games_variable << @game_member.game.id
@@ -206,7 +207,8 @@ class GameMembersController < ApplicationController
           
           unless @init_games == nil 
             last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-            current_checkout_request_time = Time.now.to_i
+            @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
+            current_checkout_request_time = @time.to_i
             total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
             @stat = Stat.where(:winners_id => @user.id).first
             @stat.total_minutes_at_gym += total_minutes_at_gym
@@ -220,7 +222,8 @@ class GameMembersController < ApplicationController
 
               while @a < @num2  do
                  game_member = GameMember.where( :user_id => params[:user_id], :game_id => @init_games[@a]).first
-                 game_member.checkouts = Time.now.to_i
+                 @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
+                 game_member.checkouts = @time.now.to_i
                  game_member.total_minutes_at_gym += total_minutes_at_gym 
                  game_member.successful_checks += 1
                  game_member.save
