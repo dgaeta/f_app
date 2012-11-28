@@ -131,9 +131,9 @@ class GameMembersController < ApplicationController
      
       if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
          then 
-            error = "no games active"
-            false_json = { :status => "fail.", :error => error }
-            #render(json: JSON.pretty_generate(false_json)) 
+            @error = "no games active"
+            false_json = { :status => "fail.", :error => @error }
+            render(json: JSON.pretty_generate(false_json)) 
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
                   @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
@@ -156,8 +156,8 @@ class GameMembersController < ApplicationController
 
                 if @last_checkin_mday == @calendar_day_now   #
                       then 
-                       error = "not enough time between checkins"
-                       false_json = { :status => "fail.", :error => error} 
+                       @error = "not enough time between checkins"
+                       false_json = { :status => "fail.", :error => @error} 
                        render(json: JSON.pretty_generate(false_json))
                       else
               

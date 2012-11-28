@@ -9,6 +9,7 @@ class CreateComments < ActiveRecord::Migration
       t.integer :from_game_id
       t.integer :first_name
       t.integer :last_name
+      t.text :email 
 
       t.timestamps
     end

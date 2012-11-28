@@ -111,6 +111,7 @@ def game_comments
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
+      :email => comment.email
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
@@ -140,6 +141,7 @@ def game_comments
 
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
+    @comment.email = user.email
     @comment.save
 
       if @comment.save
