@@ -101,7 +101,7 @@
   def login_android
     @session = Session.new
 
-     user = login(params[:email].downcase, params[:password], params[:remember])
+     user = login(params[:email].downcase, params[:password], params[:remember_me])
 
    
       if user

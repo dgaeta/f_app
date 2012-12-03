@@ -141,20 +141,6 @@ class GamesController < ApplicationController
     @user = User.where(:id => params[:user_id]).first
     @user_email = @user.email
 
-    # get the credit card details submitted by Android
-    credit_card_number = params[:credit_card_number]
-    credit_card_exp_month = params[:credit_card_exp_month]
-    credit_card_exp_year = params[:credit_card_exp_year]
-    credit_card_cvc = params[:credit_card_cvc]
-    
-    # create a Customer
-    customer = Stripe::Customer.create(
-      :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-      :email => @user_email ) 
-    @user.update_attributes(:customer_id => customer.id)
-
-    # Now, make a stripe column for database table 'users'
-    # save the customer ID in your database so you can use it later
 
     if @user.save
       then 
@@ -182,8 +168,32 @@ class GamesController < ApplicationController
          variable2 = variable2.to_i
          @game.game_end_date = variable2
          @game.save
-            true_json =  { :status => "okay", :game_id => @game.id}
-            render(json: JSON.pretty_generate(true_json) )
+
+
+         unless @game.wager == 0 
+              # get the credit card details submitted by Android
+        credit_card_number = params[:credit_card_number]
+        credit_card_exp_month = params[:credit_card_exp_month]
+        credit_card_exp_year = params[:credit_card_exp_year]
+        credit_card_cvc = params[:credit_card_cvc]
+    
+        # create a Customer
+        customer = Stripe::Customer.create(
+        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+        :email => @user_email ) 
+        @user.update_attributes(:customer_id => customer.id)
+
+        # Now, make a stripe column for database table 'users'
+        # save the customer ID in your database so you can use it later
+
+        Stripe::Charge.create(
+                   :amount => ((@game.wager * 100) + 50), # (example: 1000 is $10)
+                   :currency => "usd",
+                   :customer => @user.customer_id)
+        end
+
+        true_json =  { :status => "okay", :game_id => @game.id}
+        render(json: JSON.pretty_generate(true_json) )
     
         else
          false_json = { :status => "fail."} 
@@ -233,7 +243,8 @@ end
       :duration => game.duration,
       :wager => game.wager,
       :players => game.players,
-      :stakes => game.stakes}
+      :stakes => game.stakes,
+      :winning_structure => game.winning_structure}
        end
 
         a_json =  { :status => "okay" , :public_games => @public_games }
@@ -328,17 +339,7 @@ def winners_and_losers
     user = User.where(:id => params[:user_id]).first
     user_email = user.email
 
-    # get the credit card details submitted by Android
-    credit_card_number = params[:credit_card_number]
-    credit_card_exp_month = params[:credit_card_exp_month]
-    credit_card_exp_year = params[:credit_card_exp_year]
-    credit_card_cvc = params[:credit_card_cvc]
-    
-    # create a Customer
-    customer = Stripe::Customer.create(
-      :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-      :email => user_email ) 
-    user.update_attributes(:customer_id => customer.id)
+   
 
     if user.save 
       then 
@@ -359,14 +360,38 @@ def winners_and_losers
           game.players = total_players
           game.stakes = new_stakes
           game.save
+          stakes = game.stakes
 
         user = User.find(game_member.user_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + "" + " just joined the game.", :from_game_id => game_member.game_id)
+          :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}.", :from_game_id => game_member.game_id)
         c.save
 
-              true_json =  { :status => "okay", :game_id => game.id, :creator_first_name => game.creator_first_name }
-              render(json: JSON.pretty_generate(true_json))
+
+        unless @game.wager == 0 
+              # get the credit card details submitted by Android
+        credit_card_number = params[:credit_card_number]
+        credit_card_exp_month = params[:credit_card_exp_month]
+        credit_card_exp_year = params[:credit_card_exp_year]
+        credit_card_cvc = params[:credit_card_cvc]
+    
+        # create a Customer
+        customer = Stripe::Customer.create(
+        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+        :email => user_email ) 
+        user.update_attributes(:customer_id => customer.id)
+
+        # Now, make a stripe column for database table 'users'
+        # save the customer ID in your database so you can use it later
+
+        Stripe::Charge.create(
+                   :amount => ((game.wager * 100) + 50), # (example: 1000 is $10)
+                   :currency => "usd",
+                   :customer => user.customer_id)
+        end
+
+        true_json =  { :status => "okay", :game_id => game.id, :creator_first_name => game.creator_first_name }
+        render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
@@ -443,8 +468,15 @@ def winners_and_losers
         start_date = @search_results.game_start_date
         start_date = Time.at(start_date)
         start_date = start_date.strftime('%a %b %d')
+         winning_structure = @search_results.winning_structure
+        if winning_structure == 1 
+          then structure_string = "Winner take all"
+        else 
+          structure_string = "Top 3"
+        end
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
-        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date}
+        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
+        :winning_structure => structure_string}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 
@@ -470,8 +502,15 @@ def winners_and_losers
         end_date = @search_results.game_end_date
         end_date = Time.at(end_date)
         end_date = end_date.strftime("%-m/%-d/%-y")
+        winning_structure = @search_results.winning_structure
+        if winning_structure == 1 
+          then structure_string = "Winner take all"
+        else 
+          structure_string = "Top 3"
+        end
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
-        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, :end_date => end_date}
+        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
+        :end_date => end_date, :winning_structure => structure_string}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 
@@ -490,6 +529,28 @@ def winners_and_losers
       else
         true_json =  { :status => "okay" , :creator_first_name => @game}
         render(json: JSON.pretty_generate(true_json))
+    end
+  end
+
+  def percentage_of_game 
+     @game = Game.where(:id => params[:game_id]).first
+     @start_date = @game.game_start_date
+     @end_date = @game.game_end_date
+     @diff = Time.now.to_i - @start_date
+
+     if @diff >= 0 
+      @today = Time.now.to_date.yday
+      @end_day = Time.at(@end_date).to_date.yday
+      @days_remaining = @end_day - @today
+      @duration = @game.duration 
+      @a = @duration - @days_remaining
+      @percentage = @a.fdiv(@duration).round(2)
+      true_json =  { :status => "okay" , :percentage => @percentage}
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      @percentage = 0 
+      false_json = { :status => "fail.", :percentage => @percentage} 
+      render(json: JSON.pretty_generate(false_json))
     end
   end
 

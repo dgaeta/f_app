@@ -47,16 +47,17 @@ include BCrypt
   end
 
   def change_password 
-    @user = login(params[:email].downcase, params[:password])
+    @user_email = User.where(:id => params[:user_id]).pluck(:email).first
+    user = login(@user_email, params[:password], params[:remember_me])
     @new_password = params[:new_password]
     @new_password_confirmation = params[:new_password_confirmation]
    
   
-    if @user
+    if user
       then 
        if @new_password == @new_password_confirmation
         then 
-          @user.change_password!(params[:user][:new_password])
+          @user.change_password!([user.id][:new_password])
           @user.save
           true_json =  { :status => "okay"  }
           render(json: JSON.pretty_generate(true_json))
@@ -97,6 +98,58 @@ include BCrypt
        false_json = { :status => "fail."} 
           render(json: JSON.pretty_generate(false_json))
     end
+  end
+
+  def change_pw_request 
+    @user = User.where(:email => params[:email]).first 
+    
+    if @user 
+      then 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      @email = @user.email
+      @first_name = @user.first_name
+      @token = rand.to_s[2..7] #=> 7 digit long random number
+      @token = @token.to_i
+      @user.token = @token
+      @user.save
+      UserMailer.change_pw_request(@first_name, @email, @token)
+    else 
+       false_json = { :status => "fail."} 
+       render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
+
+  def update_password 
+    @user = User.where(:email => params[:email]).first 
+    @token = params[:token]
+  
+    if @user then 
+      if @user.token == @token 
+      then 
+       @new_password = params[:new_password]
+       @new_password_confirmation = params[:new_password_confirmation]
+        if @new_password == @new_password_confirmation
+        then 
+          @user.change_password!(params[:user][:new_password])
+          @user.save
+          true_json =  { :status => "okay"  }
+          render(json: JSON.pretty_generate(true_json))
+        else 
+          @string = "passwords dont match"
+          false_json = { :status => "fail.", :string => @string} 
+          render(json: JSON.pretty_generate(false_json))
+        end 
+      else 
+        @string = "token does not match"
+          false_json = { :status => "fail.", :string => @string} 
+          render(json: JSON.pretty_generate(false_json))
+      end
+    else 
+        @string = "email not found"
+          false_json = { :status => "fail.", :string => @string} 
+          render(json: JSON.pretty_generate(false_json))
+    end 
   end
 
 

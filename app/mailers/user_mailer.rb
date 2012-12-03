@@ -28,16 +28,17 @@ class UserMailer < ActionMailer::Base
     mail(:to => @user.email, :subject => "Congrats #{@user.first_name}, you earned $#{@winner3_money_won}!")
   end
 
-  def notify_loser(user, amount_charged, loser_checkins)   ##make view
+  def notify_loser(user, amount_charged, loser_checkins, place)   ##make view
     @user = user
     amount_charged = amount_charged / 100
     @amount_charged = sprintf("%.2f", amount_charged)
     @loser_checkins = loser_checkins
+    @place = place 
     @url  = "http://fitsby.com"
     mail(:to => user.email, :subject => "Oh no #{@user.first_name}! You just lost a game of Fitsby")
   end
 
-  def email_ourselves_to_pay_winners(game_id, winner1, winner1_money_won, winner2, winner2_money_won, 
+  def email_ourselves_to_pay_3_winners(game_id, winner1, winner1_money_won, winner2, winner2_money_won, 
          winner3, winner3_money_won, fitsby_money_won, total_amount_charged_to_losers)   ##make view
     @game_id = game_id
     @winner1 = winner1
@@ -46,6 +47,16 @@ class UserMailer < ActionMailer::Base
     @winner2_money_won = sprintf("%.2f", winner2_money_won)
     @winner3 = winner3
     @winner3_money_won = sprintf("%.2f", winner3_money_won)
+    @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
+    @total_amount_charged_to_losers = total_amount_charged_to_losers
+    @url  = "http://fitsby.com"
+    mail(:to => "payments@fitsby.com", :subject => "You owe people money!")
+  end
+
+  def email_ourselves_to_pay_1_winner(game_id, winner1, winner1_money_won, fitsby_money_won, total_amount_charged_to_losers)   ##make view
+    @game_id = game_id
+    @winner1 = winner1
+    @winner1_money_won = sprintf("%.2f", winner1_money_won)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
     @total_amount_charged_to_losers = total_amount_charged_to_losers
     @url  = "http://fitsby.com"
@@ -119,6 +130,13 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
   @url  = "http://0.0.0.0:3000/password_resets/#{user.reset_password_token}/edit"
   mail(:to => user.email,
        :subject => "Your password has been reset")
+  end
+
+  def change_pw_request(email, token, first_name)
+  @email = email
+  @token  = token
+  mail(:to => @email,
+       :subject => "Looks like you forgot your password.")
   end
 
 end

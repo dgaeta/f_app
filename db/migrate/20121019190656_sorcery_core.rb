@@ -8,6 +8,7 @@ class SorceryCore < ActiveRecord::Migration
       t.string :crypted_password, :default => nil
       t.string :salt,             :default => nil
       t.text   :customer_id
+      t.integer :token, :default => 0
 
       t.timestamps
     end

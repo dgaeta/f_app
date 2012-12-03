@@ -12,6 +12,7 @@ class CreateGames < ActiveRecord::Migration
       t.string  :creator_first_name
       t.integer :game_initialized, :default => 0
       t.integer :game_active, :default => 1
+      t.integer :winning_structure, :default => 3
 
       t.timestamps
     end

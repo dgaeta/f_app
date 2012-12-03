@@ -131,7 +131,7 @@ class GameMembersController < ApplicationController
      
       if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
          then 
-            @error = "no games active"
+            @error = "You aren't in any games or they haven't started yet."
             false_json = { :status => "fail.", :error => @error }
             render(json: JSON.pretty_generate(false_json)) 
       
@@ -214,7 +214,7 @@ class GameMembersController < ApplicationController
             @stat.total_minutes_at_gym += total_minutes_at_gym
             @stat.save
 
-            if (total_minutes_at_gym > 2700) & (total_minutes_at_gym <  10800 )
+            if (total_minutes_at_gym > 1800) & (total_minutes_at_gym <  10800 )
               then
 
               @a = 0
@@ -260,7 +260,8 @@ class GameMembersController < ApplicationController
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
-      :successful_checks => member.successful_checks}
+      :successful_checks => member.successful_checks, 
+      :email => member.user.email}
     end
 
     if leaderboard_stats == nil 

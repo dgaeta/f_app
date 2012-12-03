@@ -63,6 +63,8 @@ FApp::Application.routes.draw do
   get "change_email" => "password_resets#change_email", :as => "change_email"
   get "validate_gym" => "checklocations#validate_gym", :as => "validate_gym"
   get "logout" => "sessions#destroy", :as => "logout"
+  get "change_pw_request" => "password_resets#change_pw_request", :as => "change_pw_request"
+  get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
 
 
 
@@ -92,6 +94,7 @@ FApp::Application.routes.draw do
   match "reset_password", :to => "password_resets#create", :via => "get"
   match "change_email", :to => "password_resets#change_email", :via => "post"
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"
+  match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
 
 
 
