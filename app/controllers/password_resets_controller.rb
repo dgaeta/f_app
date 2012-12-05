@@ -5,7 +5,7 @@ include BCrypt
   # request password reset.
   # you get here when the user entered his email in the reset password form and submitted it.
   def create 
-    @user = User.where(:email => params[:email]).first
+    @user = User.where(:email => params[:email].downcase).first
         
     if @user == nil 
         false_json = { :status => "fail."} 
