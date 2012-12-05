@@ -144,6 +144,9 @@ class GamesController < ApplicationController
 
     if @user.save
       then 
+        @stat = Stat.where(:winners_id => @user.id).first 
+        @stat.games_played += 1 
+        @stat.save
         @game = Game.new(params[:game])
         @game.players = 1
         @first_name = @user.first_name.downcase
@@ -244,7 +247,8 @@ end
       :wager => game.wager,
       :players => game.players,
       :stakes => game.stakes,
-      :winning_structure => game.winning_structure}
+      :winning_structure => game.winning_structure, 
+      :email => User.where(:id => game.creator_id).pluck(:email).first}
        end
 
         a_json =  { :status => "okay" , :public_games => @public_games }
@@ -346,6 +350,10 @@ def winners_and_losers
           unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
           game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
           game_member.save
+          stat = Stat.where(:winners_id => user.id).first 
+          stat.games_played += 1 
+          stat.save
+          
 
           game = Game.where(:id => params[:game_id]).first
           
@@ -468,7 +476,8 @@ def winners_and_losers
         start_date = @search_results.game_start_date
         start_date = Time.at(start_date)
         start_date = start_date.strftime('%a %b %d')
-         winning_structure = @search_results.winning_structure
+        winning_structure = @search_results.winning_structure
+        creator_email = @user.email 
         if winning_structure == 1 
           then structure_string = "Winner take all"
         else 
@@ -476,7 +485,7 @@ def winners_and_losers
         end
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
-        :winning_structure => structure_string}
+        :winning_structure => structure_string, :email => creator_email}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 
@@ -503,6 +512,8 @@ def winners_and_losers
         end_date = Time.at(end_date)
         end_date = end_date.strftime("%-m/%-d/%-y")
         winning_structure = @search_results.winning_structure
+        creator_email = User.where(:id => @search_results.creator_id).first
+        creator_email = creator_id.email
         if winning_structure == 1 
           then structure_string = "Winner take all"
         else 
@@ -510,7 +521,7 @@ def winners_and_losers
         end
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
-        :end_date => end_date, :winning_structure => structure_string}
+        :end_date => end_date, :winning_structure => structure_string, :email => creator_email}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 

@@ -258,4 +258,27 @@ class Game < ActiveRecord::Base
         @i += 1
       end 
     end
+
+    def add_gyms_to_google
+      @client = Places::Client.new(:api_key => 'AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY')
+      @unadded = DecidedLocations.where(:added_to_google => 0)
+      
+      unless @unadded.empty? 
+       @number_of_unadded = @unadded.count
+
+       @a = 0 
+       @num = @number_of_decisions
+
+       while @a < @num do
+        @unadded = @unadded[@a]
+        @add = @client.add(:lat => @unadded.geo_lat, :lng => @unadded.geo_long, :accuracy => 50,
+         :name => @unadded.gym_name, :types => "gym")
+        @unadded.added_to_google = 1 
+        @unadded.save
+        @a += 1
+       end 
+      end
+    end  
+
+
 end

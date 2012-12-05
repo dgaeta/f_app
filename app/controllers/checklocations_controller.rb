@@ -98,9 +98,9 @@ class ChecklocationsController < ApplicationController
     @number_of_requests = @user.number_of_requests
     @user.save
 
-    @decidedlocation = Decidedlocation.new(:gym_name => params[:gym_name].downcase, :geo_lat => params[:geo_lat],
-     :geo_long => params[:geo_long])
-    @decidedlocation.save
+    #@decidedlocation = Decidedlocation.new(:gym_name => params[:gym_name].downcase, :geo_lat => params[:geo_lat],
+     #:geo_long => params[:geo_long])
+    #@decidedlocation.save
   
 
     @geo_lat = @checklocation.geo_lat

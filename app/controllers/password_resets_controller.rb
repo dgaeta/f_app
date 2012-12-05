@@ -47,17 +47,20 @@ include BCrypt
   end
 
   def change_password 
-    @user_email = User.where(:id => params[:user_id]).pluck(:email).first
-    user = login(@user_email, params[:password], params[:remember_me])
-    @new_password = params[:new_password]
-    @new_password_confirmation = params[:new_password_confirmation]
+    @user = User.where(:id => params[:user_id]).first
+    @email = @user.email
+    @session = Session.new
+    user = login( @email , params[:old_password], params[:remember_me])
+    @new_password = params[:password]
+    @new_password_confirmation = params[:password_confirmation]
    
   
     if user
       then 
        if @new_password == @new_password_confirmation
         then 
-          @user.change_password!([user.id][:new_password])
+         @user.deliver_reset_password_instructions!
+          @user.change_password!([@user.id][:password])
           @user.save
           true_json =  { :status => "okay"  }
           render(json: JSON.pretty_generate(true_json))

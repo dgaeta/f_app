@@ -6,7 +6,7 @@ class CreateDecidedlocations < ActiveRecord::Migration
       t.string :gym_name
       t.integer :decision
       t.integer :number_of_requests, :default => 1
-
+      t.intger :added_to_google, :default => 0 
       t.timestamps
     end
   end
