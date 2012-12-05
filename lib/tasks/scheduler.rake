@@ -1,3 +1,6 @@
+require 'rubygems'
+  gem 'places'
+
 desc "This task is called by the Heroku scheduler add-on"
 task :auto_start_games => :environment do
   puts "Updating games start statuses..."
@@ -192,3 +195,26 @@ task :auto_end_games => :environment do
     end 
   puts "done."
 end
+
+
+task :add_gyms_to_google => :environment do
+      @client = Places::Client.new(:api_key => 'AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY')
+      @unadded = Decidedlocation.where(:added_to_google => 0)
+      
+      unless @unadded.empty? 
+       @number_of_unadded = @unadded.count
+
+       @a = 0 
+       @num = @number_of_unadded
+
+       while @a < @num do
+        @gym = @unadded[@a]
+        @add = @client.add(:lat => @gym.geo_lat , :lng => @gym.geo_long, :accuracy => 50,
+         :name => @gym.gym_name, :types => "gym")
+        @gym.added_to_google = 1 
+        @gym.save
+        puts "added #{@gym.gym_name} to google api."
+        @a += 1
+       end 
+    end
+end  
