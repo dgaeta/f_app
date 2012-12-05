@@ -54,7 +54,7 @@ class CommentsController < ApplicationController
 
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
-    @comment.from_game_id = users_game_member_info.game_id
+    @comment.from_game_id = @game_id
     @comment.from_user_id = @user_id 
     @comment.save
 
