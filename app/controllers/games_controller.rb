@@ -513,7 +513,7 @@ def winners_and_losers
         end_date = end_date.strftime("%-m/%-d/%-y")
         winning_structure = @search_results.winning_structure
         creator_email = User.where(:id => @search_results.creator_id).first
-        creator_email = creator_id.email
+        creator_email = creator_email.email
         if winning_structure == 1 
           then structure_string = "Winner take all"
         else 
