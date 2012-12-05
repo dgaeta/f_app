@@ -17,11 +17,11 @@
     <%= @user.email %>
   </div>
   <div class="field">
-    <%= f.label :password %><br />
+    <strong><%= f.label :password %></strong><br />
     <%= f.password_field :password %>
   </div>
   <div class="field">
-    <%= f.label :password_confirmation %><br />
+    <strong><%= f.label :password_confirmation %></strong><br />
     <%= f.password_field :password_confirmation %>
     <%= hidden_field_tag :token, @token %>
   </div>

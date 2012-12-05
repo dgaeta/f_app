@@ -17,11 +17,10 @@
         <%= link_to "Newsfeed", comments_path %>
         <%= link_to "Players", game_members_path %>
         <%= link_to "Stats", stats_path %>
-         -->
-         <%= link_to "Log out", logout_path %>
+         <%= link_to "Log out", logout_path %> -->
       <% else %>
-        <%= link_to "Sign up", signup_path %> or
-        <%= link_to "Log in", login_path  %>.
+       <!-- <%= link_to "Sign up", signup_path %> or
+        <%= link_to "Log in", login_path  %>.-->
       <% end %>
     </div>
     <% flash.each do |name, msg| %>
