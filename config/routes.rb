@@ -97,6 +97,7 @@ FApp::Application.routes.draw do
   match "change_email", :to => "password_resets#change_email", :via => "post"
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
+  match "reset_password", :to => "password_resets#create", :via => "get"
 
 
 
