@@ -175,6 +175,7 @@ class GameMembersController < ApplicationController
                               :message => "#{@user.first_name} checked in at the gym.", :stamp => Time.now)
                             comment.first_name = @user.first_name
                             comment.last_name = @user.last_name
+                            comment.bold = "TRUE" 
                             comment.save
                             @a +=1
                           end
