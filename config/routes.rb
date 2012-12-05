@@ -65,6 +65,8 @@ FApp::Application.routes.draw do
   get "logout" => "sessions#destroy", :as => "logout"
   get "change_pw_request" => "password_resets#change_pw_request", :as => "change_pw_request"
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
+  get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
+
 
 
 
