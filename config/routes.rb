@@ -25,7 +25,7 @@ FApp::Application.routes.draw do
 
   resources :password_resets
 
- get "logout" => "sessions#destroy", :as => "logout"
+  get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "log_in" => "sessions#create", :as => "log_in"
   get "signup" => "users#new", :as => "signup"
@@ -59,13 +59,12 @@ FApp::Application.routes.draw do
   get "get_first_name" => "games#get_first_name", :as => "get_first_name"
   get "reset_password" => "password_resets#create", :as => "reset_password"
   get "change_password" => "password_resets#change_password", :as => "change_password"
-  get "change_email" => "password_resets#change_email", :as => "change_email"
   get "validate_gym" => "checklocations#validate_gym", :as => "validate_gym"
   get "logout" => "sessions#destroy", :as => "logout"
   get "change_pw_request" => "password_resets#change_pw_request", :as => "change_pw_request"
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
-  get "change_email" => "password_resets#change_email", :as => "change_email"
+  get "update_email" => "password_resets#update_email", :as => "update_email"
 
 
 
@@ -93,11 +92,10 @@ FApp::Application.routes.draw do
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
-  match "change_email", :to => "password_resets#change_email", :via => "post"
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
-  match "change_email", :to => "password_resets#change_email", :via => "post"
+  match "update_email", :to => "password_resets#update_email", :via => "post"
 
 
 

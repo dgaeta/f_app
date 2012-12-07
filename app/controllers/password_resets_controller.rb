@@ -155,7 +155,7 @@ include BCrypt
     end 
   end
 
-  def change_email 
+  def update_email 
     user = User.where(:id => params[:user_id]).first
 
     old_email = user.email 
