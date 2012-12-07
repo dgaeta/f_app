@@ -137,14 +137,14 @@ class GameMembersController < ApplicationController
       
          else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
                   @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
-                  @last_checkin = @game_member.checkins #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
-                  if @last_checkin == 0 or @last_checkin == nil #IF NOTHING THERE THEN KEEP IT 0 
+                  @last_checkout = @game_member.checkouts #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
+                  if @last_checkout == 0 or @last_checkout == nil #IF NOTHING THERE THEN KEEP IT 0 
                      then
-                      @last_checkin = 0
+                      @last_checkout = 0
                       else   #IF THERE IS SOMETHING THERE THEN GIVE ME THE CALENDAR DAY OF THE LAST CHECKIN 
-                      @last_checkin_time = Time.at(@last_checkin)
-                      @last_checkin_date = @last_checkin_time.to_date
-                      @last_checkin_mday = @last_checkin_date.mday
+                      @last_checkout_time = Time.at(@last_checkout)
+                      @last_checkout_date = @last_checkout_time.to_date
+                      @last_checkout_mday = @last_checkout_date.mday
                   end
                   ############ DONE GETTING INFO ON LAST CALENDAR DAY AND TODAYS CDAY ########
 
@@ -154,7 +154,7 @@ class GameMembersController < ApplicationController
                 
 
 
-                if @last_checkin_mday == @calendar_day_now   #
+                if @last_checkout_mday == @calendar_day_now   #
                       then 
                        @error = "not enough time between checkins"
                        false_json = { :status => "fail.", :error => @error} 
