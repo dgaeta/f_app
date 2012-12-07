@@ -382,7 +382,7 @@ def winners_and_losers
         c.save
 
 
-        unless @game.wager == 0 
+        unless game.wager == 0 
               # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
         credit_card_exp_month = params[:credit_card_exp_month]

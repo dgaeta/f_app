@@ -10,6 +10,8 @@ class CreateComments < ActiveRecord::Migration
       t.integer :first_name
       t.integer :last_name
       t.text :email 
+      t.boolean :bold, :default => "False"
+      t.boolean :checkin, :default => "False"
 
       t.timestamps
     end
@@ -18,3 +20,14 @@ class CreateComments < ActiveRecord::Migration
   
 
 end
+
+c = Gamemember.where(:game_id => )
+
+a = 0
+b = c.count  
+
+while a < b do 
+  d = c[a]
+  d.delete 
+  a += 1 
+end 
