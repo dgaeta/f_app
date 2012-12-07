@@ -52,8 +52,9 @@ class GamesController < ApplicationController
      @gamemember.save
 
      c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
-          :message => @user.first_name + "" + " just joined the game.", :from_game_id => @game.id)
-        c.save
+          :message => @user.first_name + "" + " just joined the game .", :from_game_id => @game.id)
+     c.email = @user.email 
+     c.save
 
         @game = Game.new(params[:game])
         @game.players = 1
@@ -149,6 +150,7 @@ class GamesController < ApplicationController
         @stat.games_played += 1 
         @stat.save
         @game = Game.new(params[:game])
+        @game.creator_id = @user.id
         @game.players = 1
         @first_name = @user.first_name.downcase
         @game.creator_first_name = @user.first_name
@@ -160,6 +162,7 @@ class GamesController < ApplicationController
         #@user = User.where(:id => @user.id)
         c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
           :message => @user.first_name + "" + " just joined the game.", :from_game_id => @game.id)
+        c.email = @user.email 
         c.save
 
         variable = Time.now + 24*60*60 #1 day after time now at midnight

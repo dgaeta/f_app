@@ -28,9 +28,10 @@ task :auto_start_games => :environment do
 	             then @game.game_initialized = 1
 	                @game.is_private = "TRUE" 
 	                @game.save   
-                  @comment = Comment.new(:from_game_id => @game.id , :from_user_id => 101, 
-                  :message => "The game has started!", :stamp => Time.now)
-                  @comment.bold = "TRUE" 
+                  @comment = Comment.new(:from_game_id => @game.id , :from_user_id => 101,  :email => "team@fitsby.com", :bold => "TRUE",  
+                  :first_name => "ANNOUNCEMENT",  :last_name => " " , :message => "The game has started!", :stamp => Time.now)
+                  @comment.email = "team@fitsby.com"
+                  @comment.bold = "TRUE"
                   @comment.save
 	                puts "started game #{@game.id}"
 	             elsif @game.players >= 5 and @diff > 0
@@ -42,8 +43,10 @@ task :auto_start_games => :environment do
 	                @game.game_start_date = @new_start_date 
 	                @game.game_end_date = @new_end_date
 	                @game.save 
-                  @comment = Comment.new(:from_game_id => @game.id, :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
+                  @comment = Comment.new(:from_game_id => @game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
                     :last_name => " " , :bold => "TRUE", :message => "The game start date has been pushed forward 1 day!", :stamp => Time.now)
+                  @comment.email = "team@fitsby.com"
+                  @comment.bold = "TRUE"
                   @comment.save
                   puts "game #{@game.id} not enough players at start date, added 1 more days to start date"
 	             elsif @game.players < 5 and @diff > 0
