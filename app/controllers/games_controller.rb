@@ -161,7 +161,7 @@ class GamesController < ApplicationController
         @gamemember.save
         #@user = User.where(:id => @user.id)
         c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
-          :message => @user.first_name + "" + " just joined the game.", :from_game_id => @game.id)
+          :message => @user.first_name + "" + " created the game.", :from_game_id => @game.id)
         c.email = @user.email 
         c.save
 
