@@ -178,6 +178,7 @@ class GameMembersController < ApplicationController
                             comment.last_name = @user.last_name
                             comment.email = @user.email 
                             comment.bold = "FALSE" 
+                            comment.checkin = "TRUE"
                             comment.save
                             @a +=1
                           end
