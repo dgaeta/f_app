@@ -171,8 +171,9 @@ class GameMembersController < ApplicationController
                             @game_member.save
                             @checked_in_for_games_variable = []
                             @checked_in_for_games_variable << @game_member.game.id
+                            gym_name = params[:gym_name]
                             comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @init_games[@a] ,
-                              :message => "#{@user.first_name} checked in at the gym.", :stamp => Time.now)
+                              :message => "#{@user.first_name} checked in at #{gym_name}.", :stamp => Time.now)
                             comment.first_name = @user.first_name
                             comment.last_name = @user.last_name
                             comment.bold = "TRUE" 
