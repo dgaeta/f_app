@@ -201,5 +201,5 @@ def change_email
          false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
     end
-=end  end
+=end 
 end

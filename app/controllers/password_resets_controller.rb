@@ -155,6 +155,39 @@ include BCrypt
     end 
   end
 
+  def change_email 
+    user = User.where(:id => params[:user_id]).first
+
+    old_email = user.email 
+    user.email = params[:new_email]
+    user.save
+
+    if user.save 
+      then 
+      gb = Gibbon.new
+      list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
+      gb.list_unsubscribe(:id => list_id, :email_address => old_email, :delete_member => true, 
+      :send_goodbye => false, :send_notify => false)
+      gb.list_subscribe(:id => list_id, :email_address => user.email, :merge_vars => {'fname' => user.first_name, 
+      'lname' => user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
+      #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
+      # UPDATE USER'S EMAIL ON STRIPE TOO:
+    Stripe.api_key = @stripe_api_key
+    unless user.customer_id.nil?
+      cu = Stripe::Customer.retrieve(user.customer_id) 
+      cu.email = user.email
+      cu.save
+
+    end
+    # END
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
 
 
 end
