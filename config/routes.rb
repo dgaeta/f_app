@@ -88,7 +88,7 @@ FApp::Application.routes.draw do
   match "number_of_players", :to => "game_members#number_of_players", :via => "get"
   match "user_stats", :to => "stats#user_stats", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
-  match "change_email", :to => "users#change_email", :via => "put"
+  match "change_email", :to => "users#change_email", :via => "post"
   match "single_game_info", :to => "games#single_game_info", :via => "get"
   match "change_password", :to => "users#change_password", :via => "put"  
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"

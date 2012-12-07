@@ -42,8 +42,11 @@ task :auto_start_games => :environment do
 	                @game.game_start_date = @new_start_date 
 	                @game.game_end_date = @new_end_date
 	                @game.save 
-                  @comment = Comment.new(:from_game_id => @game.id ,
+                  @comment = Comment.new(:from_game_id => @game.id,
                   :message => "The game start date has been pushed forward 1 day!", :stamp => Time.now)
+                  @comment.save
+                  @comment.first_name = "ANNOUNCEMENT"
+                  @comment.last_name = ""
                   @comment.bold = "TRUE" 
                   @comment.save
 	                puts "game #{@game.id} not enough players at start date, added 1 more days to start date"

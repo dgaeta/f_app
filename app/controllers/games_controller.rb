@@ -373,7 +373,7 @@ def winners_and_losers
 
         user = User.find(game_member.user_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}.", :from_game_id => game_member.game_id)
+          :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}!", :from_game_id => game_member.game_id)
         c.save
 
 
