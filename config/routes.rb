@@ -52,7 +52,6 @@ FApp::Application.routes.draw do
   get "login_android" => "sessions#login_android", :as => "login_android"
   get "games_user_is_in" => "game_members#games_user_is_in", :as => "games_user_is_in"
   get "post_comment" => "comments#post_comment", :as => "post_comment"
-  get "change_email" => "users#change_email", :as => "change_email"
   get "single_game_info" => "games#single_game_info", :as => "single_game_info"
   get "auto_init_games_and_end_games" => "games#auto_init_games_and_end_games", :as => "auto_init_games_and_end_games"
   get "auto_end_games" => "games#auto_end_games", :as => "auto_end_games"
@@ -66,6 +65,7 @@ FApp::Application.routes.draw do
   get "change_pw_request" => "password_resets#change_pw_request", :as => "change_pw_request"
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
+  get "change_email" => "users#change_email", :as => "change_email"
 
 
 
@@ -88,7 +88,6 @@ FApp::Application.routes.draw do
   match "number_of_players", :to => "game_members#number_of_players", :via => "get"
   match "user_stats", :to => "stats#user_stats", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
-  match "change_email", :to => "users#change_email", :via => "post"
   match "single_game_info", :to => "games#single_game_info", :via => "get"
   match "change_password", :to => "users#change_password", :via => "put"  
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
@@ -98,6 +97,7 @@ FApp::Application.routes.draw do
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
+  match "change_email", :to => "users#change_email", :via => "post"
 
 
 
