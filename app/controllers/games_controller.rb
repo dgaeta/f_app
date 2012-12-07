@@ -377,6 +377,8 @@ def winners_and_losers
         user = User.find(game_member.user_id)
         c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
           :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}!", :from_game_id => game_member.game_id)
+        c.bold = "False"
+        c.email = user.email 
         c.save
 
 
@@ -518,6 +520,7 @@ def winners_and_losers
         winning_structure = @search_results.winning_structure
         creator_email = User.where(:id => @search_results.creator_id).first
         creator_email = creator_email.email
+        winning_structure = @search_results.winning_structure
         if winning_structure == 1 
           then structure_string = "Winner take all"
         else 
@@ -525,7 +528,7 @@ def winners_and_losers
         end
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
-        :end_date => end_date, :winning_structure => structure_string, :email => creator_email}
+        :end_date => end_date, :winning_structure => structure_string, :email => creator_email, :winning_structure => winning_structure}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 
