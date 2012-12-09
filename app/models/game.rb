@@ -50,10 +50,10 @@ class Game < ActiveRecord::Base
                      @u += 1 
                      end 
 
-                elsif @game.players >= 5 and @diff > 0
+                elsif @game.players >= 4 and @diff > 0
                    @game.game_initialized = 0
                    puts "game #{@game.id} time hasnt passed to start, but has enough players"
-                elsif @game.players < 5 and @diff <= 0 
+                elsif @game.players < 4 and @diff <= 0 
                      @new_start_date = @start +  (24*60*60)
                      @new_end_date = @end + (1*24*60*60)
                      @game.game_start_date = @new_start_date 
@@ -76,7 +76,7 @@ class Game < ActiveRecord::Base
                      @u += 1 
                    end
 
-                elsif @game.players < 5 and @diff > 0
+                elsif @game.players < 4 and @diff > 0
                   @game.game_initialized = 0
                   puts "game #{@game.id} does not have enough players and time hasnt passed"
                  end

@@ -21,13 +21,3 @@ class CreateComments < ActiveRecord::Migration
 
 end
 
-c = Gamemember.where(:game_id => )
-
-a = 0
-b = c.count  
-
-while a < b do 
-  d = c[a]
-  d.delete 
-  a += 1 
-end 
