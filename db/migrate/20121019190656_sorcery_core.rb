@@ -9,6 +9,7 @@ class SorceryCore < ActiveRecord::Migration
       t.string :salt,             :default => nil
       t.text   :customer_id
       t.integer :token, :default => 0
+      t.integer :num_of_texts, :default => 0 
 
       t.timestamps
     end

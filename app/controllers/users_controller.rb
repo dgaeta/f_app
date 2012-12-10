@@ -186,20 +186,19 @@ def change_email
     end
   end
  
+  def append_text_field 
+    user = User.where(:id => params[:user_id]).first 
 
-=begin  def change_password
-    user = User.where(:id => params[:user_id], :crypted_password => params[:password]).first
-
-    user.crypted_password = params[:new_password]
-    user.save
-
-    if user.save 
+    if user 
       then 
-       true_json =  { :status => "okay"  }
-        render(json: JSON.pretty_generate(true_json))
-      else
-         false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-    end
-=end 
+      user.num_of_texts_sent += 1 
+      user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      else 
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
+  
 end

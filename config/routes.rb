@@ -65,6 +65,8 @@ FApp::Application.routes.draw do
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
   get "update_email" => "password_resets#update_email", :as => "update_email"
+  get "append_text_field" => "users#append_text_field", :as => "append_text_field"
+
 
 
 
@@ -96,7 +98,7 @@ FApp::Application.routes.draw do
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
   match "reset_password", :to => "password_resets#create", :via => "get"
   match "update_email", :to => "password_resets#update_email", :via => "post"
-
+  match "append_text_field", :to => "users#append_text_field", :via => "post"
 
 
 
