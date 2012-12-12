@@ -24,7 +24,7 @@ task :auto_start_games => :environment do
 
               @diff = @start - @time_now
 
-	            if @game.players >= 5 and @diff <= 0 
+	            if @game.players >= 4 and @diff <= 0 
 	             then @game.game_initialized = 1
 	                @game.is_private = "TRUE" 
 	                @game.save   
@@ -34,10 +34,10 @@ task :auto_start_games => :environment do
                   @comment.bold = "TRUE"
                   @comment.save
 	                puts "started game #{@game.id}"
-	             elsif @game.players >= 5 and @diff > 0
+	             elsif @game.players >= 4 and @diff > 0
 	                @game.game_initialized = 0
 	                puts "game #{@game.id} time hasnt passed to start, but has enough players"
-	             elsif @game.players < 5 and @diff <= 0 
+	             elsif @game.players < 4 and @diff <= 0 
 	                @new_start_date = @start +  (24*60*60)
 	                @new_end_date = @end + (1*24*60*60)
 	                @game.game_start_date = @new_start_date 
@@ -49,7 +49,7 @@ task :auto_start_games => :environment do
                   @comment.bold = "TRUE"
                   @comment.save
                   puts "game #{@game.id} not enough players at start date, added 1 more days to start date"
-	             elsif @game.players < 5 and @diff > 0
+	             elsif @game.players < 4 and @diff > 0
 	             @game.game_initialized = 0
 	             puts "game #{@game.id} does not have enough players and time hasnt passed"
 	            end
