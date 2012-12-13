@@ -30,7 +30,7 @@ class Game < ActiveRecord::Base
 
           @diff = @start - @time_now
 
-              if @game.players >= 5 and @diff <= 0 
+              if @game.players >= 4 and @diff <= 0 
                 then @game.game_initialized = 1
                      @game.is_private = "TRUE" 
                      @game.save   
