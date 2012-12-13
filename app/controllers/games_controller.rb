@@ -155,6 +155,7 @@ class GamesController < ApplicationController
         @first_name = @user.first_name.downcase
         @game.creator_first_name = @user.first_name
         @game.stakes = @game.wager
+        @game.is_private = "TRUE"
         @game.save
 
         @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
