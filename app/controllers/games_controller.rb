@@ -166,12 +166,12 @@ class GamesController < ApplicationController
         c.email = @user.email 
         c.save
 
-        variable = Time.now + 24*60*60 #1 day after time now at midnight
+        variable = (Time.now - 21600) + 24*60*60 #1 day after time now at midnight
         variable = Time.at(variable).midnight
         variable = variable.to_i
         @game.game_start_date = variable
 
-         variable2 = (Time.now + ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
+         variable2 = ((Time.now - 21600)+ ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
          variable2 = Time.at(variable2).midnight
          variable2 = variable2.to_i
          @game.game_end_date = variable2
@@ -424,7 +424,7 @@ def winners_and_losers
       then
         if @game.game_initialized == 0 
            game_start_date = @game.game_start_date
-           days_remaining = (game_start_date - Time.now.to_i)
+           days_remaining = (game_start_date - (Time.now.to_i - 21600))
            days_remaining = days_remaining / 24 
            days_remaining = days_remaining / 60 
            days_remaining = days_remaining / 60
@@ -433,7 +433,7 @@ def winners_and_losers
               @string = "Days left until game begins: #{days_remaining}"
        else 
            game_end_date = @game.game_end_date
-           time_now = Time.now
+           time_now = (Time.now - 21600)
            time_now = time_now.to_i
            days_remaining = (game_end_date - time_now)
            days_remaining = days_remaining / 24 
@@ -555,10 +555,11 @@ def winners_and_losers
      @game = Game.where(:id => params[:game_id]).first
      @start_date = @game.game_start_date
      @end_date = @game.game_end_date
-     @diff = Time.now.to_i - @start_date
+     @time_now = (Time.now - 21600)
+     @diff = @time_now.to_i - @start_date
 
      if @diff >= 0 
-      @today = Time.now.to_date.yday
+      @today = @time_now.to_date.yday
       @end_day = Time.at(@end_date).to_date.yday
       @days_remaining = @end_day - @today
       @duration = @game.duration 
