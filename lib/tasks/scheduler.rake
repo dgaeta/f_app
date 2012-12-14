@@ -31,6 +31,7 @@ task :auto_start_games => :environment do
                   @comment = Comment.new(:from_game_id => @game.id , :from_user_id => 101,  :email => "team@fitsby.com", :bold => "TRUE",  
                   :first_name => "ANNOUNCEMENT",  :last_name => " " , :message => "The game has started!", :stamp => Time.now)
                   @comment.email = "team@fitsby.com"
+                  @comment.from_user_id = 101
                   @comment.bold = "TRUE"
                   @comment.save
 	                puts "started game #{@game.id}"
@@ -46,6 +47,7 @@ task :auto_start_games => :environment do
                   @comment = Comment.new(:from_game_id => @game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
                     :last_name => " " , :bold => "TRUE", :message => "The game start date has been pushed forward 1 day!", :stamp => Time.now)
                   @comment.email = "team@fitsby.com"
+                  @comment.from_user_id = 101
                   @comment.bold = "TRUE"
                   @comment.save
                   puts "game #{@game.id} not enough players at start date, added 1 more days to start date"
@@ -71,9 +73,8 @@ task :auto_end_games => :environment do
     while @i < @num do 
       @game = Game.where(:id => @all_games[@i]).first
       @start = @game.game_start_date
-      @time_now = Time.now.to_i
-      @diff = @start - @time_now
-      @time_now = Time.now.to_i
+      @time_now = Time.now - 21600
+      @time_now = @time_now.to_i
       @diff = @time_now - @game.game_end_date  
       if @diff >= 0
         then 
