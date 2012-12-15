@@ -562,6 +562,12 @@ def winners_and_losers
       @today = @time_now.to_date.yday
       @end_day = Time.at(@end_date).to_date.yday
       @days_remaining = @end_day - @today
+      if @days_remaining < 0 
+        then @days_remaining = 365 - @today
+          @days_remaining = @days_remaining + @end_day
+        else 
+           @days_remaining = @end_day - @today
+      end
       @duration = @game.duration 
       @a = @duration - @days_remaining
       @percentage = @a.fdiv(@duration).round(2)

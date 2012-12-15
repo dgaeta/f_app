@@ -159,7 +159,7 @@ include BCrypt
     user = User.where(:id => params[:user_id]).first
 
     old_email = user.email 
-    user.email = params[:new_email]
+    user.email = params[:new_email].downcase
     user.save
 
     if user.save 
