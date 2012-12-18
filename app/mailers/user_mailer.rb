@@ -28,7 +28,7 @@ class UserMailer < ActionMailer::Base
     mail(:to => @user.email, :subject => "Congrats #{@user.first_name}, you earned $#{@winner3_money_won}!")
   end
 
-  def notify_loser(user, amount_charged, loser_checkins, place)   ##make view
+  def notify_loser(user, loser_checkins, place)   ##make view
     @user = user
     amount_charged = amount_charged / 100
     @amount_charged = sprintf("%.2f", amount_charged)
