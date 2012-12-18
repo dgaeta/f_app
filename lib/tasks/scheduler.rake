@@ -385,7 +385,7 @@ puts "Updating games with 1 winner end statuses..."
    
   @a = 0 
   @num = @all_games_number
-  @games_with_1_structure = []
+  @games_with_3_structure = []
 
   while @a < @num do 
    @game = Game.where(:id => @all_games[@a]).first
@@ -399,7 +399,7 @@ puts "Updating games with 1 winner end statuses..."
   end
 
   @b = 0 
-  @num2 =  @games_with_1_structure.count
+  @num2 =  @games_with_3_structure.count
   @finished_games = []
 
   while @b < @num2 
