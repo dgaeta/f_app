@@ -264,14 +264,28 @@ end
 task :auto_end_1_games => :environment do
 puts "Updating games with 1 winner end statuses..."
   @all_games = Game.where(:game_initialized => 1).pluck(:id)
-  @all_games_number = @all_games.count 
-   
+
+  @z = 0 
+  @numz = @all_games.count 
+  @active_games = []
+
+  while @z < @numz do 
+    @game = Game.find(@all_games[@z])
+    if @game.game_active == 1 
+    then 
+     @active_games << @all_games[@z]
+     @z += 1 
+    else 
+     @z += 1 
+    end
+  end 
+
   @a = 0 
-  @num = @all_games_number
+  @num = @active_games.count
   @games_with_1_structure = []
 
   while @a < @num do 
-   @game = Game.where(:id => @all_games[@a]).first
+   @game = Game.find(@active_games[@a])
     if  @game.winning_structure == 1 
     then
      @games_with_1_structure << @game.id
@@ -380,15 +394,16 @@ end
 
 task :auto_end_3_games => :environment do
 puts "Updating games with 3 winner end statuses..."
-  @all_games = Game.where(:game_initialized => 1).pluck(:id)
+ @all_games = Game.where(:game_active => 1).pluck(:id)
   @all_games_number = @all_games.count 
+
    
   @a = 0 
   @num = @all_games_number
   @games_with_3_structure = []
 
   while @a < @num do 
-   @game = Game.where(:id => @all_games[@a]).first
+   @game = Game.where(:id => @active_games[@a]).first
     if  @game.winning_structure == 3 
     then
      @games_with_3_structure << @game.id
@@ -433,9 +448,8 @@ puts "Updating games with 3 winner end statuses..."
      @i = 0
      @num = number_of_players 
      while @i < @num  do
-       @player = @players[@i]
-       @stat = Stat.where(:winners_id => @players[@i]).first
-       @stat = @stat
+       @players = @players[@i]
+       @stat = Stat.where(:winners_id => @players.id).first
        @stat.losses += 1
        @stat.save
        @i +=1
@@ -444,31 +458,33 @@ puts "Updating games with 3 winner end statuses..."
 
      ###### begin stripe charges ######################
      @losers = 3
+     @num = number_of_players
+
 
      while @losers < @num  do
-       user = @players[@losers]
-       user = User.find(user)
+       game_member = @players[@losers]
+       user = User.find(game_member.user_id)
        place = @losers + 1 
-       loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
-       @game = Game.where(:id => @game.id).first
+       loser_checkins = game_member.successful_checks
+       @game = game_member.game_id
        UserMailer.notify_loser(user, loser_checkins, place).deliver
        @losers +=1
       end
 
      ####### PAY THE WINNERS
-     winner1 = User.find(@players[0])
-     winner2 = User.find(@players[1])
-     winner3 = User.find(@players[2])
+     winner1 = User.find(@players[0].user_id)
+     winner2 = User.find(@players[1].user_id)
+     winner3 = User.find(@players[2].user_id)
 
-     first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
+     first = GameMember.where(:user_id => winner1.id, :game_id => @game).first
      first.final_standing = 1
      first.save
-     first = Stat.where(:winners_id => winner1).first
+     first = Stat.where(:winners_id => winner1.id).first
      first.losses -= 1
      first.first_place_finishes += 1
      first.save
 
-     second = GameMember.where(:user_id => winner2.id, :game_id => @game.id).first
+     second = GameMember.where(:user_id => winner2.id, :game_id => @game).first
      second.final_standing = 2
      second.save
      second = Stat.where(:winners_id => winner2.id).first
@@ -476,7 +492,7 @@ puts "Updating games with 3 winner end statuses..."
      second.second_place_finishes += 1
      second.save
 
-     third = GameMember.where(:user_id => winner3.id, :game_id => @game.id).first
+     third = GameMember.where(:user_id => winner3.id, :game_id => @game).first
      third.final_standing = 3
      third.save
      third = Stat.where(:winners_id => winner3.id).first
