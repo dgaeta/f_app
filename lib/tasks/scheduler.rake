@@ -416,7 +416,7 @@ puts "Updating games with 3 winner end statuses..."
    
      @c = 0
      @num3 = number_of_players
-     while @e < @num3 do
+     while @c < @num3 do
        @game_member = @players[@c]
        checks = @game_member.successful_checks * 1000000
        total_minutes = @game_member.total_minutes_at_gym / 60 
