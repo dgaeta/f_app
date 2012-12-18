@@ -47,6 +47,8 @@ require 'json'
   def create
     @user = User.new(params[:user])
     @user.save
+    @user.email = @user.email.downcase
+    @user.save
 
     stat = Stat.new(:winners_id => @user.id )
     stat.save

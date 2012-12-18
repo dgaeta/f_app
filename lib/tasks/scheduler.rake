@@ -236,6 +236,8 @@ task :auto_end_games => :environment do
 end
 
 
+
+
 task :add_gyms_to_google => :environment do
       @client = Places::Client.new(:api_key => 'AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY')
       @unadded = Decidedlocation.where(:added_to_google => 0)
@@ -257,3 +259,126 @@ task :add_gyms_to_google => :environment do
        end 
     end
 end  
+
+
+task :auto_end_1_games => :environment do
+puts "Updating games with 1 winner end statuses..."
+  @all_games = Game.where(:game_initialized => 1).pluck(:id)
+  @all_games_number = @all_games.count 
+   
+  @a = 0 
+  @num = @all_games_number
+  @games_with_1_structure = []
+
+  while @a < @num do 
+   @game = Game.where(:id => @all_games[@a]).first
+    if  @game.winning_structure == 1 
+    then
+     @games_with_1_structure << @game.id
+     @a += 1 
+    else 
+     @a += 1
+    end
+  end
+
+  @b = 0 
+  @num2 =  @games_with_1_structure.count
+  @finished_games = []
+
+  while @b < @num2 
+   @game = Game.where(:id => @games_with_1_structure[@b]).first
+   @end_date_integer = @game.game_end_date 
+   @today_integer = Time.now.to_i - 21600
+   @diff = @today_integer - @end_date_integer
+      
+   if @diff >= 0 
+   then
+     #######1st_step add up total time at gym for all players #######
+     @players = GameMember.where(:game_id => @game.id)
+     number_of_players = @players.count  
+   
+     @c = 0
+     @num3 = number_of_players
+     while @e < @num4 do
+       @game_member = @players[@c]
+       checks = @game_member.successful_checks * 1000000
+       total_minutes = @game_member.total_minutes_at_gym / 60 
+       checks_and_minutes = checks + total_minutes
+       @game_member.end_game_checks_evaluation = checks_and_minutes
+       @game_member.save
+       @c += 1
+      end
+     ###### end adding up total time at gym ###########
+
+     ###### 2nd_step order the players by place########
+     @players = GameMember.where(:game_id => @game.id).order("end_game_checks_evaluation DESC")
+   
+     @i = 0
+     @num = number_of_players 
+     while @i < @num  do
+       @player = @players[@i]
+       @stat = Stat.where(:winners_id => @players[@i]).first
+       @stat = @stat
+       @stat.losses += 1
+       @stat.save
+       @i +=1
+      end
+     ###### end ordering by place #####################
+
+     ###### begin stripe charges ######################
+     @losers = 1
+
+     while @losers < @num  do
+       user = @players[@losers]
+       user = User.find(user)
+       place = @losers + 1 
+       loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
+       @game = Game.where(:id => @game.id).first
+       UserMailer.notify_loser(user, loser_checkins, place).deliver
+       @losers +=1
+      end
+
+     ####### PAY THE WINNERS
+     winner1 = User.find(@players[0])
+     first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
+     first.final_standing = 1
+     first.save
+     first = Stat.where(:winners_id => winner1).first
+     first.losses -= 1
+     first.first_place_finishes += 1
+     first.save
+
+     unless @game.wager == 0 
+       ####### define the payout amounts
+       @first_place_percentage = 0.85
+       @fitsby_percentage = 0.15
+
+       winner1_money_won = (@game.stakes  * @first_place_percentage)
+       fitsby_money_won = (@game.stakes * @fitsby_percentage) + (0.50 * @number_of_players)
+       UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
+       UserMailer.email_ourselves_to_pay_1_winner(@game_id, winner1, winner1_money_won, fitsby_money_won).deliver 
+      else 
+       winner1_money_won = 0 
+       UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
+       @total_amount_charged_to_losers = 0 
+       fitsby_money_won = 0
+       UserMailer.email_ourselves_to_pay_1_winner(@game_id, winner1, winner1_money_won, fitsby_money_won).deliver 
+      end
+    
+     ###### inactivate the game, put status, move to next game #########
+     @game.game_active = 0
+     @game.save
+     puts "sent out mail and charges for game #{@game.id}"
+     @b += 1
+   else 
+     puts "game #{@game.id} with winning struct. 1 is not ready to end"
+     @b += 1
+   end
+ end
+end 
+
+
+
+
+
+
