@@ -30,8 +30,6 @@ class UserMailer < ActionMailer::Base
 
   def notify_loser(user, loser_checkins, place)   ##make view
     @user = user
-    amount_charged = amount_charged / 100
-    @amount_charged = sprintf("%.2f", amount_charged)
     @loser_checkins = loser_checkins
     @place = place 
     @url  = "http://fitsby.com"
