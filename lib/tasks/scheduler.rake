@@ -311,9 +311,9 @@ puts "Updating games with 1 winner end statuses..."
      @players = GameMember.where(:game_id => @game.id)
      number_of_players = @players.count  
    
-     @c = 0
+     @c = 0 
      @num3 = number_of_players
-     while @e < @num4 do
+     while @c < @num3 do
        @game_member = @players[@c]
        checks = @game_member.successful_checks * 1000000
        total_minutes = @game_member.total_minutes_at_gym / 60 
@@ -330,9 +330,8 @@ puts "Updating games with 1 winner end statuses..."
      @i = 0
      @num = number_of_players 
      while @i < @num  do
-       @player = @players[@i]
-       @stat = Stat.where(:winners_id => @players[@i]).first
-       @stat = @stat
+       @game_member = @players[@i]
+       @stat = Stat.where(:winners_id => @game_member.user_id).first
        @stat.losses += 1
        @stat.save
        @i +=1
@@ -343,17 +342,17 @@ puts "Updating games with 1 winner end statuses..."
      @losers = 1
 
      while @losers < @num  do
-       user = @players[@losers]
-       user = User.find(user)
+       game_member = @players[@losers]
+       user = User.find(game_member.user_id)
        place = @losers + 1 
-       loser_checkins = GameMember.where(:user_id => user.id, :game_id => @game.id).pluck(:successful_checks).first
+       loser_checkins = game_member.successful_checks
        @game = Game.where(:id => @game.id).first
        UserMailer.notify_loser(user, loser_checkins, place).deliver
        @losers +=1
       end
 
      ####### PAY THE WINNERS
-     winner1 = User.find(@players[0])
+     winner1 = User.find(@players[0].user_id)
      first = GameMember.where(:user_id => winner1.id, :game_id => @game.id).first
      first.final_standing = 1
      first.save
@@ -403,7 +402,7 @@ puts "Updating games with 3 winner end statuses..."
   @games_with_3_structure = []
 
   while @a < @num do 
-   @game = Game.where(:id => @active_games[@a]).first
+   @game = Game.where(:id => @all_games[@a]).first
     if  @game.winning_structure == 3 
     then
      @games_with_3_structure << @game.id
