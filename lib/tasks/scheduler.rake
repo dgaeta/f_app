@@ -510,7 +510,7 @@ puts "Updating games with 3 winner end statuses..."
        winner1_money_won = (@game_info.stakes  * @first_place_percentage)
        winner2_money_won = (@game_info.stakes  * @second_place_percentage)
        winner3_money_won = (@game_info.stakes  *  @third_place_percentage)
-       fitsby_money_won = (@game_info.stakes * @fitsby_percentage) + (0.50 * @number_of_players)
+       fitsby_money_won = (@game_info.stakes * @fitsby_percentage) + (0.50 * number_of_players)
        UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
        UserMailer.congratulate_winner2(winner2, winner2_money_won).deliver
        UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
