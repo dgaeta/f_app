@@ -42,11 +42,10 @@ end
  gem "delayed_job"
  gem 'gibbon'
  gem 'stalker'
- gem 'whenever', :require => false
  gem "bcrypt-ruby", "~> 3.0.1"
  gem 'places'
  gem 'heroku'
-
+ gem 'gcm_on_rails'
 
 
 # Use unicorn as the app server

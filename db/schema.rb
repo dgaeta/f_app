@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121116041338) do
+ActiveRecord::Schema.define(:version => 20121219034120) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -40,9 +40,11 @@ ActiveRecord::Schema.define(:version => 20121116041338) do
     t.float    "geo_lat"
     t.float    "geo_long"
     t.string   "gym_name"
-    t.integer  "decision"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "decision",           :default => 0
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.integer  "number_of_requests", :default => 1
+    t.integer  "added_to_google",    :default => 0
   end
 
   create_table "game_members", :force => true do |t|
@@ -74,16 +76,82 @@ ActiveRecord::Schema.define(:version => 20121116041338) do
     t.integer  "game_start_date"
     t.integer  "game_end_date"
     t.text     "creator_first_name"
-    t.integer  "game_initialized",   :default => 0
+    t.integer  "game_initialized",   :default => 1
     t.integer  "game_active",        :default => 1
+    t.integer  "winning_structure",  :default => 3
   end
 
   add_index "games", ["creator_id"], :name => "fki_creator_id"
+
+  create_table "gcm_devices", :force => true do |t|
+    t.string   "registration_id",    :null => false
+    t.datetime "last_registered_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "gcm_devices", ["registration_id"], :name => "index_gcm_devices_on_registration_id", :unique => true
+
+  create_table "gcm_notifications", :force => true do |t|
+    t.integer  "device_id",        :null => false
+    t.string   "collapse_key"
+    t.text     "data"
+    t.boolean  "delay_while_idle"
+    t.datetime "sent_at"
+    t.integer  "time_to_live"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "gcm_notifications", ["device_id"], :name => "index_gcm_notifications_on_device_id"
 
   create_table "landings", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "push_configurations", :force => true do |t|
+    t.string   "type",                           :null => false
+    t.string   "app",                            :null => false
+    t.text     "properties"
+    t.boolean  "enabled",     :default => false, :null => false
+    t.integer  "connections", :default => 1,     :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  create_table "push_feedback", :force => true do |t|
+    t.string   "app",                             :null => false
+    t.string   "device",                          :null => false
+    t.string   "type",                            :null => false
+    t.string   "follow_up",                       :null => false
+    t.datetime "failed_at",                       :null => false
+    t.boolean  "processed",    :default => false, :null => false
+    t.datetime "processed_at"
+    t.text     "properties"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "push_feedback", ["processed"], :name => "index_push_feedback_on_processed"
+
+  create_table "push_messages", :force => true do |t|
+    t.string   "app",                                  :null => false
+    t.string   "device",                               :null => false
+    t.string   "type",                                 :null => false
+    t.text     "properties"
+    t.boolean  "delivered",         :default => false, :null => false
+    t.datetime "delivered_at"
+    t.boolean  "failed",            :default => false, :null => false
+    t.datetime "failed_at"
+    t.integer  "error_code"
+    t.string   "error_description"
+    t.datetime "deliver_after"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "push_messages", ["delivered", "failed", "deliver_after"], :name => "index_push_messages_on_delivered_and_failed_and_deliver_after"
 
   create_table "sessions", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -111,8 +179,8 @@ ActiveRecord::Schema.define(:version => 20121116041338) do
     t.text     "email"
     t.string   "crypted_password"
     t.string   "salt"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.text     "first_name"
     t.text     "last_name"
     t.string   "reset_password_token"
@@ -124,6 +192,8 @@ ActiveRecord::Schema.define(:version => 20121116041338) do
     t.datetime "last_activity_at"
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
+    t.integer  "number_of_requests",              :default => 0
+    t.integer  "token",                           :default => 0
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
