@@ -526,7 +526,8 @@ puts "Updating games with 3 winner end statuses..."
        UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
        @total_amount_charged_to_losers = 0 
        fitsby_money_won = 0
-       UserMailer.email_ourselves_to_pay_3_winner(@game_id, winner1, winner1_money_won, fitsby_money_won).deliver 
+       UserMailer.email_ourselves_to_pay_3_winners(@game_info.id, winner1, winner1_money_won, winner2, winner2_money_won,
+       winner3, winner3_money_won, fitsby_money_won).deliver 
        puts "sent out mail for free game #{@game.id}. Winning structure 3"
       end
      ####### END STRIPE ################################################
