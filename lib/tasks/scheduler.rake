@@ -499,7 +499,8 @@ puts "Updating games with 3 winner end statuses..."
      third.third_place_finishes += 1
      third.save
      
-     unless @game.wager == 0 
+     @wager = Game.where(:id => @game).pluck(:wager)
+     unless @wager == 0 
        ####### define the payout amounts
        @first_place_percentage = 0.45
        @second_place_percentage = 0.25
