@@ -514,7 +514,7 @@ puts "Updating games with 3 winner end statuses..."
        UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
        UserMailer.congratulate_winner2(winner2, winner2_money_won).deliver
        UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
-       UserMailer.email_ourselves_to_pay_1_winner(@game_info.id, winner1, winner1_money_won, winner2, winner2_money_won,
+       UserMailer.email_ourselves_to_pay_3_winner(@game_info.id, winner1, winner1_money_won, winner2, winner2_money_won,
        winner3, winner3_money_won, fitsby_money_won).deliver  
        puts "sent out mail and charges for money game #{@game.id}. Winning structure 3"
       else 
