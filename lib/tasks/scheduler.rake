@@ -533,8 +533,8 @@ puts "Updating games with 3 winner end statuses..."
      ####### END STRIPE ################################################
     
      ###### inactivate the game, put status, move to next game #########
-     @game.game_active = 0
-     @game.save
+     @game_info.game_active = 0
+     @game_info.save
      @b += 1
    else 
      puts "game #{@game.id} with winning struct. 3 is not ready to end"
