@@ -447,8 +447,8 @@ puts "Updating games with 3 winner end statuses..."
      @i = 0
      @num = number_of_players 
      while @i < @num  do
-       @players = @players[@i]
-       @stat = Stat.where(:winners_id => @players.id).first
+       @game_member = @players[@i]
+       @stat = Stat.where(:winners_id => @game_member.user_id).first
        @stat.losses += 1
        @stat.save
        @i +=1
