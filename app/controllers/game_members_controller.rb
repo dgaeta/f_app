@@ -196,13 +196,13 @@ class GameMembersController < ApplicationController
 
          @i = 0
         @num = number_of_games
+        @init_games = []
 
           while @i < @num  do
              game_init_status = Game.where(:id => @all_of_users_games[@i], :game_active => 1).pluck(:game_initialized).first
              if game_init_status == 0 
               then  @i +=1
             else
-              @init_games = []
               @init_games << @all_of_users_games[@i]
               @i +=1
             end
@@ -211,9 +211,9 @@ class GameMembersController < ApplicationController
           
           unless @init_games == nil 
             last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-            @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
+            @time = Time.now.to_i - 21600
             current_checkout_request_time = @time.to_i
-            total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
+            #total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
             @stat = Stat.where(:winners_id => @user.id).first
             @stat.total_minutes_at_gym += total_minutes_at_gym
             @stat.save
@@ -228,9 +228,9 @@ class GameMembersController < ApplicationController
               @num2 = @init_games.count
 
               while @a < @num2  do
-                 game_member = GameMember.where( :user_id => params[:user_id], :game_id => @init_games[@a]).first
-                 @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
-                 game_member.checkouts = @time.now.to_i
+                 game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
+                 @time = Time.now.to_i - 21600
+                 game_member.checkouts = @time
                  game_member.total_minutes_at_gym += total_minutes_at_gym 
                  game_member.successful_checks += 1
                  game_member.save
@@ -248,7 +248,7 @@ class GameMembersController < ApplicationController
             else 
               error_string = "No active games"
               false_json = { :status => "fail.", :error => error_string} 
-                render(json: JSON.pretty_generate(false_json))
+              render(json: JSON.pretty_generate(false_json))
         end
 
   end
