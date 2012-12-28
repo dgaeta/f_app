@@ -34,6 +34,24 @@ task :auto_start_games => :environment do
                   @comment.from_user_id = 101
                   @comment.bold = "TRUE"
                   @comment.save
+                  ########### game start push begin ##############
+                  notification = Gcm::Notification.new
+ ###### NEED THIS ID notification.device = for user 101 
+                  notification.collapse_key = "updates_available"
+                  notification.delay_while_idle = true
+                  @a = 0 
+                  @num = @game.players
+                  @registration_ids = []
+                  while @a < @num do 
+                  user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
+                  user = User.find(user_ids[@a])
+                  @registration_ids << user.registration_id
+                  @a += 1 
+                  end
+                  notification.data = {:registration_ids => @registration_ids,
+                  :data => {:message_text => "Your Fitsby Game #{@game.id} has started!"}}
+                  notification.save
+                  ########### game start push ends ###############
 	                puts "started game #{@game.id}"
 	             elsif @game.players >= 4 and @diff > 0
 	                @game.game_initialized = 0
@@ -45,7 +63,7 @@ task :auto_start_games => :environment do
 	                @game.game_end_date = @new_end_date
 	                @game.save 
                   @comment = Comment.new(:from_game_id => @game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
-                    :last_name => " " , :bold => "TRUE", :message => "The game start date has been pushed forward 1 day!", :stamp => Time.now)
+                    :last_name => " " , :bold => "TRUE", :message => "The game start date has been pushed forward 1 day! Need at least 4 players.", :stamp => Time.now)
                   @comment.email = "team@fitsby.com"
                   @comment.from_user_id = 101
                   @comment.bold = "TRUE"
@@ -207,6 +225,24 @@ puts "Updating games with 1 winner end statuses..."
      ###### inactivate the game, put status, move to next game #########
      @game.game_active = 0
      @game.save
+     ########### game start push begin ##############
+     notification = Gcm::Notification.new
+###### NEED THIS ID notification.device = for user 101 
+     notification.collapse_key = "updates_available"
+     notification.delay_while_idle = true
+     @a = 0 
+     @num = @game.players
+     @registration_ids = []
+     while @a < @num do 
+     user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
+     user = User.find(user_ids[@a])
+     @registration_ids << user.registration_id
+     @a += 1 
+     end
+     notification.data = {:registration_ids => @registration_ids,
+     :data => {:message_text => "Your Fitsby Game #{@game.id} has started!"}}
+     notification.save
+     ########### game start push ends ###############
      puts "sent out mail and charges for game #{@game.id}"
      @b += 1
    else 

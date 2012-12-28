@@ -202,5 +202,21 @@ def change_email
       render(json: JSON.pretty_generate(false_json))
     end 
   end 
+
+  def push_registration 
+    @registration_id = params[:registration_id]
+    @user = User.find(params[:user_id])
+
+    if @user.registration_id == 0 
+      then 
+      @user.registration_id = @registration_id
+      @user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
   
 end

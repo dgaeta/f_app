@@ -147,14 +147,32 @@ def game_comments
     @comment.email = user.email
     @comment.save
 
-      if @comment.save
-        true_json =  { :status => "okay"}
-        render(json: JSON.pretty_generate(true_json))
-      else
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json) )
-      end
+    if @comment.save
+  ########## push start ################
+     notification = Gcm::Notification.new
+     notification.device = user.registration_id
+     notification.collapse_key = "updates_available"
+     notification.delay_while_idle = true
+     @game = Game.find(@comment.from_game_id)
+     @a = 0 
+     @num = @game.players
+     @registration_ids = []
+     while @a < @num do 
+      user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
+      user = User.find(user_ids[@a])
+      @registration_ids << user.registration_id
+      @a += 1 
     end
-
+     notification.data = {:registration_ids => @registration_ids,
+      :data => {:message_text => "New Comment from Game #{@game.id}"}}
+     notification.save
+  ######### push end #####################
+     true_json =  { :status => "okay"}
+     render(json: JSON.pretty_generate(true_json))
+    else
+     false_json = { :status => "fail."} 
+     render(json: JSON.pretty_generate(false_json) )
+    end
+  end
 
 end

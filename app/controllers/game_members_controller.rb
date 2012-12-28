@@ -363,5 +363,14 @@ class GameMembersController < ApplicationController
       end
     end
 
+=begin  def push_position_change
+   leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
+
+   leaderboard_stats = leaderboard_stats.map do |member|
+   {:user_id => member.user.id}
+   end
+
+  end
+=end
 
 end
