@@ -47,8 +47,8 @@ end
  gem 'heroku'
  gem 'gcm_on_rails'
 
- gem 'paperclip'
- gem 'aws-sdk'
+ #gem 'paperclip'
+ #gem 'aws-sdk'
 
 
 # Use unicorn as the app server
