@@ -216,7 +216,11 @@ end
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
 
-    unless @all_of_users_games[0] == nil  
+   
+
+        a_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(a_json))
+ unless @all_of_users_games[0] == nil  
           h = Hash.new(0)
 
              @a = 0 
@@ -256,10 +260,6 @@ end
       :email => User.where(:id => game.creator_id).pluck(:email).first}
        end
 
-        a_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(a_json))
-
-
       else
          @public_games = Game.where("is_private = false")
          @public_games = @public_games.map do |game|
@@ -267,7 +267,9 @@ end
         :duration => game.duration,
         :wager => game.wager,
         :players => game.players,
-        :stakes => game.stakes}
+        :stakes => game.stakes,
+        :winning_structure => game.winning_structure, 
+        :email => User.where(:id => game.creator_id).pluck(:email).first}
       end
         b_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(b_json))
