@@ -150,7 +150,7 @@ def game_comments
     if @comment.save
   ########## push start ################
      notification = Gcm::Notification.new
-     notification.device = user.registration_id
+     notification.device = user.device_id
      notification.collapse_key = "updates_available"
      notification.delay_while_idle = true
      @game = Game.find(@comment.from_game_id)
@@ -160,7 +160,8 @@ def game_comments
      while @a < @num do 
       user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
       user = User.find(user_ids[@a])
-      @registration_ids << user.registration_id
+      device = Gcm::Device.find(user.device_id)
+      @registration_ids << device.registration_id
       @a += 1 
     end
      notification.data = {:registration_ids => @registration_ids,
