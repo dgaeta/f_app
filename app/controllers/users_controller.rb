@@ -208,7 +208,7 @@ def change_email
     @user_id = params[:user_id]
     @user = User.where(:id => @user_id).first
 
-    if @user.registration_id == 0 
+    if @user.registration_id == "0" 
       then 
       @user.registration_id = @registration_id
       @user.save 
