@@ -206,7 +206,7 @@ def change_email
   def push_registration 
     @registration_id = params[:registration_id] 
     @user_id = params[:user_id]
-    @user = User.find(@user_id)
+    @user = User.where(:id => @user_id).first
 
     if @user.registration_id == 0 
       then 
