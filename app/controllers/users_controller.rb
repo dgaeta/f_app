@@ -208,9 +208,11 @@ def change_email
     @user_id = params[:user_id]
     @user = User.where(:id => @user_id).first
 
-    if @user.registration_id == "0" 
+    if @user.device_id == "0" 
       then 
-      @user.registration_id = @registration_id
+      @device = Gcm::Device.create(:registration_id => @registration_id)
+      @device.save
+      @user.device_id = @device.id
       @user.save 
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
