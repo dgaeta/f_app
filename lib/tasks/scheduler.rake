@@ -63,7 +63,7 @@ task :auto_start_games => :environment do
 	                @game.game_end_date = @new_end_date
 	                @game.save 
                   @comment = Comment.new(:from_game_id => @game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
-                    :last_name => " " , :bold => "TRUE", :message => "The game start date has been pushed forward 1 day! Need at least 4 players.", :stamp => Time.now)
+                    :last_name => " " , :bold => "TRUE", :message => “The game start date has been pushed forward 1 day! (need at least 4 players)”, :stamp => Time.now)
                   @comment.email = "team@fitsby.com"
                   @comment.from_user_id = 101
                   @comment.bold = "TRUE"

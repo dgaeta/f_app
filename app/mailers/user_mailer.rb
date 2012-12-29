@@ -47,7 +47,7 @@ class UserMailer < ActionMailer::Base
     @winner3_money_won = sprintf("%.2f", winner3_money_won)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
     @url  = "http://fitsby.com"
-    mail(:to => "payments@fitsby.com", :subject => "Pay winners")
+    mail(:to => "payments@fitsby.com", :subject => "")
   end
 
   def email_ourselves_to_pay_1_winner(game_id, winner1, winner1_money_won, fitsby_money_won, total_amount_charged_to_losers)   ##make view
