@@ -163,7 +163,7 @@ def game_comments
       device = Gcm::Device.find(user.device_id)
       @registration_ids << device.registration_id
       @a += 1 
-    end
+     end
      notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "New Comment from Game #{@game.id}"}}
      notification.save
