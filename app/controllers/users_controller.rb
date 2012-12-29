@@ -204,8 +204,9 @@ def change_email
   end 
 
   def push_registration 
-    @registration_id = params[:registration_id]
-    @user = User.find(params[:user_id])
+    @registration_id = params[:registration_id] 
+    @user_id = params[:user_id]
+    @user = User.find(@user_id)
 
     if @user.registration_id == 0 
       then 
