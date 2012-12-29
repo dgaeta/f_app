@@ -1,4 +1,4 @@
-bundle exec herokuclass UsersController < ApplicationController
+class UsersController < ApplicationController
 skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 require 'json'
 #require 'gibbon'
@@ -234,7 +234,5 @@ def change_email
       false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
       render(json: JSON.pretty_generate(false_json))
     end 
-  end 
-
-  
+  end  
 end
