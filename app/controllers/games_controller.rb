@@ -466,8 +466,7 @@ def winners_and_losers
 
   def get_private_game_info
 
-    @search_results = Game.where(:id => params[:game_id], :creator_first_name.downcase => params[:first_name_of_creator].downcase, 
-      :game_active => 1).first
+    @search_results = Game.find(:first, :conditions => [ "lower(creator_first_name) = ?", params[:first_name_of_creator].downcase ]) || [ "id = ?", params[:game_id]]
 
     @user = User.find(params[:user_id])
 

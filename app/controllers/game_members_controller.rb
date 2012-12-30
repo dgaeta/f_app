@@ -363,14 +363,44 @@ class GameMembersController < ApplicationController
       end
     end
 
-=begin  def push_position_change
-   leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
+def push_position_change
+   @game_id = params[:game_id]
+   leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_id).order("successful_checks DESC")
 
    leaderboard_stats = leaderboard_stats.map do |member|
-   {:user_id => member.user.id}
+   {:user_id => member.user.id, 
+    :game_member_id => member.id}
    end
 
+   @a = 0 
+   @num = leaderboard_stats.count
+
+   while @a < @num do 
+    a =leaderboard_stats[@a]
+    game_member = GameMember.find(a.game_member_id)
+
+    if game_member.place == @a 
+      then 
+      @a += 1
+    else 
+      game_member.place = @a 
+      game_member.save 
+      notification = Gcm::Notification.new
+      notification.device = Gcm::Device.find(a.device_id)
+      notification.collapse_key = ""
+      notification.delay_while_idle = true
+      unless a.push_enabled = "FALSE"
+      device = Gcm::Device.find(a.device_id)
+      @registration_ids << device.registration_id
+      @game = Game.find(@game_id)
+      notification.data = {:registration_ids => @registration_ids,
+      :data => {:message_text => "You are now in position: @a, in Fitsby game #{@game.id}!"}}
+      notification.save
+      end
+      @a += 1
+    end
+   end
   end
-=end
+
 
 end
