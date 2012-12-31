@@ -356,7 +356,7 @@ class GameMembersController < ApplicationController
   end
 
   def games_user_is_in 
-    g = GameMember.where(:user_id => params[:user_id],).pluck(:game_id)
+    g = GameMember.where(:user_id => params[:user_id]).pluck(:game_id)
     g_number = g.count 
 
     @a = 0 
