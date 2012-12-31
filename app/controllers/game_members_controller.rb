@@ -110,6 +110,11 @@ class GameMembersController < ApplicationController
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
     number_of_games = @all_of_users_games.count
+    @geo_lat = params[:geo_lat]
+    @geo_long = params[:geo_long]
+    @user.check_in_geo_lat = @geo_lat
+    @user.check_in_geo_long = @geo_long
+    @user.save
  
    #########################LOOP TO GET ACTIVE GAMES USER IS IN #######################################################################  
         @i = 0
@@ -131,7 +136,7 @@ class GameMembersController < ApplicationController
      
       if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
          then 
-            @error = "You aren't in any games or they haven't started yet."
+            @error = "Sorry, You aren't in any games or they haven't started yet."
             false_json = { :status => "fail.", :error => @error }
             render(json: JSON.pretty_generate(false_json)) 
       
@@ -156,7 +161,7 @@ class GameMembersController < ApplicationController
 
                 if @last_checkout_mday == @calendar_day_now   #
                       then 
-                       @error = "not enough time between checkins"
+                       @error = "Sorry, only one check in per calendar day."
                        false_json = { :status => "fail.", :error => @error} 
                        render(json: JSON.pretty_generate(false_json))
                       else
@@ -168,7 +173,7 @@ class GameMembersController < ApplicationController
                             @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
                             @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
                             @game_member.checkins = @time.to_i
-                            @game_member.save
+                            @game_member.save 
                             @checked_in_for_games_variable = []
                             @checked_in_for_games_variable << @game_member.game.id
                             gym_name = params[:gym_name]
@@ -191,8 +196,13 @@ class GameMembersController < ApplicationController
 
   def check_out_request
    @user = User.find(params[:user_id])
-    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    number_of_games = @all_of_users_games.count
+   @geo_lat = params[:geo_lat]
+   @geo_long = params[:geo_long]
+   @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+   number_of_games = @all_of_users_games.count
+   dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], 
+    [@geo_lat,@geo_long])
+   dist_in_meters = dist_in_miles * 1609.34
 
          @i = 0
         @num = number_of_games
@@ -210,16 +220,17 @@ class GameMembersController < ApplicationController
 
           
           unless @init_games == nil 
-            last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-            @time = Time.now.to_i - 21600
-            current_checkout_request_time = @time.to_i
-            #total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
-            @stat = Stat.where(:winners_id => @user.id).first
-            @stat.total_minutes_at_gym += total_minutes_at_gym
-            @stat.save
+          last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
+          @time = Time.now.to_i - 21600
+          current_checkout_request_time = @time.to_i
+          total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
+          @stat = Stat.where(:winners_id => @user.id).first
+          @stat.total_minutes_at_gym += total_minutes_at_gym
+          @stat.save
+         
 
-            if (total_minutes_at_gym > 1800) & (total_minutes_at_gym <  10800 )
-              then
+           if ((total_minutes_at_gym > 1800) & (total_minutes_at_gym <  18000 )) and (dist_in_meters < 90)
+           then
               @stat = Stat.where(:winners_id => @user.id).first
               @stat.successful_checks += 1
               @stat.save
@@ -233,20 +244,30 @@ class GameMembersController < ApplicationController
                  game_member.checkouts = @time
                  game_member.total_minutes_at_gym += total_minutes_at_gym 
                  game_member.successful_checks += 1
+                 game_member.check_out_geo_lat = @geo_lat
+                 game_member.check_out_geo_long = @geo_long
                  game_member.save
                  @a +=1
+               end
                  true_json =  { :status => "okay"}
                  render(json: JSON.pretty_generate(true_json))
-              end
-              else
+              
+              elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
                 game_member.checkins = 0
                 game_member.save
-                error_string = "not enough time or greater than 3 hours"
+                error_string = "Sorry, time must be more than 30 min and less than 5 hours."
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
-             end
+
+              elsif (dist_in_meters > 90)
+                game_member.checkins = 0
+                game_member.save
+                error_string = "Sorry, you left the gym before checking out."
+                false_json = { :status => "fail.", :error => error_string} 
+                render(json: JSON.pretty_generate(false_json))
+              end
             else 
-              error_string = "No active games"
+              error_string = "Sorry, you aren't in any games."
               false_json = { :status => "fail.", :error => error_string} 
               render(json: JSON.pretty_generate(false_json))
         end

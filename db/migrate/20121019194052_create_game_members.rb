@@ -10,6 +10,8 @@ class CreateGameMembers < ActiveRecord::Migration
       t.integer :daily_checkins, :default => 0
       t.integer :total_minutes_at_gym, :default => 0
       t.integer :end_game_checks_evaluation, :default => 0
+      t.real    :check_out_geo_lat, :default => 0 
+      t.real    :check_out_geo_long, :default => 0 
 
       t.timestamps
     end

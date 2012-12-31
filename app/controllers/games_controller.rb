@@ -144,7 +144,7 @@ class GamesController < ApplicationController
     @user_email = @user.email
 
 
-    if @user.save
+    if @user
       then 
         @stat = Stat.where(:winners_id => @user.id).first 
         @stat.games_played += 1 
@@ -155,7 +155,7 @@ class GamesController < ApplicationController
         @first_name = @user.first_name.downcase
         @game.creator_first_name = @user.first_name
         @game.stakes = @game.wager
-        #@game.is_private = "TRUE"
+        # @game.is_private = "TRUE"
         @game.save
 
         @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )

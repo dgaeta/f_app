@@ -10,6 +10,9 @@ class SorceryCore < ActiveRecord::Migration
       t.text   :customer_id
       t.integer :token, :default => 0
       t.integer :num_of_texts, :default => 0 
+      t.integer :device_id
+      t.real :check_in_geo_lat, :default => 0 
+      t.real :check_in_geo_long, :default => 0 
 
       t.timestamps
     end
