@@ -136,7 +136,7 @@ class GameMembersController < ApplicationController
      
       if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
          then 
-            @error = "You can'/t check in right now because none of your games have started."
+            @error = "You can\'t check in right now because none of your games have started."
             false_json = { :status => "fail.", :error => @error }
             render(json: JSON.pretty_generate(false_json)) 
       
