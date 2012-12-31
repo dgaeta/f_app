@@ -154,6 +154,8 @@ puts "Updating games with 1 winner end statuses..."
    if @diff >= 0 
    then
      #######1st_step add up total time at gym for all players #######
+     @game.game_active = 0 
+     @game.save 
      @players = GameMember.where(:game_id => @game.id)
      number_of_players = @players.count  
    
@@ -298,6 +300,8 @@ puts "Updating games with 3 winner end statuses..."
    if @diff >= 0 
    then
      #######1st_step add up total time at gym for all players #######
+     @game.game_active = 0 
+     @game.save 
      @players = GameMember.where(:game_id => @game.id)
      number_of_players = @players.count  
    
@@ -342,6 +346,7 @@ puts "Updating games with 3 winner end statuses..."
        UserMailer.notify_loser(user, loser_checkins, place).deliver
        @losers +=1
       end
+
 
      ####### PAY THE WINNERS
      winner1 = User.find(@players[0].user_id)
