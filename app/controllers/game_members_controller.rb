@@ -110,8 +110,8 @@ class GameMembersController < ApplicationController
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
     number_of_games = @all_of_users_games.count
-    @geo_lat = params[:geo_lat]
-    @geo_long = params[:geo_long]
+    @geo_lat = params[:latitude]
+    @geo_long = params[:longitude]
     @user.check_in_geo_lat = @geo_lat
     @user.check_in_geo_long = @geo_long
     @user.save
@@ -196,8 +196,8 @@ class GameMembersController < ApplicationController
 
   def check_out_request
    @user = User.find(params[:user_id])
-   @geo_lat = params[:geo_lat]
-   @geo_long = params[:geo_long]
+   @geo_lat = params[:latitude]
+   @geo_long = params[:longitude]
    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
    number_of_games = @all_of_users_games.count
    dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], 
