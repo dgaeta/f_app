@@ -164,7 +164,7 @@ def game_comments
      user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
      while @a < @num do 
       user = User.find(user_ids[@a])
-      unless (user.enable_notifications = "FALSE") & (user.device_id == 0)
+      unless (user.enable_notifications == "FALSE") or (user.device_id == 0)
         device = Gcm::Device.find(user.device_id)
         @registration_ids << device.registration_id
       end

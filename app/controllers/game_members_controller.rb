@@ -429,11 +429,14 @@ def push_position_change
        @registration_ids = []
        while @c < @num3 do 
        user = User.find(@user_ids[@c])
-       unless ((user.enable_notifications == "FALSE") or (user.device_id == 0 ))
+       if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
+        @c += 1
+      else 
          device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
+         @c += 1 
         end
-        @c += 1 
+        
         end
          @game = Game.find(@game_id)
          notification.data = {:registration_ids => @registration_ids,
