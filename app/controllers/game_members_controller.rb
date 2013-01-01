@@ -253,6 +253,7 @@ class GameMembersController < ApplicationController
                  render(json: JSON.pretty_generate(true_json))
               
               elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
+                game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
                 game_member.checkins = 0
                 game_member.save
                 error_string = "Sorry, time must be more than 30 min and less than 5 hours."
@@ -260,6 +261,7 @@ class GameMembersController < ApplicationController
                 render(json: JSON.pretty_generate(false_json))
 
               elsif (dist_in_meters > 90)
+                game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
                 game_member.checkins = 0
                 game_member.save
                 error_string = "Sorry, you left the gym before checking out."
