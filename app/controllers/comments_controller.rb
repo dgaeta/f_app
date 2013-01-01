@@ -157,12 +157,12 @@ def game_comments
      @a = 0 
      @num = @game.players
      @registration_ids = []
+     user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
      while @a < @num do 
-      user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
       user = User.find(user_ids[@a])
-      unless user.push_enabled = "FALSE"
-      device = Gcm::Device.find(user.device_id)
-      @registration_ids << device.registration_id
+      unless (user.enable_notifications = "FALSE") & (user.device_id == 0)
+        device = Gcm::Device.find(user.device_id)
+        @registration_ids << device.registration_id
       end
       @a += 1 
      end

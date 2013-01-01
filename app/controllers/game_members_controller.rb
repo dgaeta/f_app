@@ -221,9 +221,8 @@ class GameMembersController < ApplicationController
           
           unless @init_games == nil 
           last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-          @time = Time.now.to_i - 21600
-          current_checkout_request_time = @time.to_i
-          total_minutes_at_gym = current_checkout_request_time - last_checkin[0] 
+          @time_now = Time.now.to_i - 21600
+          total_minutes_at_gym = @time_now - last_checkin[0] 
           @stat = Stat.where(:winners_id => @user.id).first
           @stat.total_minutes_at_gym += (total_minutes_at_gym /60)
           @stat.save
