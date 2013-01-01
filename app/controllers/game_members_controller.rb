@@ -223,9 +223,9 @@ class GameMembersController < ApplicationController
           last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
           @time = Time.now.to_i - 21600
           current_checkout_request_time = @time.to_i
-          total_minutes_at_gym = current_checkout_request_time - last_checkin[0]
+          total_minutes_at_gym = current_checkout_request_time - last_checkin[0]) 
           @stat = Stat.where(:winners_id => @user.id).first
-          @stat.total_minutes_at_gym += total_minutes_at_gym
+          @stat.total_minutes_at_gym += (total_minutes_at_gym /60)
           @stat.save
          
 
@@ -242,7 +242,7 @@ class GameMembersController < ApplicationController
                  game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
                  @time = Time.now.to_i - 21600
                  game_member.checkouts = @time
-                 game_member.total_minutes_at_gym += total_minutes_at_gym 
+                 game_member.total_minutes_at_gym += total_minutes_at_gym 60  
                  game_member.successful_checks += 1
                  game_member.check_out_geo_lat = @geo_lat
                  game_member.check_out_geo_long = @geo_long
