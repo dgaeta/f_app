@@ -224,7 +224,7 @@ class GameMembersController < ApplicationController
           @time_now = Time.now.to_i - 21600
           total_minutes_at_gym = @time_now - last_checkin[0] 
           @stat = Stat.where(:winners_id => @user.id).first
-          @stat.total_minutes_at_gym += (total_minutes_at_gym /60)
+          @stat.total_minutes_at_gym += (total_minutes_at_gym / 60)
           @stat.save
          
 
@@ -426,7 +426,7 @@ def push_position_change
       notification.device = Gcm::Device.find(a.device_id)
       notification.collapse_key = ""
       notification.delay_while_idle = true
-      unless a.push_enabled = "FALSE"
+      unless (a.push_enabled = "FALSE") & (a.device_id == 0 )
       device = Gcm::Device.find(a.device_id)
       @registration_ids << device.registration_id
       @game = Game.find(@game_id)
@@ -436,7 +436,6 @@ def push_position_change
       end
       @a += 1
     end
-    @
    end
   end
 
