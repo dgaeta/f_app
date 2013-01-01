@@ -229,7 +229,7 @@ class GameMembersController < ApplicationController
           @stat.save
          
 
-           if ((total_minutes_at_gym > 0) & (total_minutes_at_gym <  18000 )) and (dist_in_meters < 90)
+           if ((total_minutes_at_gym > 0) & (total_minutes_at_gym <  18000 )) and (dist_in_meters <= 90)
            then
               @stat = Stat.where(:winners_id => @user.id).first
               @stat.successful_checks += 1
