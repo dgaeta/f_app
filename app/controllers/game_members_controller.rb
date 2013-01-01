@@ -403,6 +403,7 @@ def push_position_change
   @num = @game_ids.count
   while @a < @num do 
    leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
+   user_ids =  GameMember.where(:game_id => @game_ids[@a]).pluck(:user_id)
    leaderboard_stats = leaderboard_stats.map do |member|
      {:user_id => member.user.id, 
      :game_member_id => member.id}
@@ -419,19 +420,26 @@ def push_position_change
        else 
        game_member.place = @b 
        game_member.save 
-       user = User.find(a[:user_id])
        notification = Gcm::Notification.new
        notification.device = Gcm::Device.find(1)
        notification.collapse_key = ""
        notification.delay_while_idle = true
-       unless (user.push_enabled = "FALSE") & (user.device_id == 0 )
+       @c = 0 
+       @num3 = @num2
+       @registration_ids = []
+       while @c < @num3 do 
+       user = User.find(user_ids[@c])
+       unless (user.enable_notification = "FALSE") & (user.device_id == 0 )
          device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
+        end
+        @c += 1 
+        end
          @game = Game.find(@game_id)
          notification.data = {:registration_ids => @registration_ids,
          :data => {:message_text => "You are now in position: @b, in Fitsby game #{@game.id}!"}}
          notification.save
-        end
+        
         @b += 1
       end
     end
