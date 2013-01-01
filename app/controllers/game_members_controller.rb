@@ -412,7 +412,7 @@ def push_position_change
     @num2 = leaderboard_stats.count
     while @b < @num2 do 
      a =leaderboard_stats[@b]
-     game_member = GameMember.find(a.game_member_id)
+     game_member = GameMember.find(a[:game_member_id])
      if game_member.place == @b 
        then 
        @b += 1
