@@ -397,47 +397,45 @@ class GameMembersController < ApplicationController
 
 def push_position_change
   @user_id = params[:user_id]
-   @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
+  @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
    
-   @a = 0 
-   @num = @game_ids.count
-   while @a < @num do 
-    leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
-
+  @a = 0 
+  @num = @game_ids.count
+  while @a < @num do 
+   leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
    leaderboard_stats = leaderboard_stats.map do |member|
-   {:user_id => member.user.id, 
-    :game_member_id => member.id}
-   end
-
-   @a = 0 
-   @num = leaderboard_stats.count
-
-   while @a < @num do 
-    a =leaderboard_stats[@a]
-    game_member = GameMember.find(a.game_member_id)
-
-    if game_member.place == @a 
-      then 
-      @a += 1
-    else 
-      game_member.place = @a 
-      game_member.save 
-      notification = Gcm::Notification.new
-      notification.device = Gcm::Device.find(a.device_id)
-      notification.collapse_key = ""
-      notification.delay_while_idle = true
-      unless (a.push_enabled = "FALSE") & (a.device_id == 0 )
-      device = Gcm::Device.find(a.device_id)
-      @registration_ids << device.registration_id
-      @game = Game.find(@game_id)
-      notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "You are now in position: @a, in Fitsby game #{@game.id}!"}}
-      notification.save
-      end
-      @a += 1
+     {:user_id => member.user.id, 
+     :game_member_id => member.id}
     end
-   end
-  end
 
+    @b = 0 
+    @num2 = leaderboard_stats.count
+    while @b < @num2 do 
+     a =leaderboard_stats[@b]
+     game_member = GameMember.find(a.game_member_id)
+     if game_member.place == @b 
+       then 
+       @b += 1
+       else 
+       game_member.place = @b 
+       game_member.save 
+       notification = Gcm::Notification.new
+       notification.device = Gcm::Device.find(a.device_id)
+       notification.collapse_key = ""
+       notification.delay_while_idle = true
+       unless (a.push_enabled = "FALSE") & (a.device_id == 0 )
+         device = Gcm::Device.find(a.device_id)
+         @registration_ids << device.registration_id
+         @game = Game.find(@game_id)
+         notification.data = {:registration_ids => @registration_ids,
+         :data => {:message_text => "You are now in position: @a, in Fitsby game #{@game.id}!"}}
+         notification.save
+        end
+        @b += 1
+      end
+    end
+    @a += 1 
+  end 
+end
 
 end
