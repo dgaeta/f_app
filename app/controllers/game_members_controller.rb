@@ -251,8 +251,8 @@ class GameMembersController < ApplicationController
                end
                  true_json =  { :status => "okay"}
                  render(json: JSON.pretty_generate(true_json))
-              
-              elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
+              #(total_minutes_at_gym < 1800)# 
+              elsif (total_minutes_at_gym > 18000 )
                 @a = 0 
                 @num2 = @init_games.count
                 while @a < @num2  do
