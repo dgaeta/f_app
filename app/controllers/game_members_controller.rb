@@ -428,7 +428,7 @@ def push_position_change
          @registration_ids << device.registration_id
          @game = Game.find(@game_id)
          notification.data = {:registration_ids => @registration_ids,
-         :data => {:message_text => "You are now in position: @a, in Fitsby game #{@game.id}!"}}
+         :data => {:message_text => "You are now in position: @b, in Fitsby game #{@game.id}!"}}
          notification.save
         end
         @b += 1
