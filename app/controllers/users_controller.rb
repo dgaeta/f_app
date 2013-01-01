@@ -236,5 +236,21 @@ def change_email
       false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
       render(json: JSON.pretty_generate(false_json))
     end 
-  end  
+  end 
+
+  def push_enable
+    @user_id = params[:user_id]
+    @user = User.find(@user_id)
+
+    if @user 
+      then 
+      @user.push_enabled = "TRUE"
+      @user.save
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      else 
+      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end   
 end

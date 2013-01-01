@@ -66,7 +66,8 @@ FApp::Application.routes.draw do
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
   get "update_email" => "password_resets#update_email", :as => "update_email"
   get "append_text_field" => "users#append_text_field", :as => "append_text_field"
-
+  get "push_enable" => "users#push_enable", :as => "push_enable"
+  get "push_disable" => "users#push_disable", :as => "push_disable"
 
 
 
@@ -100,7 +101,8 @@ FApp::Application.routes.draw do
   match "update_email", :to => "password_resets#update_email", :via => "post"
   match "append_text_field", :to => "users#append_text_field", :via => "post"
   match "push_registration", :to => "users#push_registration", :via => "post"
-
+  match "push_enable", :to => "users#push_enable", :via => "post"
+  match "push_disable", :to => "users#push_disable", :via => "post"
 
 
 
