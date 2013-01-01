@@ -419,11 +419,11 @@ def push_position_change
        else 
        game_member.place = @b 
        game_member.save 
+       user = User.find(a[:user_id])
        notification = Gcm::Notification.new
-       notification.device = Gcm::Device.find(a.device_id)
+       notification.device = Gcm::Device.find(user.device_id)
        notification.collapse_key = ""
        notification.delay_while_idle = true
-       user = User.find(a[:user_id])
        unless (user.push_enabled = "FALSE") & (user.device_id == 0 )
          device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
