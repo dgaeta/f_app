@@ -172,7 +172,7 @@ class GameMembersController < ApplicationController
                          while @a < @num2  do
                             @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
                             @time = Time.at(Time.now.utc + Time.zone_offset('CST'))
-                            @game_member.checkins = @time.to_i - 21600 
+                            @game_member.checkins = @time.to_i 
                             @game_member.save 
                             @checked_in_for_games_variable = []
                             @checked_in_for_games_variable << @game_member.game.id
