@@ -48,11 +48,13 @@ task :auto_start_games => :environment do
                  user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
                  while @a < @num do 
                   user = User.find(user_ids[@a])
-                  unless (user.push_enabled == "FALSE") or (user.device_id == 0)
+                  if (user.push_enabled == "FALSE") or (user.device_id == "0")
+                    @a += 1 
+                  else
                   device = Gcm::Device.find(user.device_id)
                   @registration_ids << device.registration_id
-                  end
                   @a += 1 
+                  end
                  end
                  notification.data = {:registration_ids => @registration_ids,
                   :data => {:message_text => "Your Fitsby Game #{@game.id} has started!"}}
@@ -248,11 +250,13 @@ puts "Updating games with 1 winner end statuses..."
       while @a < @num do 
       user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
       user = User.find(user_ids[@a])
-      unless (user.push_enabled == "FALSE") or (user.device_id == 0)
+      if (user.push_enabled == "FALSE") or (user.device_id == "0")
+        @a += 1 
+      else
       device = Gcm::Device.find(user.device_id)
       @registration_ids << device.registration_id
-      end
       @a += 1 
+      end
       end
       notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!"}}
@@ -428,11 +432,14 @@ puts "Updating games with 3 winner end statuses..."
       while @a < @num do 
       user_ids = GameMember.where(:game_id => @game_info.id).pluck(:user_id)
       user = User.find(user_ids[@a])
-       unless (user.enable_notifications == "FALSE") or (user.device_id == 0)
+       if (user.enable_notifications == "FALSE") or (user.device_id == "0")
+        @a += 1 
+      else
       device = Gcm::Device.find(user.device_id)
       @registration_ids << device.registration_id
-      end
       @a += 1 
+      end
+      
       end
       notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!"}}

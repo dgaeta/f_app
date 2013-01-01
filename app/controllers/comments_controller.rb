@@ -164,11 +164,13 @@ def game_comments
      user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
      while @a < @num do 
       user = User.find(user_ids[@a])
-      unless (user.enable_notifications == "FALSE") or (user.device_id == 0)
+      if (user.enable_notifications == "FALSE") or (user.device_id == "0")
+        @a += 1 
+      else
         device = Gcm::Device.find(user.device_id)
         @registration_ids << device.registration_id
+        @a += 1 
       end
-      @a += 1 
      end
      notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "New Comment from Game #{@game.id}"}}
