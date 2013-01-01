@@ -403,7 +403,7 @@ def push_position_change
   @num = @game_ids.count
   while @a < @num do 
    leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
-   user_ids =  GameMember.where(:game_id => @game_ids[@a]).pluck(:user_id)
+   @user_ids =  GameMember.where(:game_id => @game_ids[@a]).pluck(:user_id)
    leaderboard_stats = leaderboard_stats.map do |member|
      {:user_id => member.user.id, 
      :game_member_id => member.id}
@@ -428,8 +428,8 @@ def push_position_change
        @num3 = @num2
        @registration_ids = []
        while @c < @num3 do 
-       user = User.find(user_ids[@c])
-       unless (user.enable_notification = "FALSE") & (user.device_id == 0 )
+       user = User.find(@user_ids[@c])
+       unless (user.enable_notifications = "FALSE") & (user.device_id == 0 )
          device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
         end
