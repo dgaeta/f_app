@@ -152,6 +152,7 @@ class GamesController < ApplicationController
         @game = Game.new(params[:game])
         @game.creator_id = @user.id
         @game.players = 1
+        @game.save
         @first_name = @user.first_name.downcase
         @game.creator_first_name = @user.first_name
         @game.stakes = @game.wager

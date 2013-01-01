@@ -68,6 +68,7 @@ FApp::Application.routes.draw do
   get "append_text_field" => "users#append_text_field", :as => "append_text_field"
   get "push_enable" => "users#push_enable", :as => "push_enable"
   get "push_disable" => "users#push_disable", :as => "push_disable"
+  get "push_position_change" => "game_members#push_position_change", :as => "push_position_change"
 
 
 
@@ -103,6 +104,7 @@ FApp::Application.routes.draw do
   match "push_registration", :to => "users#push_registration", :via => "post"
   match "push_enable", :to => "users#push_enable", :via => "post"
   match "push_disable", :to => "users#push_disable", :via => "post"
+  match "push_position_change", :to => "game_members#push_position_change", :via => "post"
 
 
 
