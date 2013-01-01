@@ -423,8 +423,9 @@ def push_position_change
        notification.device = Gcm::Device.find(a.device_id)
        notification.collapse_key = ""
        notification.delay_while_idle = true
-       unless (a.push_enabled = "FALSE") & (a.device_id == 0 )
-         device = Gcm::Device.find(a.device_id)
+       user = User.find(a[:user_id])
+       unless (user.push_enabled = "FALSE") & (user.device_id == 0 )
+         device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
          @game = Game.find(@game_id)
          notification.data = {:registration_ids => @registration_ids,
