@@ -271,6 +271,7 @@ class GameMembersController < ApplicationController
                 game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
                 game_member.checkins = 0
                 game_member.save
+                @a += 1 
               end
                 error_string = "Sorry, you left the gym before checking out."
                 false_json = { :status => "fail.", :error => error_string} 
@@ -395,8 +396,13 @@ class GameMembersController < ApplicationController
     end
 
 def push_position_change
-   @game_id = params[:game_id]
-   leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_id).order("successful_checks DESC")
+  @user_id = params[:user_id]
+   @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
+   
+   @a = 0 
+   @num = @game_ids.count
+   while @a < @num do 
+    leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
 
    leaderboard_stats = leaderboard_stats.map do |member|
    {:user_id => member.user.id, 
@@ -430,6 +436,7 @@ def push_position_change
       end
       @a += 1
     end
+    @
    end
   end
 
