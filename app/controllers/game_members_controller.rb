@@ -283,6 +283,12 @@ class GameMembersController < ApplicationController
                 error_string = "Sorry, you left the gym before checking out."
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
+              else 
+                puts "cant find error"
+                error_string = "Sorry, you left the gym before checking out."
+                false_json = { :status => "fail.", :error => error_string} 
+                render(json: JSON.pretty_generate(false_json))
+                
               end
             else 
               puts "no games error"
