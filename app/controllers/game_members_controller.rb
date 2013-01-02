@@ -283,6 +283,10 @@ class GameMembersController < ApplicationController
                 error_string = "Location is not the same as check in - Log out to restart"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
+              else 
+                error_string = "Error"
+                false_json = { :status => "fail.", :error => error_string} 
+                render(json: JSON.pretty_generate(false_json))
                 
               end
             else 
