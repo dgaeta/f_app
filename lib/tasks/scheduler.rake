@@ -48,7 +48,7 @@ task :auto_start_games => :environment do
                  user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
                  while @a < @num do 
                   user = User.find(user_ids[@a])
-                  if (user.push_enabled == "FALSE") or (user.device_id == "0")
+                  if (user.enable_notifications == "FALSE") or (user.device_id == "0")
                     @a += 1 
                   else
                   device = Gcm::Device.find(user.device_id)
@@ -250,7 +250,7 @@ puts "Updating games with 1 winner end statuses..."
       while @a < @num do 
       user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
       user = User.find(user_ids[@a])
-      if (user.push_enabled == "FALSE") or (user.device_id == "0")
+      if (user.enable_notifications == "FALSE") or (user.device_id == "0")
         @a += 1 
       else
       device = Gcm::Device.find(user.device_id)
