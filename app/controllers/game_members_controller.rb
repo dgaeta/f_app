@@ -399,12 +399,28 @@ class GameMembersController < ApplicationController
 def push_position_change
   @user_id = params[:user_id]
   @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
+
+   @i = 0
+   @num = game_ids.count
+   @init_games = []
+
+   while @i < @num  do
+   game = Game.where(:id => @all_of_users_games[@i], :game_active => 1).first
+   if (game.game_initialized == 0 ) & (game.game_active == 1)
+   then
+   @init_games << @all_of_users_games[@i]  
+   @i +=1
+   else         
+   @i +=1
+   end
+   end
+
    
   @a = 0 
-  @num = @game_ids.count
+  @num = @init_games.count
   while @a < @num do 
-   leaderboard_stats = GameMember.includes(:user).where(:game_id => @game_ids[@a]).order("successful_checks DESC")
-   @user_ids =  GameMember.where(:game_id => @game_ids[@a]).pluck(:user_id)
+   leaderboard_stats = GameMember.includes(:user).where(:game_id => @init_games[@a]).order("successful_checks DESC")
+   @user_ids =  GameMember.where(:game_id => @init_games[@a]).pluck(:user_id)
    leaderboard_stats = leaderboard_stats.map do |member|
      {:user_id => member.user.id, 
      :game_member_id => member.id}
