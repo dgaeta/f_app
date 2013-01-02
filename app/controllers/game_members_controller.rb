@@ -270,7 +270,7 @@ class GameMembersController < ApplicationController
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
 
-              elsif (dist_in_meters > 90)
+              elsif (dist_in_meters > 500)
                 @a = 0 
                 @num2 = @init_games.count
                 while @a < @num2  do
