@@ -211,7 +211,7 @@ class GameMembersController < ApplicationController
           while @i < @num  do
              game = Game.where(:id => @all_of_users_games[@i], :game_active => "1").first
              unless game == nil 
-             if (game.game_initialized == 0 ) & (game.game_active == 1)
+             if (game.game_initialized == 1 ) & (game.game_active == 1)
               then
               @init_games << @all_of_users_games[@i]  
               @i +=1
