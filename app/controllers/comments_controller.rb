@@ -150,10 +150,10 @@ def game_comments
     if @comment.save
   ########## push start ################
      notification = Gcm::Notification.new
-     unless user.device_id == 0 
-     notification.device_id = Gcm::Device.find(user.device_id)
+     if user.device_id == "0" 
+      notification.device_id = Gcm::Device.find(1)
      else 
-     notification.device_id = Gcm::Device.find(1)
+      notification.device_id = Gcm::Device.find(user.device_id)
      end
      notification.collapse_key = "Update"
      notification.delay_while_idle = true
