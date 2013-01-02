@@ -246,7 +246,7 @@ class GameMembersController < ApplicationController
                  game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
                  @time = Time.now.to_i - 21600
                  game_member.checkouts = @time
-                 game_member.total_minutes_at_gym += total_minutes_at_gym   
+                 game_member.total_minutes_at_gym += total_minutes_at_gym 
                  game_member.successful_checks += 1
                  game_member.check_out_geo_lat = @geo_lat
                  game_member.check_out_geo_long = @geo_long
