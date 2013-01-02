@@ -233,7 +233,7 @@ class GameMembersController < ApplicationController
           @stat.save
          
 
-           if ((total_minutes_at_gym > 0) & (total_minutes_at_gym <  18000 )) & (dist_in_meters <= 90)
+           if ((total_minutes_at_gym > 1800) & (total_minutes_at_gym <  18000 )) & (dist_in_meters <= 90)
            then
               @stat = Stat.where(:winners_id => @user.id).first
               @stat.successful_checks += 1
@@ -255,8 +255,7 @@ class GameMembersController < ApplicationController
                end
                  true_json =  { :status => "okay"}
                  render(json: JSON.pretty_generate(true_json))
-              #(total_minutes_at_gym < 1800)# 
-              elsif (total_minutes_at_gym > 18000 )
+              elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
                 @a = 0 
                 @num2 = @init_games.count
                 while @a < @num2  do
