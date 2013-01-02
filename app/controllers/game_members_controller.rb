@@ -266,6 +266,7 @@ class GameMembersController < ApplicationController
                 @a += 1 
                 end
                 puts "Time error"
+                puts "#{total_minutes_at_gym}"
                 error_string = "Time must be more than 30 minutes and less than 5 hours"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
