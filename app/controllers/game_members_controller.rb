@@ -266,7 +266,7 @@ class GameMembersController < ApplicationController
                 @a += 1 
                 end
                 puts "Time error"
-                error_string = "Sorry, time must be more than 30 min and less than 5 hours."
+                error_string = "Time must be more than 30 minutes and less than 5 hours"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
 
@@ -280,12 +280,7 @@ class GameMembersController < ApplicationController
                 @a += 1 
               end
                puts "coordinates error"
-                error_string = "Sorry, you left the gym before checking out."
-                false_json = { :status => "fail.", :error => error_string} 
-                render(json: JSON.pretty_generate(false_json))
-              else 
-                puts "cant find error"
-                error_string = "Sorry, you left the gym before checking out."
+                error_string = "Location is not the same as check in - Log out to restart"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
                 
