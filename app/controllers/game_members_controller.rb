@@ -384,7 +384,7 @@ class GameMembersController < ApplicationController
     @array = []
 
     while @a < @num do 
-      b = Game.where(:id => g[@a], :game_active => "1")
+      b = Game.where(:id => g[@a], :game_active => "1").first
       if b.game_active == 1
         then @array << b.id 
         @a += 1
