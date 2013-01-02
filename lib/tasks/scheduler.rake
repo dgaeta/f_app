@@ -238,6 +238,7 @@ puts "Updating games with 1 winner end statuses..."
     
      ###### inactivate the game, put status, move to next game #########
      @game.game_active = 0
+     @game.is_private = "TRUE"
      @game.save
      ########### game start push begin ##############
       notification = Gcm::Notification.new
@@ -446,6 +447,7 @@ puts "Updating games with 3 winner end statuses..."
       notification.save
       ############ PUSH END ###########################################
      @game_info.game_active = 0
+     @game_info.is_private = "TRUE"
      @game_info.save
      @b += 1
    else 

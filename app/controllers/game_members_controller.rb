@@ -255,15 +255,17 @@ class GameMembersController < ApplicationController
                end
                  true_json =  { :status => "okay"}
                  render(json: JSON.pretty_generate(true_json))
+           
               elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
                 @a = 0 
                 @num2 = @init_games.count
                 while @a < @num2  do
                 game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-                game_member.checkins = 0
+                game_member.checkouts = 0
                 game_member.save
                 @a += 1 
                 end
+                puts "Time error"
                 error_string = "Sorry, time must be more than 30 min and less than 5 hours."
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
@@ -273,15 +275,17 @@ class GameMembersController < ApplicationController
                 @num2 = @init_games.count
                 while @a < @num2  do
                 game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-                game_member.checkins = 0
+                game_member.checkouts = 0
                 game_member.save
                 @a += 1 
               end
+               puts "coordinates error"
                 error_string = "Sorry, you left the gym before checking out."
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
               end
             else 
+              puts "no games error"
               error_string = "Sorry, you aren't in any games."
               false_json = { :status => "fail.", :error => error_string} 
               render(json: JSON.pretty_generate(false_json))
@@ -379,7 +383,7 @@ class GameMembersController < ApplicationController
     @array = []
 
     while @a < @num do 
-      b = Game.find(g[@a])
+      b = Game.where(:id => g[@a], :game_active => "1")
       if b.game_active == 1
         then @array << b.id 
         @a += 1
