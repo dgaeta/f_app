@@ -122,11 +122,11 @@ class GameMembersController < ApplicationController
         @init_games = []
 
           while @i < @num  do
-             game_init_status = Game.where(:id => @all_of_users_games[@i], :game_active => 1).pluck(:game_initialized).first
-             if game_init_status == 0 
-               @i +=1
-            else
+             game = Game.where(:id => @all_of_users_games[@i]).first
+             if (game.game_initialized == 1) & (game.game_active == 1)
               @init_games << @all_of_users_games[@i]
+              @i +=1
+            else
               @i +=1
             end
           end
