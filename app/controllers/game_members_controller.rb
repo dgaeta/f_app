@@ -409,14 +409,18 @@ def push_position_change
    @init_games = []
 
    while @i < @num  do
-   game = Game.where(:id => @all_of_users_games[@i], :game_active => 1).first
-   if (game.game_initialized == 0 ) & (game.game_active == 1)
-   then
-   @init_games << @all_of_users_games[@i]  
-   @i +=1
-   else         
-   @i +=1
-   end
+   game = Game.where(:id => @game_ids[@i], :game_active => 1).first
+   unless game == nil 
+     if (game.game_initialized == 1 ) & (game.game_active == 1)
+     then
+     @init_games << @game_ids[@i]  
+     @i +=1
+     else         
+     @i +=1
+     end
+    else 
+     @i += 1 
+    end 
    end
 
    

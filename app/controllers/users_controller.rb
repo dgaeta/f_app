@@ -228,7 +228,7 @@ def change_email
 
     if @user 
       then 
-      @user.push_notification = "FALSE"
+      @user.push_notifications = "FALSE"
       @user.save
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
@@ -244,7 +244,7 @@ def change_email
 
     if @user 
       then 
-      @user.push_notification = "TRUE"
+      @user.push_notifications = "TRUE"
       @user.save
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
