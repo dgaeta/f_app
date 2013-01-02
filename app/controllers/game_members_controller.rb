@@ -161,7 +161,7 @@ class GameMembersController < ApplicationController
 
                 if @last_checkout_mday == @calendar_day_now   #
                       then 
-                       @error = "Sorry, only one check in per calendar day."
+                       @error = "Only 1 check-in per day is allowed"
                        false_json = { :status => "fail.", :error => @error} 
                        render(json: JSON.pretty_generate(false_json))
                       else
@@ -426,7 +426,7 @@ def push_position_change
        else
        notification = Gcm::Notification.new
        notification.device = Gcm::Device.find(1)
-       notification.collapse_key = ""
+       notification.collapse_key = "Update"
        notification.delay_while_idle = true
        device = Gcm::Device.find(user.device_id)
        @registration_id = device.registration_id   
