@@ -405,7 +405,7 @@ def push_position_change
   @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
 
    @i = 0
-   @num = game_ids.count
+   @num = @game_ids.count
    @init_games = []
 
    while @i < @num  do
