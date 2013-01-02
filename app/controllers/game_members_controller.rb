@@ -414,35 +414,28 @@ def push_position_change
     while @b < @num2 do 
      a =leaderboard_stats[@b]
      game_member = GameMember.find(a[:game_member_id])
-     if game_member.place == @b 
+     if game_member.place == (@b + 1)
        then 
        @b += 1
        else 
-       game_member.place = @b 
+       game_member.place = (@b + 1)  
        game_member.save 
+       user = User.find(game_member.user_id)
+       if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
+        puts "skipped"
+       else
        notification = Gcm::Notification.new
        notification.device = Gcm::Device.find(1)
        notification.collapse_key = ""
        notification.delay_while_idle = true
-       @c = 0 
-       @num3 = @num2
-       @registration_ids = []
-       while @c < @num3 do 
-       user = User.find(@user_ids[@c])
-       if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
-        @c += 1
-      else 
-         device = Gcm::Device.find(user.device_id)
-         @registration_ids << device.registration_id
-         @c += 1 
-        end      
-        end
-         @game = Game.find(@game_ids[@a])
-         notification.data = {:registration_ids => @registration_ids,
-         :data => {:message_text => "You are now in position: @b, in Fitsby game #{@game.id}!"}}
-         notification.save
-        
-        @b += 1
+       device = Gcm::Device.find(user.device_id)
+       @registration_id = device.registration_id   
+       @game = Game.find(@game_ids[@a])
+       notification.data = {:registration_ids => [@registration_id],
+       :data => {:message_text => "You are now in position: #{game_member.place}, in Fitsby game #{@game.id}!"}}
+       notification.save
+       end
+       @b += 1
       end
     end
     @a += 1 
