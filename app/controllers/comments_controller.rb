@@ -167,8 +167,10 @@ def game_comments
       if (user.enable_notifications == "FALSE") or (user.device_id == "0")
         @a += 1 
       else
+        unless @comment.from_user_id == user.id
         device = Gcm::Device.find(user.device_id)
         @registration_ids << device.registration_id
+        end
         @a += 1 
       end
      end
