@@ -385,12 +385,16 @@ class GameMembersController < ApplicationController
 
     while @a < @num do 
       b = Game.where(:id => g[@a], :game_active => "1").first
+      unless b == nil 
       if b.game_active == 1
         then @array << b.id 
         @a += 1
       else 
         @a +=1
       end
+    else 
+      @a += 1 
+    end
     end
 
 
