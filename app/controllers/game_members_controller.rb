@@ -435,8 +435,7 @@ def push_position_change
          device = Gcm::Device.find(user.device_id)
          @registration_ids << device.registration_id
          @c += 1 
-        end
-        
+        end      
         end
          @game = Game.find(@game_ids[@a])
          notification.data = {:registration_ids => @registration_ids,
@@ -447,7 +446,9 @@ def push_position_change
       end
     end
     @a += 1 
-  end 
+  end
+   true_json =  { :status => "okay"  }
+   render(json: JSON.pretty_generate(true_json)) 
 end
 
 end
