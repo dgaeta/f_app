@@ -280,6 +280,7 @@ class GameMembersController < ApplicationController
                 @a += 1 
               end
                puts "coordinates error"
+               puts "#{dist_in_meters}"
                 error_string = "Location is not the same as check in - Log out to restart"
                 false_json = { :status => "fail.", :error => error_string} 
                 render(json: JSON.pretty_generate(false_json))
