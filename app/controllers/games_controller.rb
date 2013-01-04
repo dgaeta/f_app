@@ -466,39 +466,69 @@ def winners_and_losers
   end
 
   def get_private_game_info
-
-    @search_results = Game.find(:first, :conditions => [ "lower(creator_first_name) = ?", params[:first_name_of_creator].downcase ]) || [ "id = ?", params[:game_id]]
-
+    @searched_game_with_id = Game.where(:id => params[:game_id]).first
+    @searched_game_creator_name = params[:first_name_of_creator]
+    @searched_game_creator_name = @searched_game_creator_name.downcase
+    @actual_game_creator_name = @searched_game_with_id.creator_first_name
+    @actual_game_creator_name = @searched_game_creator_name.downcase
     @user = User.find(params[:user_id])
-
     @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
+    
+    ##### Compare actual game creator name and the name the user entered
+    if @searched_game_creator_name == @actual_game_creator_name
+      then 
+      @found_game = @searched_game_with_id
+    else 
+      @found_game = []
+    end 
 
-    unless (@game_member != nil) or (@search_results == nil) 
+    ##### run through the possible outcomes 
+    if @searched_game_with_id?
       then
-        game_id = @search_results.id
-        creator_first_name = @search_results.creator_first_name
-        players = @search_results.players
-        wager = @search_results.wager
-        stakes = @search_results.stakes
-        private_or_not = @search_results.is_private
-        duration = @search_results.duration
-        start_date = @search_results.game_start_date
-        start_date = Time.at(start_date)
-        start_date = start_date.strftime('%a %b %d')
-        winning_structure = @search_results.winning_structure
-        creator_email = @user.email 
-        if winning_structure == 1 
-          then structure_string = "Winner take all"
+      @error_string = "Incorrect Game id"
+      false_json = { :status => "fail.", :error => @error_string} 
+      render(json: JSON.pretty_generate(false_json))
+
+    elsif @found_game.empty?
+      then
+      @error_string = "Incorrect Creator Name"
+      false_json = { :status => "fail.", :error => @error_string} 
+      render(json: JSON.pretty_generate(false_json))
+
+
+    elsif @game_member[0] != nil 
+      then
+      @error_string = "You are already in this game"
+      false_json = { :status => "fail.", :error => @error_string} 
+      render(json: JSON.pretty_generate(false_json))
+
+    elsif @found_game[0] != nil 
+      game_id = @found_game.id
+      creator_first_name = @found_game.creator_first_name
+      players = @found_game.players
+      wager = @found_game.wager
+      stakes = @found_game.stakes
+      private_or_not = @found_game.is_private
+      duration = @found_game.duration
+      start_date = @found_game.game_start_date
+      start_date = Time.at(start_date)
+      start_date = start_date.strftime('%a %b %d')
+      winning_structure = @found_game.winning_structure
+      creator_email = @user.email 
+      if winning_structure == 1 
+        then structure_string = "Winner take all"
         else 
-          structure_string = "Top 3"
-        end
-        true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
-        :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
-        :winning_structure => structure_string, :email => creator_email}
-        render(json: JSON.pretty_generate(true_json))
-        else
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
+        structure_string = "Top 3"
+      end
+      true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
+      :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
+      :winning_structure => structure_string, :email => creator_email}
+      render(json: JSON.pretty_generate(true_json))
+    
+    else
+      error_string = "Unknown error, please email us"
+      false_json = { :status => "fail.", :error => @error_string} 
+      render(json: JSON.pretty_generate(false_json))
     end
   end
 

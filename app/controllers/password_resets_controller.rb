@@ -165,10 +165,9 @@ include BCrypt
     if user.save 
       then 
       gb = Gibbon.new
-      list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
-      gb.list_unsubscribe(:id => list_id, :email_address => old_email, :delete_member => true, 
+      gb.list_unsubscribe(:id => "3c9272b951", :email_address => old_email, :delete_member => true, 
       :send_goodbye => false, :send_notify => false)
-      gb.list_subscribe(:id => list_id, :email_address => user.email, :merge_vars => {'fname' => user.first_name, 
+      gb.list_subscribe(:id => "3c9272b951", :email_address => user.email, :merge_vars => {'fname' => user.first_name, 
       'lname' => user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
       #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
       # UPDATE USER'S EMAIL ON STRIPE TOO:

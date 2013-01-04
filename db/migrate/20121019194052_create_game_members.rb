@@ -12,6 +12,7 @@ class CreateGameMembers < ActiveRecord::Migration
       t.integer :end_game_checks_evaluation, :default => 0
       t.real    :check_out_geo_lat, :default => 0 
       t.real    :check_out_geo_long, :default => 0 
+      t.text    :full_name
 
       t.timestamps
     end
