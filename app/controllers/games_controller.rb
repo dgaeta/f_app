@@ -465,7 +465,7 @@ def winners_and_losers
     end
   end
 
-  def get_private_game_info
+=begin  def get_private_game_info
     @searched_game_with_id = Game.where(:id => params[:game_id]).first
     @searched_game_creator_name = params[:first_name_of_creator]
     @searched_game_creator_name = @searched_game_creator_name.downcase
@@ -527,7 +527,7 @@ def winners_and_losers
       render(json: JSON.pretty_generate(false_json))
     end
   end
-
+=end
   def single_game_info 
     @search_results = Game.where(:id => params[:game_id], :game_active => 1 ).first
 
