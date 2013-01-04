@@ -484,20 +484,17 @@ def winners_and_losers
 
     ##### run through the possible outcomes 
     if @searched_game_with_id?
-      then
       @error_string = "Incorrect Game id"
       false_json = { :status => "fail.", :error => @error_string} 
       render(json: JSON.pretty_generate(false_json))
 
     elsif @found_game.empty?
-      then
       @error_string = "Incorrect Creator Name"
       false_json = { :status => "fail.", :error => @error_string} 
       render(json: JSON.pretty_generate(false_json))
 
 
     elsif @game_member[0] != nil 
-      then
       @error_string = "You are already in this game"
       false_json = { :status => "fail.", :error => @error_string} 
       render(json: JSON.pretty_generate(false_json))
@@ -524,8 +521,7 @@ def winners_and_losers
       :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
       :winning_structure => structure_string, :email => creator_email}
       render(json: JSON.pretty_generate(true_json))
-    
-    else
+     else
       error_string = "Unknown error, please email us"
       false_json = { :status => "fail.", :error => @error_string} 
       render(json: JSON.pretty_generate(false_json))
