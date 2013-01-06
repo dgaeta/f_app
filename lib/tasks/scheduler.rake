@@ -8,7 +8,7 @@ task :auto_start_games => :environment do
   @all_games = Game.where(:game_initialized => 0)
 
   unless @all_games.empty?
-    @a = 0 git remote add origin git@github.com:gaeta2/TEST_app.git
+    @a = 0 
     @num1 = @all_games.count
 
     while @a < @num1 do ####start cycling through the games to see what the status is 
