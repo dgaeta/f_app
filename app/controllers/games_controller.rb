@@ -137,15 +137,38 @@ class GamesController < ApplicationController
   end
 
 
-  def create_game
+ def create_game
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
     @user = User.where(:id => params[:user_id]).first
     @user_email = @user.email
+    @wager = params[:wager]
 
 
     if @user
       then 
+        unless @wager == 0 
+                # get the credit card details submitted by Android
+        credit_card_number = params[:credit_card_number]
+        credit_card_exp_month = params[:credit_card_exp_month]
+        credit_card_exp_year = params[:credit_card_exp_year]
+        credit_card_cvc = params[:credit_card_cvc]
+    
+        # create a Customer
+        customer = Stripe::Customer.create(
+        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+        :email => @user_email ) 
+        @user.update_attributes(:customer_id => customer.id)
+
+        # Now, make a stripe column for database table 'users'
+        # save the customer ID in your database so you can use it later
+
+        Stripe::Charge.create(
+                   :amount => ((@game.wager * 100) + 50), # (example: 1000 is $10)
+                   :currency => "usd",
+                   :customer => @user.customer_id)
+      end
+
         @stat = Stat.where(:winners_id => @user.id).first 
         @stat.games_played += 1 
         @stat.save
@@ -179,36 +202,19 @@ class GamesController < ApplicationController
          @game.save
 
 
-         unless @game.wager == 0 
-              # get the credit card details submitted by Android
-        credit_card_number = params[:credit_card_number]
-        credit_card_exp_month = params[:credit_card_exp_month]
-        credit_card_exp_year = params[:credit_card_exp_year]
-        credit_card_cvc = params[:credit_card_cvc]
-    
-        # create a Customer
-        customer = Stripe::Customer.create(
-        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-        :email => @user_email ) 
-        @user.update_attributes(:customer_id => customer.id)
-
-        # Now, make a stripe column for database table 'users'
-        # save the customer ID in your database so you can use it later
-
-        Stripe::Charge.create(
-                   :amount => ((@game.wager * 100) + 50), # (example: 1000 is $10)
-                   :currency => "usd",
-                   :customer => @user.customer_id)
-        end
-
-        true_json =  { :status => "okay", :game_id => @game.id}
-        render(json: JSON.pretty_generate(true_json) )
-    
-        else
-         false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-    end
-end
+        if @game.save
+          then 
+          true_json =  { :status => "okay", :game_id => @game.id}
+          render(json: JSON.pretty_generate(true_json) )
+        else 
+          false_json = { :status => "fail."} 
+          render(json: JSON.pretty_generate(false_json))
+        end 
+      else 
+        false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end
 
   def public_games
     @public_games = Game.where(:is_private => "false", :game_active => 1)
@@ -344,50 +350,19 @@ def winners_and_losers
   end 
 
 
+ 
   def join_game
-
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
-
+    
     user = User.where(:id => params[:user_id]).first
     user_email = user.email
 
-   
+    @game = Game.where(:id => params[:game_id]).first
 
     if user.save 
       then 
-          unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
-          game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
-          game_member.save
-          stat = Stat.where(:winners_id => user.id).first 
-          stat.games_played += 1 
-          stat.save
-          
-
-          game = Game.where(:id => params[:game_id]).first
-          
-          wager = game.wager
-          
-          current_stakes = game.stakes
-
-          new_stakes = wager + current_stakes
-
-          total_players = game.players
-          total_players += 1
-          game.players = total_players
-          game.stakes = new_stakes
-          game.save
-          stakes = game.stakes
-
-        user = User.find(game_member.user_id)
-        c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
-          :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}!", :from_game_id => game_member.game_id)
-        c.bold = "False"
-        c.email = user.email 
-        c.save
-
-
-        unless game.wager == 0 
-              # get the credit card details submitted by Android
+      unless @game.wager == 0 
+        # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
         credit_card_exp_month = params[:credit_card_exp_month]
         credit_card_exp_year = params[:credit_card_exp_year]
@@ -403,12 +378,39 @@ def winners_and_losers
         # save the customer ID in your database so you can use it later
 
         Stripe::Charge.create(
-                   :amount => ((game.wager * 100) + 50), # (example: 1000 is $10)
-                   :currency => "usd",
-                   :customer => user.customer_id)
-        end
+        :amount => ((@game.wager * 100) + 50), # (example: 1000 is $10)
+        :currency => "usd",
+        :customer => user.customer_id)
+      end
 
-        true_json =  { :status => "okay", :game_id => game.id, :creator_first_name => game.creator_first_name }
+      unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
+        game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
+        game_member.save
+        stat = Stat.where(:winners_id => user.id).first 
+        stat.games_played += 1 
+        stat.save
+          
+        wager = @game.wager
+        current_stakes = @game.stakes
+        new_stakes = wager + current_stakes
+        total_players = @game.players
+        total_players += 1
+        @game.players = total_players
+        @game.stakes = new_stakes
+        @game.save
+        stakes = @game.stakes
+
+        user = User.find(game_member.user_id)
+        c = Comment.new(:from_user_id => user.id, :first_name => user.first_name, :last_name => user.last_name, 
+          :message => user.first_name + "" + " just joined the game and the pot is now $#{stakes}!", :from_game_id => game_member.game_id)
+        c.bold = "False"
+        c.email = user.email 
+        c.save
+
+
+       
+
+        true_json =  { :status => "okay", :game_id => @game.id, :creator_first_name => @game.creator_first_name }
         render(json: JSON.pretty_generate(true_json))
       else
         false_json = { :status => "fail."} 
