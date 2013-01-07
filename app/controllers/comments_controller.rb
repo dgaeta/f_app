@@ -175,7 +175,7 @@ def game_comments
       end
      end
      notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "New Comment from Game #{@game.id}           "}}
+      :data => {:message_text => "New Comment from Game #{@game.id}                                  "}}
      notification.save
      notification.device_id = "171"
      notification.save
