@@ -404,7 +404,7 @@ class GameMembersController < ApplicationController
     end
 
 
-    unless g[0] == nil
+    unless g.empty?
       then
       true_json =  { :status => "okay" , :games_user_is_in => @array }
         render(json: JSON.pretty_generate(true_json)) 
