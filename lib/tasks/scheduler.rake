@@ -279,8 +279,8 @@ puts "Updating games with 1 winner end statuses..."
 
       unless @game.wager == 0 
         ####### define the payout amounts
-        @first_place_percentage = 0.85
-        @fitsby_percentage = 0.15
+        @first_place_percentage = 0.92
+        @fitsby_percentage = 0.08
 
         winner1_money_won = (@game.stakes  * @first_place_percentage)
         total_money_processed = (@game.stakes + (@game.players * 0.50))
@@ -508,9 +508,9 @@ puts "Updating games with 3 winner end statuses..."
       unless @game.wager == 0 
         ####### define the payout amounts
         @first_place_percentage = 0.45
-        @second_place_percentage = 0.25
-        @third_place_percentage = 0.15
-        @fitsby_percentage = 0.15
+        @second_place_percentage = 0.27
+        @third_place_percentage = 0.20
+        @fitsby_percentage = 0.08
 
         winner1_money_won = (@game.stakes  * @first_place_percentage)
         winner2_money_won = (@game.stakes  * @second_place_percentage)
