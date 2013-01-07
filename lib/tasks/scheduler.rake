@@ -65,7 +65,7 @@ task :auto_start_games => :environment do
         end
         
         notification.data = {:registration_ids => @registration_ids,
-        :data => {:message_text => "Your Fitsby Game #{@game.id} has started!"}}
+        :data => {:message_text => "Your Fitsby Game #{@game.id} has started!                              "}}
         notification.save
         ########### End of push notifications ###############
 	      puts "started game #{@game.id}"
@@ -327,7 +327,7 @@ puts "Updating games with 1 winner end statuses..."
       end
      
       notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!"}}
+      :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!                                     "}}
       notification.save
       ########### game start push ends ###############
     
@@ -560,7 +560,7 @@ puts "Updating games with 3 winner end statuses..."
       end
     
       notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!"}}
+      :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!                                   "}}
       notification.save
       ############ PUSH END ###########################################
       @game.game_active = 0
