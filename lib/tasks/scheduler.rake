@@ -553,13 +553,13 @@ puts "Updating games with 3 winner end statuses..."
     
       while @g < @num8 do 
         user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
-        user = User.find(user_ids[@a])
+        user = User.find(user_ids[@g])
         if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-          @a += 1 
+          @g += 1 
           else
           device = Gcm::Device.find(user.device_id)
           @registration_ids << device.registration_id
-          @a += 1 
+          @g += 1 
         end
       end
     
