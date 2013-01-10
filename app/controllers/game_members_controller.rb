@@ -185,7 +185,17 @@ class GameMembersController < ApplicationController
                             comment.bold = "FALSE" 
                             comment.checkin = "TRUE"
                             comment.save
-                            @a +=1
+                          ####mailer
+                            user_id = @user.id 
+                            game_member_id = @game_member.id
+                            check_in_time = @time
+                            successful_checks_before = @game_member.successful_checks
+                            geo_lat = @geo_lat
+                            geo_long = @geo_long
+                            UserMailer.testing_checkin_to_checkout(user_id, game_member_id, check_in_time, 
+                            successful_checks_before, geo_lat, geo_long).deliver
+                            #### end mailer 
+                            @a += 1
                           end
                         true_json =  { :status => "okay", :checked_in_for_games_variable => @checked_in_for_games_variable}
                         render(json: JSON.pretty_generate(true_json))

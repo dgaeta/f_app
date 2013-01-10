@@ -139,6 +139,16 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
        :subject => "Looks like you forgot your password.")
   end
 
+  def testing_checkin_to_checkout(user_id, game_member_id, check_in_time, successful_checks_before, geo_lat, geo_long)
+    @user_id = user_id
+    @game_member_id = game_member_id
+    @check_in_time = check_in_time
+    @successful_checks_before = successful_checks_before
+    @geo_lat = geo_lat
+    @geo_long = geo_long
+    mail(:to => "gyms@fitsby.com", :subject => "Checkin from User #{@user_id}")
+  end
+
 end
 
 
