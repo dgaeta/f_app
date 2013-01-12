@@ -20,8 +20,7 @@ task :auto_start_games => :environment do
 
 	   if @game.players >= 2 and @diff <= 0  ### CASE 1 = has 2 players and start date is here
 	      then 
-        @game.game_initialized = 1
-	      @game.is_private = "TRUE" 
+        @game.game_initialized = 1 
         
         if @game.players <= 3   #### checks to see if the stucture is 3 winners but less than 3 users 
           then 

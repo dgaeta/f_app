@@ -511,7 +511,7 @@ def winners_and_losers
         end
       else 
         @results = "Wrong Creator Name"
-        false_json = { :status => "fail.", :error => @error_string} 
+        false_json = { :status => "fail.", :error => @results} 
         render(json: JSON.pretty_generate(false_json))
       end
     else
