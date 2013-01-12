@@ -43,7 +43,7 @@ task :auto_start_games => :environment do
 
         ########### game start push begin ##############
         notification = Gcm::Notification.new
-        device = Gcm::Device.find(171)
+        device = Gcm::Device.all.first
         notification.device = device
         notification.collapse_key = "Update"
         notification.delay_while_idle = true
@@ -308,7 +308,7 @@ puts "Updating games with 1 winner end statuses..."
     
       ########### game start push begin ##############
       notification = Gcm::Notification.new
-      notification.device = Gcm::Device.find(171)
+      notification.device = Gcm::Device.all.first
       notification.collapse_key = "Update"
       notification.delay_while_idle = true
       
@@ -543,7 +543,7 @@ puts "Updating games with 3 winner end statuses..."
     
       ############# Start the PUSH notification ##########################################
       notification = Gcm::Notification.new
-      notification.device = Gcm::Device.find(171)
+      notification.device = Gcm::Device.all.first
       notification.collapse_key = "Update"
       notification.delay_while_idle = true
       

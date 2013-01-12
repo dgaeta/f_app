@@ -476,7 +476,7 @@ def push_position_change
         puts "skipped"
        else
        notification = Gcm::Notification.new
-       notification.device = Gcm::Device.find(171)
+       notification.device = Gcm::Device.all.first
        notification.collapse_key = "Update"
        notification.delay_while_idle = true
        device = Gcm::Device.find(user.device_id)

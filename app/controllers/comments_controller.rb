@@ -151,7 +151,7 @@ def game_comments
   ########## push start ################
      notification = Gcm::Notification.new
      if user.device_id == "0" 
-      notification.device_id = Gcm::Device.find(171)
+      notification.device_id = Gcm::Device.all.first
      else 
       notification.device_id = Gcm::Device.find(user.device_id)
      end

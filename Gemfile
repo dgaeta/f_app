@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -31,10 +31,10 @@ end
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
- gem 'jbuilder'
+ #gem 'jbuilder'
 
- gem 'rabl'
- gem 'yajl-ruby'
+ #gem 'rabl'
+ #gem 'yajl-ruby'
  gem 'pry-rails', :group => :development
  gem "time_diff", "~> 0.2.2"
  gem 'thin'
