@@ -178,7 +178,9 @@ def game_comments
       :data => {:message_text => "New Comment from Game #{@game.id}                                  "}}
      notification.save
      notification.device_id = "171"
-     notification.save
+     unless @registration_ids.empty?
+       notification.save
+     end
   ######### push end #####################
      true_json =  { :status => "okay"}
      render(json: JSON.pretty_generate(true_json))

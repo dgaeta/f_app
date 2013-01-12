@@ -65,9 +65,10 @@ task :auto_start_games => :environment do
         
         notification.data = {:registration_ids => @registration_ids,
         :data => {:message_text => "Your Fitsby Game #{@game.id} has started!                              "}}
-        notification.save
-        notification.device_id = "171"
-        notification.save
+        unless @registration_ids.empty?
+          notification.save
+        end
+    
         ########### End of push notifications ###############
 	      puts "started game #{@game.id}"
 	    
@@ -286,7 +287,7 @@ puts "Updating games with 1 winner end statuses..."
         total_amount_charged_to_losers = (@game.stakes + ((@game.players - 1) * 0.50))
         fitsby_money_won = (@game.stakes * @fitsby_percentage) + (0.50 * @number_of_players)
         UserMailer.congratulate_winner1(winner1, winner1_money_won).deliver
-        game_id = @game_id
+        game_id = @game.id
         UserMailer.email_ourselves_to_pay_1_winner(game_id, winner1, winner1_money_won, fitsby_money_won, 
         total_amount_charged_to_losers,total_money_processed).deliver 
         else 
@@ -295,7 +296,7 @@ puts "Updating games with 1 winner end statuses..."
         total_money_processed = 0
         total_amount_charged_to_losers = 0 
         fitsby_money_won = 0
-        game_id = @game_id
+        game_id = @game.id
         UserMailer.email_ourselves_to_pay_1_winner(game_id, winner1, winner1_money_won, fitsby_money_won, 
         total_amount_charged_to_losers, total_money_processed).deliver 
       end
@@ -329,9 +330,9 @@ puts "Updating games with 1 winner end statuses..."
      
       notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!                                     "}}
-      notification.save
-      notification.device_id = "171"
-      notification.save
+      unless @registration_ids.empty?
+        notification.save
+      end
       ########### game start push ends ###############
     
       puts "sent out mail and charges for game #{@game.id}"
@@ -532,7 +533,7 @@ puts "Updating games with 3 winner end statuses..."
         UserMailer.congratulate_winner3(winner3, winner3_money_won).deliver
         @total_amount_charged_to_losers = 0 
         fitsby_money_won = 0
-        game_id = @game_.id
+        game_id = @game.id
         total_money_processed = 0
         UserMailer.email_ourselves_to_pay_3_winners(game_id, winner1, winner1_money_won, winner2, winner2_money_won,
         winner3, winner3_money_won, fitsby_money_won, total_money_processed).deliver 
@@ -564,9 +565,9 @@ puts "Updating games with 3 winner end statuses..."
     
       notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!                                   "}}
-      notification.save
-      notification.device_id = "171"
-     notification.save
+      unless @registration_ids.empty?
+       notification.save
+      end
       ############ PUSH END ###########################################
       @game.game_active = 0
       @game.is_private = "TRUE"

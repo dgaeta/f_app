@@ -14,6 +14,7 @@ class CreateGameMembers < ActiveRecord::Migration
       t.integer :check_out_geo_long, :default => 0 #change to double precision in db
       t.text    :full_name
       t.integer :place, :default => 0 
+      t.integer :last_checkin_date, :default => 0 
 
       t.timestamps
     end
