@@ -46,7 +46,7 @@ end
  gem 'places'
  gem 'heroku'
  gem 'gcm_on_rails'
- gem "geocoder"
+ gem 'geocoder'
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"
