@@ -639,7 +639,7 @@ task :send_notification_to_inactive_game_members => :environment do
           @registration_id = device.registration_id   
           @game = Game.find(@game_ids[@a])
           notification.data = {:registration_ids => [@registration_id],
-          :data => {:message_text => "Hey! It’s been 2 days -- looks like you’re losing to your friends!"}}
+          :data => {:message_text => "Hey! You haven\'t checked in yet."}}
           notification.save
         end
         @a += 1 
