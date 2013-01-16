@@ -130,8 +130,7 @@ def game_comments
   end
 
   def post_comment
-    @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message],
-     :from_game_id => params[:game_id])
+    @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message], :from_game_id => params[:game_id])
     @comment.save
     @comment.from_game_id = params[:game_id]
     t = Time.now
@@ -151,9 +150,10 @@ def game_comments
   ########## push start ################
      notification = Gcm::Notification.new
      if user.device_id == "0" 
-      notification.device_id = Gcm::Device.all.first
+      device = Gcm::Device.all.first
+      notification.device_id = device.id
      else 
-      notification.device_id = Gcm::Device.where(:id => user.device_id).first
+      notification.device_id = Gcm::Device.where(:id => user.device_id).pluck(:id).first
      end
      notification.collapse_key = "Update"
      notification.delay_while_idle = true
@@ -177,7 +177,6 @@ def game_comments
      notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "New Comment from Game #{@game.id}                                  "}}
      notification.save
-     notification.device_id = "171"
      unless @registration_ids.empty?
        notification.save
      end
