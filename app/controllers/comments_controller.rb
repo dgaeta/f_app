@@ -153,7 +153,7 @@ def game_comments
      if user.device_id == "0" 
       notification.device_id = Gcm::Device.all.first
      else 
-      notification.device_id = Gcm::Device.find(user.device_id)
+      notification.device_id = Gcm::Device.where(:id => user.device_id).first
      end
      notification.collapse_key = "Update"
      notification.delay_while_idle = true
