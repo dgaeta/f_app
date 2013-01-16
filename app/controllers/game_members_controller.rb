@@ -176,15 +176,8 @@ class GameMembersController < ApplicationController
                             @game_member.save 
                             @checked_in_for_games_variable = []
                             @checked_in_for_games_variable << @game_member.game.id
-                            gym_name = params[:gym_name]
-                            comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @init_games[@a] ,
-                              :message => "#{@user.first_name} checked in at #{gym_name}.", :stamp => Time.now)
-                            comment.first_name = @user.first_name
-                            comment.last_name = @user.last_name
-                            comment.email = @user.email 
-                            comment.bold = "FALSE" 
-                            comment.checkin = "TRUE"
-                            comment.save
+                        
+                            
                           ####mailer
                             user_id = @user.id 
                             game_member_id = @game_member.id
@@ -213,6 +206,7 @@ class GameMembersController < ApplicationController
    dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], 
     [@geo_lat,@geo_long])
    dist_in_meters = dist_in_miles * 1609.34
+   #gym_name = params[:gym_name]
 
          @i = 0
         @num = number_of_games
@@ -263,6 +257,14 @@ class GameMembersController < ApplicationController
                  game_member.check_out_geo_lat = @geo_lat
                  game_member.check_out_geo_long = @geo_long
                  game_member.save
+                 comment = Comment.new(:from_user_id => @game_member.user_id, :from_game_id => @init_games[@a] ,
+                 :message => "#{@user.first_name} just completed a #{@minutes} workout.", :stamp => Time.now)
+                 comment.first_name = @user.first_name
+                 comment.last_name = @user.last_name
+                 comment.email = @user.email 
+                 comment.bold = "FALSE" 
+                 comment.checkin = "TRUE"
+                 comment.save
                  @a +=1
                end
                  true_json =  { :status => "okay"}

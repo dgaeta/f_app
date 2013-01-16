@@ -25,6 +25,7 @@ task :auto_start_games => :environment do
         if @game.players <= 3   #### checks to see if the stucture is 3 winners but less than 3 users 
           then 
           @game.winning_structure = 1 
+          @game.was_recently_initiated = 1
           @game.save 
           else
           @game.save 
@@ -576,6 +577,24 @@ puts "Updating games with 3 winner end statuses..."
     end
   end
 end   
+
+
+task :make_games_private_games_private_1_day_after => :environment do 
+  @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games 
+
+  @a = 0 
+  @num1 = @all_games.count 
+
+  unless @all_games.empty?
+    while @a < @num1 do        
+      @game = Game.find(@all_games[@a])
+      @game.is_private = "TRUE"
+      @game.was_recently_initiated = 0 
+      @game.save
+      @a += 1
+    end 
+  end
+end
 
 
 
