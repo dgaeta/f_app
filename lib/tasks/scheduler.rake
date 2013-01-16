@@ -615,6 +615,7 @@ end
 
 
 task :send_notification_to_inactive_game_members => :environment do 
+  puts "Sending notifications to inactive members..."
   @all_game_members = GameMember.where(:active => "1", :successful_checks => "0")
 
   unless @all_game_members.empty?
