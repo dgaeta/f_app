@@ -15,6 +15,7 @@ class CreateGameMembers < ActiveRecord::Migration
       t.text    :full_name
       t.integer :place, :default => 0 
       t.integer :last_checkin_date, :default => 0 
+      t.integer :activated_at, :default => 0 
 
       t.timestamps
     end

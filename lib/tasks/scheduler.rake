@@ -15,7 +15,7 @@ task :auto_start_games => :environment do
 		  @game = Game.where(:id => @all_games[@a]).first
 		  @start = @game.game_start_date
 		  @end = @game.game_end_date
-      @time_now = Time.now.to_i
+      @time_now = Time.now.to_i - 21420
       @diff = @start - @time_now
 
 	   if @game.players >= 2 and @diff <= 0  ### CASE 1 = has 2 players and start date is here
@@ -71,6 +71,19 @@ task :auto_start_games => :environment do
         end
     
         ########### End of push notifications ###############
+        ########### make game members active  ###############
+        @c = 0 
+        @num3 = @game.players
+        @game_members = GameMember.where(:game_id => @game.id)
+
+        while @c < @num3 do 
+          @member = @game_members[@c]
+          @member.actiive = 1
+          @member.activated_at = @time_now
+          @member.save 
+          @c += 1 
+        end 
+        ########## end make member active  #################
 	      puts "started game #{@game.id}"
 	    
 
@@ -230,6 +243,7 @@ puts "Updating games with 1 winner end statuses..."
 
       while @e < @num5 do   ####assigns the stats to the users 
         @game_member = @players[@e]
+        @game_member.active = 0 
         checks = @game_member.successful_checks * 1000000
         total_minutes = @game_member.total_minutes_at_gym / 60 
         checks_and_minutes = checks + total_minutes
@@ -438,6 +452,7 @@ puts "Updating games with 3 winner end statuses..."
 
       while @e < @num5 do  ##assigns stats to users (adds up total minutes)
         @game_member = @players[@e]
+        @game_member.active = 0
         checks = @game_member.successful_checks * 1000000
         total_minutes = @game_member.total_minutes_at_gym / 60 
         checks_and_minutes = checks + total_minutes
@@ -580,6 +595,7 @@ end
 
 
 task :make_games_private_games_private_1_day_after => :environment do 
+  puts "Making games private..."
   @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games 
 
   @a = 0 
@@ -598,6 +614,41 @@ end
 
 
 
+task :send_notification_to_inactive_game_members => :environment do 
+  @all_game_members = GameMember.where(:active => "1", :successful_checks => "0")
+
+  unless @all_game_members.empty?
+    @a = 0 
+    @num = @all_game_members.count 
+    @time_now = Time.now.to_i - 21420
+
+    while @a < @num do 
+      @selected_game_member = GameMember.where(:id => @all_game_members[@a].id).first
+      @last_activity = @selected_game_member.activated_at
+ 
+      if ((@time_now - @last_activity) >= 172800) and ((@time_now - @last_activity)   <= 259200)
+      then 
+        @user = User.where(:id => @selected_game_member.user_id).first
+        unless @user.device_id == 0 
+          notification = Gcm::Notification.new
+          notification.device = Gcm::Device.all.first
+          notification.collapse_key = "Update"
+          notification.delay_while_idle = true
+          @user = User.where(:id => @selected_game_member.user_id).first
+          device = Gcm::Device.find(@user.device_id)
+          @registration_id = device.registration_id   
+          @game = Game.find(@game_ids[@a])
+          notification.data = {:registration_ids => [@registration_id],
+          :data => {:message_text => "Hey! It’s been 2 days -- looks like you’re losing to your friends!"}}
+          notification.save
+        end
+        @a += 1 
+       else 
+        @a += 1
+      end 
+    end 
+  end
+end
 
 
 
