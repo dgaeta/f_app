@@ -475,12 +475,12 @@ def push_position_change
           if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
             puts "skipped game member #{game_member.id}"
           else
-            notification = Gcm::Notification.new
-            notification.device = Gcm::Device.all.first
-            notification.collapse_key = "Update"
-            notification.delay_while_idle = true
             device = Gcm::Device.find(user.device_id)
-            @registration_id = device.registration_id   
+            @registration_id = device.registration_id  
+            notification = Gcm::Notification.new
+            notification.device = device
+            notification.collapse_key = "Update"
+            notification.delay_while_idle = true   
             @game = Game.find(@game_ids[@a])
             notification.data = {:registration_ids => [@registration_id],
             :data => {:message_text => "You are now in position: #{game_member.place}, in Fitsby game #{@game.id}!"}}
