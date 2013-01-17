@@ -258,7 +258,7 @@ class GameMembersController < ApplicationController
                  game_member.check_out_geo_long = @geo_long
                  game_member.save
                  comment = Comment.new(:from_user_id => game_member.user_id, :from_game_id => @init_games[@a] ,
-                 :message => "#{@user.first_name} just completed a #{@minutes} workout.", :stamp => Time.now)
+                 :message => "#{@user.first_name} just completed a #{@minutes} minute workout.", :stamp => Time.now)
                  comment.first_name = @user.first_name
                  comment.last_name = @user.last_name
                  comment.email = @user.email 

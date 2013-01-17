@@ -75,14 +75,15 @@ task :auto_start_games => :environment do
         @c = 0 
         @num3 = @game.players
         @game_members = GameMember.where(:game_id => @game.id)
-
-        while @c < @num3 do 
+        @time_now = Time.now.to_i - 21420
+while @c < @num3 do 
           @member = @game_members[@c]
-          @member.actiive = 1
+          @member.active = 1
           @member.activated_at = @time_now
           @member.save 
           @c += 1 
         end 
+        
         ########## end make member active  #################
 	      puts "started game #{@game.id}"
 	    
