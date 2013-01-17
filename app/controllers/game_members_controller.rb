@@ -430,71 +430,73 @@ class GameMembersController < ApplicationController
 
 def push_position_change
   @user_id = params[:user_id]
-  @game_ids = GameMember.where(:user_id => @user_id).pluck(:game_id)
+  @game_ids = GameMember.where(:user_id => @user_id, :active => "1").pluck(:game_id)
 
-   @i = 0
-   @num = @game_ids.count
-   @init_games = []
+  unless @game_ids.empty?
+    @a = 0
+    @num1 = @game_ids.count
+    @init_games = []
 
-   while @i < @num  do
-   game = Game.where(:id => @game_ids[@i], :game_active => 1).first
-   unless game == nil 
-     if (game.game_initialized == 1 ) & (game.game_active == 1)
-     then
-     @init_games << @game_ids[@i]  
-     @i +=1
-     else         
-     @i +=1
-     end
-    else 
-     @i += 1 
-    end 
-   end
-
-   
-  @a = 0 
-  @num = @init_games.count
-  while @a < @num do 
-   leaderboard_stats = GameMember.includes(:user).where(:game_id => @init_games[@a]).order("successful_checks DESC")
-   @user_ids =  GameMember.where(:game_id => @init_games[@a]).pluck(:user_id)
-   leaderboard_stats = leaderboard_stats.map do |member|
-     {:user_id => member.user.id, 
-     :game_member_id => member.id}
+    while @a < @num1  do  ###### get all initialized games 
+      game = Game.where(:id => @game_ids[@a], :game_active => 1, :game_initialized => 1 ).first
+      unless game == nil 
+        @init_games << game.id
+      end
+      @a += 1 
     end
 
     @b = 0 
-    @num2 = leaderboard_stats.count
-    while @b < @num2 do 
-     a =leaderboard_stats[@b]
-     game_member = GameMember.find(a[:game_member_id])
-     if game_member.place == (@b + 1)
-       then 
-       @b += 1
-       else 
-       game_member.place = (@b + 1)  
-       game_member.save 
-       user = User.find(game_member.user_id)
-       if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
-        puts "skipped"
-       else
-       notification = Gcm::Notification.new
-       notification.device = Gcm::Device.all.first
-       notification.collapse_key = "Update"
-       notification.delay_while_idle = true
-       device = Gcm::Device.find(user.device_id)
-       @registration_id = device.registration_id   
-       @game = Game.find(@game_ids[@a])
-       notification.data = {:registration_ids => [@registration_id],
-       :data => {:message_text => "You are now in position: #{game_member.place}, in Fitsby game #{@game.id}!"}}
-       notification.save
-       end
-       @b += 1
+    @num2 = @init_games.count
+  
+    while @b < @num2 do #####cycle through this users games to see if position change occured 
+      leaderboard_stats = GameMember.includes(:user).where(:game_id => @init_games[@b]).order("successful_checks DESC")
+      #@user_ids =  GameMember.where(:game_id => @init_games[@b]).pluck(:user_id)
+      leaderboard_stats = leaderboard_stats.map do |member|
+        {:user_id => member.user.id, 
+        :game_member_id => member.id}
       end
+
+      @c = 0 
+      @num3 = leaderboard_stats.count
+    
+      while @c < @num3 do ####compare previous place to new place 
+        
+        a =leaderboard_stats[@c]
+        game_member = GameMember.find(a[:game_member_id])
+        if game_member.place == (@c + 1)
+          then 
+          puts "no position change for Game member #{game_member.id}"
+          @c += 1
+        else 
+          puts "position change for Game member #{game_member.id}"
+          game_member.place = (@c + 1)  
+          game_member.save 
+          user = User.where(:id => game_member.user_id).first
+          if ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
+            puts "skipped game member #{game_member.id}"
+          else
+            notification = Gcm::Notification.new
+            notification.device = Gcm::Device.all.first
+            notification.collapse_key = "Update"
+            notification.delay_while_idle = true
+            device = Gcm::Device.find(user.device_id)
+            @registration_id = device.registration_id   
+            @game = Game.find(@game_ids[@a])
+            notification.data = {:registration_ids => [@registration_id],
+            :data => {:message_text => "You are now in position: #{game_member.place}, in Fitsby game #{@game.id}!"}}
+            unless @registration_id.empty?
+              notification.save
+              puts "sent notif to game member #{game_member.id}"
+            end
+          end
+          @c += 1
+        end
+      end
+      @b += 1 
     end
-    @a += 1 
-  end
-   true_json =  { :status => "okay"  }
-   render(json: JSON.pretty_generate(true_json)) 
+  end  
+  true_json =  { :status => "okay"  }
+  render(json: JSON.pretty_generate(true_json)) 
 end
 
 end

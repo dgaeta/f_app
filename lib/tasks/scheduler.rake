@@ -630,8 +630,10 @@ task :send_notification_to_inactive_game_members => :environment do
  
       if ((@time_now - @last_activity) >= 172800) and ((@time_now - @last_activity)   <= 259200)
       then 
+        puts "game member #{@selected_game_member.id} has been inactive for 2 days"
         @user = User.where(:id => @selected_game_member.user_id).first
-        unless @user.device_id == 0 
+        unless ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
+
           notification = Gcm::Notification.new
           notification.device = Gcm::Device.all.first
           notification.collapse_key = "Update"
@@ -642,10 +644,13 @@ task :send_notification_to_inactive_game_members => :environment do
           @game = Game.find(@game_ids[@a])
           notification.data = {:registration_ids => [@registration_id],
           :data => {:message_text => "Hey! You haven\'t checked in yet."}}
-          notification.save
+          unless @registration_id.empty?
+            notification.save
+          end
         end
         @a += 1 
        else 
+         puts "game member #{@selected_game_member.id} has been inactive but not for 2 days"
         @a += 1
       end 
     end 
