@@ -133,6 +133,7 @@ def game_comments
     @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message], :from_game_id => params[:game_id])
     @comment.save
     @comment.from_game_id = params[:game_id]
+    @comment.from_user_id = params[:user_id]
     t = Time.now
     @comment.stamp = t
     @comment.save
@@ -169,13 +170,14 @@ def game_comments
       else
         unless @comment.from_user_id == user.id
         device = Gcm::Device.find(user.device_id)
+        puts "#{user.id}"
         @registration_ids << device.registration_id
         end
         @a += 1 
       end
      end
      notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "New Comment from Game #{@game.id}                                  "}}
+      :data => {:message_text => "New Comment from Game #{@game.id}                                   "}}
      notification.save
      unless @registration_ids.empty?
        notification.save
