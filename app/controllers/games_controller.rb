@@ -494,7 +494,8 @@ def winners_and_losers
           start_date = Time.at(start_date)
           start_date = start_date.strftime('%a %b %d')
           winning_structure = @found_game.winning_structure
-          creator_email = @user.email 
+          creator = User.find(@found_game.creator_id)
+          creator_email = creator.email
           if winning_structure == 1 
             then structure_string = "Winner take all"
             else 
