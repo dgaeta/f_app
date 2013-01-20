@@ -252,5 +252,23 @@ def change_email
       false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
       render(json: JSON.pretty_generate(false_json))
     end 
-  end   
+  end  
+
+  def upload_profile_picture
+    @user = User.where(:id => params[:user_id]).first 
+    @profile_picture = params[:profile_picture]
+
+    @user.profile_picture = @profile_picture
+    @user.save
+
+    if @user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+   end
+
+
 end
