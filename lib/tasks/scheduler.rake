@@ -603,6 +603,7 @@ task :make_games_private_games_private_1_day_after => :environment do
       @game.is_private = "TRUE"
       @game.was_recently_initiated = 0 
       @game.save
+      puts "made game #{@game.id} private"
       @a += 1
     end 
   end
