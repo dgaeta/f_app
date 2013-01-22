@@ -361,7 +361,8 @@ def winners_and_losers
 
     if user.save 
       then 
-      unless @game.wager == 0 
+      unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first
+        unless @game.wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
         credit_card_exp_month = params[:credit_card_exp_month]
@@ -383,7 +384,6 @@ def winners_and_losers
         :customer => user.customer_id)
       end
 
-      unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first 
         game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
         game_member.save
         stat = Stat.where(:winners_id => user.id).first 

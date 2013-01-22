@@ -590,7 +590,7 @@ puts "Updating games with 3 winner end statuses..."
 end   
 
 
-task :make_games_private_games_private_1_day_after => :environment do 
+task :make_games_private_1_day_after => :environment do 
   puts "Making games private..."
   @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games 
 
