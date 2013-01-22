@@ -470,11 +470,11 @@ puts "Updating games with 3 winner end statuses..."
       @num6 = number_of_players
 
       while @f < @num6  do ####gives everyone a loss (changes the winner's losses later)
-        @game_member = @players[@e]
+        @game_member = @players[@f]
         @stat = Stat.where(:winners_id => @game_member.user_id).first
         @stat.losses += 1
         @stat.save
-        @e +=1
+        @f +=1
       end
       ###### end ordering by place #####################
 
