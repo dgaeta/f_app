@@ -278,7 +278,6 @@ puts "Updating games with 1 winner end statuses..."
         user = User.find(game_member.user_id)
         place = @losers + 1 
         loser_checkins = game_member.successful_checks
-        @game = Game.where(:id => @game.id).first
         UserMailer.notify_loser(user, loser_checkins, place).deliver
         @losers +=1
       end
@@ -293,7 +292,7 @@ puts "Updating games with 1 winner end statuses..."
       first.first_place_finishes += 1
       first.save
 
-      unless @game.wager == "0" 
+      unless @game.wager == 0 
         ####### define the payout amounts
         @first_place_percentage = 0.92
         @fitsby_percentage = 0.08
@@ -442,9 +441,6 @@ puts "Updating games with 3 winner end statuses..."
     while @d < @num4 
       @game = Game.find(@finished_games[@d])
       #######1st_step add up total time at gym for all players #######
-      @game.game_active = 0 
-      @game.save 
-
       @players = GameMember.where(:game_id => @game.id)
       number_of_players = @players.count  
    
@@ -487,7 +483,6 @@ puts "Updating games with 3 winner end statuses..."
         user = User.find(game_member.user_id)
         place = @losers + 1 
         loser_checkins = game_member.successful_checks
-        @game = game_member.game_id
         UserMailer.notify_loser(user, loser_checkins, place).deliver
         @losers +=1
       end
@@ -522,7 +517,7 @@ puts "Updating games with 3 winner end statuses..."
       third.third_place_finishes += 1
       third.save
      
-      unless @game.wager == "0" 
+      unless @game.wager == 0 
         ####### define the payout amounts
         @first_place_percentage = 0.45
         @second_place_percentage = 0.27
