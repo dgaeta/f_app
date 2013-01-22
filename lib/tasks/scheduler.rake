@@ -293,7 +293,7 @@ puts "Updating games with 1 winner end statuses..."
       first.first_place_finishes += 1
       first.save
 
-      unless @game.wager == 0 
+      unless @game.wager == "0" 
         ####### define the payout amounts
         @first_place_percentage = 0.92
         @fitsby_percentage = 0.08
@@ -522,7 +522,7 @@ puts "Updating games with 3 winner end statuses..."
       third.third_place_finishes += 1
       third.save
      
-      unless @game.wager == 0 
+      unless @game.wager == "0" 
         ####### define the payout amounts
         @first_place_percentage = 0.45
         @second_place_percentage = 0.27
