@@ -665,7 +665,8 @@ end
       @gameEndDate = @selectedGame.game_end_date 
       if (@timeNow > @gameEndDate)
         @selectedGame.game_active = 0
-        @couner += 1 
+        @counter += 1 
+        puts "game #{@selectedGame.id} status changed to 0"
       else 
         @counter += 1 
       end
