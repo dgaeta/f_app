@@ -653,6 +653,26 @@ task :send_notification_to_inactive_game_members => :environment do
   end
 end
 
+  task :end_games_now => :environment do 
+    @allGames = Game.all 
+
+    @counter = 0 
+    @numberOfGames = @allGames.count
+    @timeNow = Time.now.to_i - 21420
+
+    while @counter < @numberOfGames do 
+      @selectedGame = @allGames[@counter]
+      @gameEndDate = @selectedGame.game_end_date 
+      if (@timeNow > @gameEndDate)
+        @selectedGame.game_active = 0
+        @couner += 1 
+      else 
+        @counter += 1 
+      end
+    end
+  end 
+
+
 
 
 
