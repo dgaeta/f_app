@@ -173,7 +173,7 @@ class GamesController < ApplicationController
       @game.creator_first_name = @user.first_name
       @game.stakes = @game.wager
       @game.is_private = params[:is_private]
-      @game.goal_days = params[:goal_days]
+      @game.goal_days = 8
       @game.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
