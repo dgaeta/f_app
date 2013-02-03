@@ -7,44 +7,41 @@ class UserMailer < ActionMailer::Base
     mail(:to => user.email, :subject => "Welcome to Fitsby, #{@user.first_name}!")
   end
 
-  def congratulate_winner1(winner1, winner1_money_won) ##make views
-    @user = winner1
-    @winner1_money_won = sprintf("%.2f", winner1_money_won)
+  def congratulate_winner_of_paid_game(winner_email, winner_first_name, game_id, player_cut) ##make views
+    @winner_email = winner_email
+    @winner_first_name = winner_first_name
+    @player_cut = sprintf("%.2f", player_cut)
     @url  = "http://fitsby.com"
-    mail(:to => @user.email, :subject => "Congrats #{@user.first_name}, you earned $#{@winner1_money_won}!")
+    mail(:to => @winner_email, :subject => "Congrats #{@winner_first_name}, you earned $#{@player_cut}!")
   end
 
-  def congratulate_winner2(winner2, winner2_money_won) ##make views
-    @user = winner2
-    @winner2_money_won = sprintf("%.2f", winner2_money_won)
+  def congratulate_winner_of_free_game(winner_email, winner_first_name) ##make views
+    @winner_email = winner_email
+    @winner_first_name = winner_first_name
     @url  = "http://fitsby.com"
-    mail(:to => @user.email, :subject => "Congrats #{@user.first_name}, you earned $#{@winner2_money_won}!")
+    mail(:to => @winner_email, :subject => "Congrats #{@winner_first_name}, you earned $#{@player_cut}!")
   end
 
-  def congratulate_winner3(winner3, winner3_money_won) ##make views
-    @user = winner3
-    @winner3_money_won = sprintf("%.2f", winner3_money_won)
-    @url  = "http://fitsby.com"
-    mail(:to => @user.email, :subject => "Congrats #{@user.first_name}, you earned $#{@winner3_money_won}!")
-  end
 
-  def notify_loser(user, loser_checkins, place)   ##make view
-    @user = user
+  def notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days )   ##make view
+    @loser_email = loser_email
     @loser_checkins = loser_checkins
-    @place = place 
+    @game_id = game_id
+    @money_lost = money_lost
+    @loser_first_name = loser_first_name
+    @loser_user_id = loser_user_id 
+    @goal_days = goal_days
     @url  = "http://fitsby.com"
-    mail(:to => user.email, :subject => "Oh no #{@user.first_name}! You just lost a game of Fitsby")
+    mail(:to => loser_email, :subject => "Oh no #{@loser_first_name}! You just lost a game of Fitsby")
   end
 
-  def email_ourselves_to_pay_3_winners(game_id, winner1, winner1_money_won, winner2, winner2_money_won, 
-         winner3, winner3_money_won, fitsby_money_won, total_money_processed)   ##make view
-    @game_id = @game_info.id
-    @winner1 = winner1
-    @winner1_money_won = sprintf("%.2f", winner1_money_won)
-    @winner2 = winner2
-    @winner2_money_won = sprintf("%.2f", winner2_money_won)
-    @winner3 = winner3
-    @winner3_money_won = sprintf("%.2f", winner3_money_won)
+  def email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
+  player_cut, fitsby_money_won, total_money_processed)   ##make view
+    @game_id = game_id
+    @winner_first_name = winner_first_name
+    @winner_email = winner_email
+    @winner_user_id = winner_user_id
+    @winner_money_won = sprintf("%.2f", winner1_money_won)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
     @total_money_processed = total_money_processed
     @url  = "http://fitsby.com"

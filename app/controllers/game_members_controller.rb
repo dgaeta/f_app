@@ -248,7 +248,7 @@ class GameMembersController < ApplicationController
 
               while @a < @num2  do
                  game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-                 last_checkin = game_member.checkins
+                 last_checkin = @time_now
                  @time_now = Time.now.to_i - 21420
                  @minutes = ((@time_now - last_checkin) / 60 )
                  game_member.checkouts = @minutes
@@ -320,6 +320,7 @@ class GameMembersController < ApplicationController
   def leaderboard 
     leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
 
+      goal_days = Game.where(:id => params[:game_id]).pluck(:goal_days)
        
 
       leaderboard_stats = leaderboard_stats.map do |member|
@@ -335,7 +336,7 @@ class GameMembersController < ApplicationController
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
       else
-        true_json =  { :status => "okay" , :leaderboard => leaderboard_stats }
+        true_json =  { :status => "okay" , :leaderboard => leaderboard_stats, :goal_days => goal_days }
         render(json: JSON.pretty_generate(true_json))
     end
    

@@ -7,7 +7,7 @@
     <h4 style="color: red">FOR FITSBY EMPLOYEES ONLY</h4>
     <p>Pay the winner of game id: <%= @game_id %></p>
     <p>
-      You owe <strong><%= @winner1.email %></strong>: <span style="color:red">$<%= @winner1_money_won %></span>.<br/>
+      You owe <strong><%= @winner_email %></strong>: <span style="color:red">$<%= @player_cut %></span>.<br/>
     </p>
 
     <br/>
@@ -16,10 +16,6 @@
 
     <br/>
 
-    <p>Total money paid by losers:</p>
-    <p>
-     <strong>$<%= @total_amount_charged_to_losers %>
-    </p>
 
     <p>Total money processed:</p>
     <p>
@@ -36,3 +32,7 @@
     
   </body>
 </html>
+
+
+
+

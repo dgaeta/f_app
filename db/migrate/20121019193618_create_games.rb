@@ -14,6 +14,7 @@ class CreateGames < ActiveRecord::Migration
       t.integer :game_active, :default => 1
       t.integer :winning_structure, :default => 3
       t.integer :was_recently_initiated, :default => 0
+      t.integer :goal_days
 
       t.timestamps
     end
