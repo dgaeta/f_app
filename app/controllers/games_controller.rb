@@ -251,8 +251,8 @@ class GamesController < ApplicationController
       :email => User.where(:id => game.creator_id).pluck(:email).first}
        end
 
-        #a_json =  { :status => "okay" , :public_games => @public_games }
-        #render(json: JSON.pretty_generate(a_json))
+        a_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(a_json))
 
 
       else
@@ -266,8 +266,8 @@ class GamesController < ApplicationController
        :goal_days => game.goal_days, 
        :email => User.where(:id => game.creator_id).pluck(:email).first}
       end
-        #b_json =  { :status => "okay" , :public_games => @public_games }
-        #render(json: JSON.pretty_generate(b_json))
+        b_json =  { :status => "okay" , :public_games => @public_games }
+        render(json: JSON.pretty_generate(b_json))
         
     end
   end
@@ -527,7 +527,7 @@ def winners_and_losers
         winning_structure = @search_results.winning_structure
         creator_email = User.where(:id => @search_results.creator_id).first
         creator_email = creator_email.email
-       goal_days = @search_results.goal_days
+        goal_days = @search_results.goal_days
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
         :end_date => end_date, :email => creator_email, :goal_days => goal_days}
