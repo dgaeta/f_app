@@ -144,6 +144,7 @@ class GamesController < ApplicationController
     @user_email = @user.email
     @wager = params[:wager]
 
+
     unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first
       unless @wager == 0 
         # get the credit card details submitted by Android
@@ -173,7 +174,7 @@ class GamesController < ApplicationController
       @game.creator_first_name = @user.first_name
       @game.stakes = @game.wager
       @game.is_private = params[:is_private]
-      @game.goal_days = 8
+      @game.goal_days = params[:goal_days]
       @game.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
@@ -250,8 +251,8 @@ class GamesController < ApplicationController
       :email => User.where(:id => game.creator_id).pluck(:email).first}
        end
 
-        a_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(a_json))
+        #a_json =  { :status => "okay" , :public_games => @public_games }
+        #render(json: JSON.pretty_generate(a_json))
 
 
       else
@@ -265,8 +266,8 @@ class GamesController < ApplicationController
        :goal_days => game.goal_days, 
        :email => User.where(:id => game.creator_id).pluck(:email).first}
       end
-        b_json =  { :status => "okay" , :public_games => @public_games }
-        render(json: JSON.pretty_generate(b_json))
+        #b_json =  { :status => "okay" , :public_games => @public_games }
+        #render(json: JSON.pretty_generate(b_json))
         
     end
   end
