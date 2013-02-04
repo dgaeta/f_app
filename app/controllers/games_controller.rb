@@ -156,7 +156,7 @@ class GamesController < ApplicationController
         # create a Customer
         customer = Stripe::Customer.create(
         :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-        :email => user_email ) 
+        :email => @user.email ) 
         @user.update_attributes(:customer_id => customer.id)
 
             # Now, make a stripe column for database table 'users'
