@@ -156,7 +156,7 @@ def game_comments
      else 
       notification.device_id = Gcm::Device.where(:id => user.device_id).pluck(:id).first
      end
-     notification.collapse_key = "Newsfeed"
+     notification.collapse_key = "newsfeed"
      notification.delay_while_idle = true
      @game = Game.find(@comment.from_game_id)
      @a = 0 

@@ -45,7 +45,7 @@ task :auto_start_games => :environment do
         notification = Gcm::Notification.new
         device = Gcm::Device.all.first
         notification.device = device
-        notification.collapse_key = "Game_start"
+        notification.collapse_key = "game_start"
         notification.delay_while_idle = true
         
         @b = 0 
@@ -289,7 +289,7 @@ puts "Updating game end statuses..."
         ############# Start the PUSH notification ##########################################
         notification = Gcm::Notification.new
         notification.device = Gcm::Device.all.first
-        notification.collapse_key = "Game_start"
+        notification.collapse_key = "game_start"
         notification.delay_while_idle = true
       
         @g = 0 
@@ -367,7 +367,7 @@ task :send_notification_to_inactive_game_members => :environment do
 
           notification = Gcm::Notification.new
           notification.device = Gcm::Device.all.first
-          notification.collapse_key = "Games"
+          notification.collapse_key = "games"
           notification.delay_while_idle = true
           @user = User.where(:id => @selected_game_member.user_id).first
           device = Gcm::Device.find(@user.device_id)

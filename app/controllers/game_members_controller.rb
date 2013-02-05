@@ -480,7 +480,7 @@ def push_position_change
             @registration_id = device.registration_id  
             notification = Gcm::Notification.new
             notification.device = device
-            notification.collapse_key = "Games"
+            notification.collapse_key = "games"
             notification.delay_while_idle = true   
             @game = Game.find(@game_ids[@a])
             notification.data = {:registration_ids => [@registration_id],
