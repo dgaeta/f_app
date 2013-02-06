@@ -452,40 +452,44 @@ def winners_and_losers
 
   def get_private_game_info
     @found_game = Game.find(params[:game_id])
-    unless @found_game != nil
-    @user_entered_creator_name = params[:first_name_of_creator]
-    @user_entered_creator_name_downcased = @user_entered_creator_name.downcase
-    @actual_game_creator_name = @found_game.creator_first_name
-    @actual_game_creator_name_downcased = @actual_game_creator_name.downcase
-    @user = User.find(params[:user_id])
-    @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
     
-    ##### Compare actual game creator name and the name the user entered
-        unless @game_member != nil
-          @results = "Found Game"
-          game_id = @found_game.id
-          creator_first_name = @found_game.creator_first_name
-          players = @found_game.players
-          wager = @found_game.wager
-          stakes = @found_game.stakes
-          private_or_not = @found_game.is_private
-          duration = @found_game.duration
-          start_date = @found_game.game_start_date
-          start_date = Time.at(start_date)
-          start_date = start_date.strftime('%a %b %d')
-          goal_days = @found_game.goal_days
-          creator = User.find(@found_game.creator_id)
-          creator_email = creator.email
-          true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
+    unless @found_game != nil
+      @user_entered_creator_name = params[:first_name_of_creator]
+      @user_entered_creator_name_downcased = @user_entered_creator_name.downcase
+      @actual_game_creator_name = @found_game.creator_first_name
+      @actual_game_creator_name_downcased = @actual_game_creator_name.downcase
+      @user = User.find(params[:user_id])
+      @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
+    
+      ##### Compare actual game creator name and the name the user entered
+      unless @game_member != nil
+        @results = "Found Game"
+        game_id = @found_game.id
+        creator_first_name = @found_game.creator_first_name
+        players = @found_game.players
+        wager = @found_game.wager
+        stakes = @found_game.stakes
+        private_or_not = @found_game.is_private
+        duration = @found_game.duration
+        start_date = @found_game.game_start_date
+        start_date = Time.at(start_date)
+        start_date = start_date.strftime('%a %b %d')
+        goal_days = @found_game.goal_days
+        creator = User.find(@found_game.creator_id)
+        creator_email = creator.email
+        true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
           :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
           :goal_days => goal_days, :email => creator_email}
-          render(json: JSON.pretty_generate(true_json))
-        else 
-          @results = "You are already in this game"
-          false_json = { :status => "fail.", :error => @error_string} 
-          render(json: JSON.pretty_generate(false_json))
-        end
-    end 
+        render(json: JSON.pretty_generate(true_json))
+      else 
+        @results = "You are already in this game"
+        false_json = { :status => "fail.", :error => @error_string} 
+        render(json: JSON.pretty_generate(false_json))
+      end
+    else
+      false_json = { :status => "fail.", :error => @error_string} 
+      render(json: JSON.pretty_generate(false_json))
+    end
   end
 
 
