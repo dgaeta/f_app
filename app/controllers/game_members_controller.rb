@@ -248,7 +248,7 @@ class GameMembersController < ApplicationController
 
               while @a < @num2  do
                  game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-                 last_checkin = @time_now
+                 last_checkin = game_member.checkins
                  @time_now = Time.now.to_i - 21420
                  @minutes = ((@time_now - last_checkin) / 60 )
                  game_member.checkouts = @minutes
@@ -497,7 +497,7 @@ def push_position_change
     end
   end  
   true_json =  { :status => "okay"  }
-  render(json: JSON.pretty_generate(true_json)) 
+  render(json: JSON.pretty_generate(true_json))
 end
 
 end
