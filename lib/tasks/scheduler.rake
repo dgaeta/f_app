@@ -192,7 +192,7 @@ puts "Updating game end statuses..."
   @finished_games = []
 
   while @b < @num2       ##check which of the previous games have reached the end date 
-   @game = Game.where(:id => active_games[@b]).first
+   @game = Game.where(:id => @active_games[@b]).first
    @end_date_integer = @game.game_end_date 
    @today_integer = Time.now.to_i - 21600
    @diff = @today_integer - @end_date_integer
