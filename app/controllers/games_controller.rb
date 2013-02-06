@@ -451,21 +451,20 @@ def winners_and_losers
   end
 
   def get_private_game_info
-    @searched_game_with_id = Game.where(:id => params[:game_id]).first
-    @searched_game_creator_name = params[:first_name_of_creator]
-    @searched_game_creator_name = @searched_game_creator_name.downcase
-    @actual_game_creator_name = @searched_game_with_id.creator_first_name
-    @actual_game_creator_name = @searched_game_creator_name.downcase
+    @found_game = Game.where(:id => params[:game_id]).first
+    unless @found_game != nil
+    @user_entered_creator_name = params[:first_name_of_creator]
+    @user_entered_creator_name_downcased = @user_entered_creator_name.downcase
+    @actual_game_creator_name = @found_game.creator_first_name
+    @actual_game_creator_name_downcased = @actual_game_creator_name.downcase
     @user = User.find(params[:user_id])
     @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
     
     ##### Compare actual game creator name and the name the user entered
-    unless @searched_game_with_id[0] != nil
-      if @searched_game_creator_name == @actual_game_creator_name
+      if @actual_game_creator_name_downcased ==  @user_entered_creator_name_downcased 
         then 
         unless @game_member != nil
           @results = "Found Game"
-          @found_game = @searched_game_with_id
           game_id = @found_game.id
           creator_first_name = @found_game.creator_first_name
           players = @found_game.players
@@ -479,11 +478,6 @@ def winners_and_losers
           goal_days = @found_game.goal_days
           creator = User.find(@found_game.creator_id)
           creator_email = creator.email
-          if winning_structure == 1 
-            then structure_string = "Winner take all"
-            else 
-            structure_string = "Top 3"
-          end
           true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
           :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
           :goal_days => goal_days, :email => creator_email}
