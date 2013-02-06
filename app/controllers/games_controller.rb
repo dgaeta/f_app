@@ -461,8 +461,6 @@ def winners_and_losers
     @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
     
     ##### Compare actual game creator name and the name the user entered
-      if @actual_game_creator_name_downcased ==  @user_entered_creator_name_downcased 
-        then 
         unless @game_member != nil
           @results = "Found Game"
           game_id = @found_game.id
@@ -487,15 +485,6 @@ def winners_and_losers
           false_json = { :status => "fail.", :error => @error_string} 
           render(json: JSON.pretty_generate(false_json))
         end
-      else 
-        @results = "Wrong Creator Name"
-        false_json = { :status => "fail.", :error => @results} 
-        render(json: JSON.pretty_generate(false_json))
-      end
-    else
-      @results = "Wrong Game id" 
-      false_json = { :status => "fail.", :error => @results} 
-      render(json: JSON.pretty_generate(false_json))
     end 
   end
 
