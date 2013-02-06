@@ -372,7 +372,6 @@ task :send_notification_to_inactive_game_members => :environment do
           @user = User.where(:id => @selected_game_member.user_id).first
           device = Gcm::Device.find(@user.device_id)
           @registration_id = device.registration_id   
-          @game = Game.find(@game_ids[@a])
           notification.data = {:registration_ids => [@registration_id],
           :data => {:message_text => "Hey! You haven\'t checked in yet."}}
           unless @registration_id.empty?
@@ -388,6 +387,29 @@ task :send_notification_to_inactive_game_members => :environment do
   end
 end
 
+
+
+
+ task :end_games_now => :environment do 
+    @allGames = Game.all 
+
+    @counter = 0 
+    @numberOfGames = @allGames.count
+    @timeNow = Time.now.to_i - 21420
+
+    while @counter < @numberOfGames do 
+      @selectedGame = @allGames[@counter]
+      @gameEndDate = @selectedGame.game_end_date 
+      if (@timeNow > @gameEndDate)
+        @selectedGame.game_active = 0
+        @selectedGame.save
+        @counter += 1 
+        puts "game #{@selectedGame.id} status changed to 0"
+      else 
+        @counter += 1 
+      end
+    end
+  end 
 
 
 
