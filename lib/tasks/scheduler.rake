@@ -363,7 +363,7 @@ task :send_notification_to_inactive_game_members => :environment do
       then 
         puts "game member #{@selected_game_member.id} has been inactive for 2 days"
         @user = User.where(:id => @selected_game_member.user_id).first
-        unless ((user.enable_notifications == "FALSE") or (user.device_id == "0" ))
+        unless ((@user.enable_notifications == "FALSE") or (@user.device_id == "0" ))
 
           notification = Gcm::Notification.new
           notification.device = Gcm::Device.all.first
