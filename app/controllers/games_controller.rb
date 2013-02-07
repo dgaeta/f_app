@@ -453,7 +453,7 @@ def winners_and_losers
   def get_private_game_info
     @found_game = Game.find(params[:game_id])
     
-    unless @found_game != nil
+    unless @found_game.nil?
       @user_entered_creator_name = params[:first_name_of_creator]
       @user_entered_creator_name_downcased = @user_entered_creator_name.downcase
       @actual_game_creator_name = @found_game.creator_first_name
