@@ -270,5 +270,17 @@ def change_email
     end
    end
 
+   def user_deletion
+    @user = User.where(:id => params[:user_id]).first
+
+    if @user
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
 
 end
