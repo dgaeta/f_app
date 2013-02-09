@@ -141,14 +141,7 @@ class GameMembersController < ApplicationController
     else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
       @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
       @last_checkout_mday = @game_member.last_checkout_date #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
-      
-      if (@last_checkout_mday == 0) or (@last_checkout_mday == nil) #IF NOTHING THERE THEN KEEP IT 0 
-        @last_checkout_mday = 0
-      else   #IF THERE IS SOMETHING THERE THEN GIVE ME THE CALENDAR DAY OF THE LAST CHECKIN 
-        @last_checkout_mday = @game_member.last_checkout_date
-      end
-      ############ DONE GETTING INFO ON LAST CALENDAR DAY AND TODAYS CDAY ########
-
+    
       @calendar_day_now = (Time.now - 21400).mday       #WHATS THE CALENDAR DAY TODAY?
       
       if @last_checkout_mday == @calendar_day_now   #
@@ -156,7 +149,7 @@ class GameMembersController < ApplicationController
          @error = "Only 1 check-in per day is allowed"
          false_json = { :status => "fail.", :error => @error} 
          render(json: JSON.pretty_generate(false_json))
-        else
+      else
 
         @a = 0
         @num2 = @init_games.count
