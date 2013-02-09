@@ -327,21 +327,40 @@ end
 
 task :make_games_private_1_day_after => :environment do 
   puts "Making games private..."
-  @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games 
+  @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games that were recently initialized
 
-  @a = 0 
-  @num1 = @all_games.count 
+  #check to see if they have more than 1 player
+
+  placeHolder = 0 
+  @numberOfRecentlyInitializedGames = @all_games.count
+  @gamesThatNeedToBePrivatized = Array.new
 
   unless @all_games.empty?
-    while @a < @num1 do        
-      @game = Game.find(@all_games[@a])
-      @game.is_private = "TRUE"
-      @game.was_recently_initiated = 0 
-      @game.save
-      puts "made game #{@game.id} private"
-      @a += 1
+    while @placeHolder < @numberOfRecentlyInitializedGames do        
+      @game = Game.where(:id => @all_games[@placeHolder]).first
+      if @game.players > 1 
+        @gamesThatNeedToBePrivatized << @game.id
+        @placeHolder += 1
+      else 
+        @placeHolder += 1
+      end
     end 
-  end
+
+
+    @a = 0 
+    @num1 = @gamesThatNeedToBePrivatized.count 
+
+    unless @gamesThatNeedToBePrivatized.empty?
+      while @a < @num1 do        
+        @game = Game.find(@gamesThatNeedToBePrivatized[@a])
+        @game.is_private = "TRUE"
+        @game.was_recently_initiated = 0 
+        @game.save
+        puts "made game #{@game.id} private"
+        @a += 1
+      end 
+    end
+  end  
 end
 
 
