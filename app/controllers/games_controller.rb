@@ -499,7 +499,7 @@ def winners_and_losers
   def single_game_info 
     @search_results = Game.where(:id => params[:game_id], :game_active => 1 ).first
 
-    unless @search_results == nil 
+    unless @search_results.nil? 
       then
         game_id = @search_results.id
         creator_first_name = @search_results.creator_first_name

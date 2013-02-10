@@ -386,7 +386,7 @@ task :send_notification_to_inactive_game_members => :environment do
 
           notification = Gcm::Notification.new
           notification.device = Gcm::Device.all.first
-          notification.collapse_key = "games"
+          notification.collapse_key = "no_check_in"
           notification.delay_while_idle = true
           @user = User.where(:id => @selected_game_member.user_id).first
           device = Gcm::Device.find(@user.device_id)
