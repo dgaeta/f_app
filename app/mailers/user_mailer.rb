@@ -146,7 +146,7 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     mail(:to => "gyms@fitsby.com", :subject => "Checkin from User #{@user_id}")
   end
 
-  def delete_user(user_id)
+  def user_deletion(user_id)
     @user_id = user_id
     mail(:to => "team@fitsby.com", :subject => "User #{@user_id} requested a deletion")
   end
