@@ -69,8 +69,7 @@ FApp::Application.routes.draw do
   get "push_enable" => "users#push_enable", :as => "push_enable"
   get "push_disable" => "users#push_disable", :as => "push_disable"
   get "push_position_change" => "game_members#push_position_change", :as => "push_position_change"
-  get "upload_profile_picture" => "users#upload_profile_picture", :as => "push_position_change"
-
+  get "user_deletion" => "users#user_deletion", :as => "user_deletion" 
 
 
 
@@ -107,6 +106,7 @@ FApp::Application.routes.draw do
   match "push_disable", :to => "users#push_disable", :via => "post"
   match "push_position_change", :to => "game_members#push_position_change", :via => "post"
   match "upload_profile_picture", :to => "users#upload_profile_picture", :via => "post"
+  match "user_deletion", :to => "users#user_deletion", :via => "post"
 
 
 
