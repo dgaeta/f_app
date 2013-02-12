@@ -144,7 +144,7 @@ class GameMembersController < ApplicationController
     
       @calendar_day_now = (Time.now - 21400).mday       #WHATS THE CALENDAR DAY TODAY?
       
-      if @last_checkout_mday == @calendar_day_now   #
+      if @last_checkout_mday == @calendar_day_now  
         then 
          @error = "Only 1 check-in per day is allowed"
          false_json = { :status => "fail.", :error => @error} 
@@ -224,6 +224,7 @@ class GameMembersController < ApplicationController
           @time_now = Time.now.to_i - 21420
           @minutes = ((@time_now - last_checkin) / 60 )
           game_member.checkouts = @minutes
+          game_member.last_checkout_date = (Time.now - 21420).mday
           game_member.total_minutes_at_gym += @minutes
           game_member.successful_checks += 1
           game_member.check_out_geo_lat = @geo_lat
