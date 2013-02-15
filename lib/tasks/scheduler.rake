@@ -331,7 +331,7 @@ task :make_games_private_1_day_after => :environment do
 
   #check to see if they have more than 1 player
 
-  placeHolder = 0 
+  @placeHolder = 0 
   @numberOfRecentlyInitializedGames = @all_games.count
   @gamesThatNeedToBePrivatized = Array.new
 
