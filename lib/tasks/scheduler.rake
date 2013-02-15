@@ -433,7 +433,7 @@ end
 
   task :make_games_private_now => :environment do
     puts "making games private..."
-    @allGames = Game.where(:is_private => "TRUE")
+    @allGames = Game.where(:is_private => "FALSE")
 
     unless @allGames.empty?
       @counter = 0 
