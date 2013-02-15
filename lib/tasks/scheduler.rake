@@ -215,7 +215,7 @@ puts "Updating game end statuses..."
       @game = Game.find(@finished_games[@c])
       #######1st_step add up total time at gym for all players #######
       @players = GameMember.where(:game_id => @game.id)
-      number_of_players = @players.count  
+      @number_of_players = @players.count  
    
       @players = GameMember.where(:game_id => @game.id)
    
