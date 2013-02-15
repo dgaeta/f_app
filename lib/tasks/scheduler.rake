@@ -431,6 +431,33 @@ end
   end 
 
 
+  task :make_games_private_now => :environment do
+    puts "making games private..."
+    @all_games = Game.where(:game_active => 1).pluck(:id)
+
+    unless @all_games.empty?
+      @counter = 0 
+      @numberOfGames = @allGames.count
+      @timeNow = Time.now.to_i - 21420
+      @timeNow = @timeNow.to_i
+
+      while @counter < @numberOfGames do 
+        @game = @allGames[@counter]
+        if @game.game_start_date < @timeNow
+          @game.is_private = "TRUE"
+          @game.save
+          @counter += 1 
+        else 
+          @counter += 1 
+        end 
+      end
+    end
+  end
+
+
+
+
+
 
 
 
