@@ -435,7 +435,7 @@ end
     puts "making games private..."
     @allGames = Game.where(:is_private => "TRUE").pluck(:id)
 
-    unless @all_games.empty?
+    unless @allGames.empty?
       @counter = 0 
       @numberOfGames = @allGames.count
       @timeNow = Time.now.to_i - 21420
