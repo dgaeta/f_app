@@ -260,21 +260,21 @@ class GameMembersController < ApplicationController
         false_json = { :status => "fail.", :error => error_string} 
         render(json: JSON.pretty_generate(false_json))
 
-      elsif (dist_in_meters > 50000)
-        @a = 0 
-        @num2 = @init_games.count
-        while @a < @num2  do
-        game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-        game_member.checkouts = 0
-        game_member.save
-        @a += 1 
-        end
+      #elsif (dist_in_meters > 50000)
+        #@a = 0 
+        #@num2 = @init_games.count
+        #while @a < @num2  do
+        #game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
+        #game_member.checkouts = 0
+        #game_member.save
+        #@a += 1 
+        #end
 
-        puts "coordinates error"
-        puts "#{dist_in_meters}"
-        error_string = "Location is not the same as check in - Log out to restart"
-        false_json = { :status => "fail.", :error => error_string} 
-        render(json: JSON.pretty_generate(false_json))
+        ##puts "coordinates error"
+        #puts "#{dist_in_meters}"
+        #error_string = "Location is not the same as check in - Log out to restart"
+        #false_json = { :status => "fail.", :error => error_string} 
+        #render(json: JSON.pretty_generate(false_json))
       else 
         error_string = "Error"
         false_json = { :status => "fail.", :error => error_string} 

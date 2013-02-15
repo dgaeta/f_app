@@ -170,11 +170,11 @@ task :auto_end_games => :environment do
 puts "Updating game end statuses..."
   @all_games = Game.where(:game_initialized => 1).pluck(:id) #get all games 
  
-  @a = 0 
-  @num1 = @all_games.count 
+  @a = 0  #integer to place hold
+  @number_of_all_games = @all_games.count #integer value of how many games there are
   @active_games = []
 
-  while @a < @num1 do         # get all games that are currently alive and allowing check ins (initialized)
+  while @a < @number_of_all_games do         # get all games that are currently alive and allowing check ins (initialized)
     @game = Game.find(@all_games[@a])
     if @game.game_active == 1 
      then 
@@ -188,10 +188,10 @@ puts "Updating game end statuses..."
 
 
   @b = 0 
-  @num2 =  @active_games.count
+  @number_of_active_and_intialized_games =  @active_games.count
   @finished_games = []
 
-  while @b < @num2       ##check which of the previous games have reached the end date 
+  while @b < @number_of_active_and_intialized_games  do     ##check which of the previous games have reached the end date 
    @game = Game.where(:id => @active_games[@b]).first
    @end_date_integer = @game.game_end_date 
    @today_integer = Time.now.to_i - 21600
@@ -209,9 +209,9 @@ puts "Updating game end statuses..."
 
   unless @finished_games.empty?
     @c = 0 
-    @num3 = @finished_games.count
+    @number_of_finished_games = @finished_games.count
 
-    while @c < @num3 
+    while @c < @number_of_finished_games 
       @game = Game.find(@finished_games[@c])
       #######1st_step add up total time at gym for all players #######
       @players = GameMember.where(:game_id => @game.id)
@@ -219,11 +219,11 @@ puts "Updating game end statuses..."
    
       @players = GameMember.where(:game_id => @game.id)
    
-      @f = 0
-      @num6 = number_of_players
+      @d = 0
+      @number_of_players
 
-      while @f < @num6  do ####gives everyone a loss (changes the winner's losses later)
-        @game_member = @players[@f]
+      while @d < @number_of_players  do ####gives everyone a loss (changes the winner's losses later)
+        @game_member = @players[@d]
         @goal_days = @game.goal_days
         @stat = Stat.where(:winners_id => @game_member.user_id).first
 
@@ -246,12 +246,12 @@ puts "Updating game end statuses..."
             UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
             player_cut, fitsby_money_won, total_money_processed )
           else 
-            user = User.where(:id => @game_member.user_id).first_name
+            usder = User.where(:id => @game_member.user_id).first_name
             winner_email = user.email 
             winner_first_name = user.first_name
             UserMailer.congratulate_winner_of_free_game(winner_email, winner_first_name).deliver ###TODO TODO TODO TODO TODO fix this mailer 
           end
-          @f += 1 
+          @d += 1 
         else 
           @stat.losses += 1 
           @stat.games_played += 1 
@@ -283,7 +283,7 @@ puts "Updating game end statuses..."
             loser_user_id = user.id 
             UserMailer.notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days).deliver  
           end
-          @f += 1 
+          @d += 1 
         end 
     
         ############# Start the PUSH notification ##########################################
@@ -292,19 +292,19 @@ puts "Updating game end statuses..."
         notification.collapse_key = "game_start"
         notification.delay_while_idle = true
       
-        @g = 0 
-        @num8 = @game.players
+        @e = 0 
+        @num_of_players_to_send_push = @game.players
         @registration_ids = []
     
-        while @g < @num8 do 
+        while @e < @num_of_players_to_send_push do 
           user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
-          user = User.find(user_ids[@g])
+          user = User.find(user_ids[@e])
           if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-            @g += 1 
+            @e += 1 
           else
             device = Gcm::Device.find(user.device_id)
             @registration_ids << device.registration_id
-            @g += 1 
+            @e += 1 
           end
         end
     
