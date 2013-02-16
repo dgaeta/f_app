@@ -109,7 +109,7 @@ class GameMembersController < ApplicationController
  def check_in_request
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    number_of_games = @all_of_users_games.count
+    @number_of_games = @all_of_users_games.count
     @geo_lat = params[:latitude]
     @geo_long = params[:longitude]
     @user.check_in_geo_lat = @geo_lat
@@ -118,7 +118,7 @@ class GameMembersController < ApplicationController
  
    ###LOOP TO GET ACTIVE GAMES USER IS IN  
     @i = 0
-    @num = number_of_games
+    @num = @number_of_games
     @init_games = []
 
     while @i < @num  do

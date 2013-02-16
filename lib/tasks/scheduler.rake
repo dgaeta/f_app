@@ -277,7 +277,7 @@ puts "Updating game end statuses..."
             money_lost = 0
             loser_checkins = @game_member.successful_checks
             game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id)first
+            user = User.where(:id => @game_member.user_id).first
             loser_email = user.email 
             loser_first_name = user.first_name
             loser_user_id = user.id 
