@@ -236,7 +236,7 @@ puts "Updating game end statuses..."
 
          unless @game.wager == 0 
             game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id).first_name
+            user = User.where(:id => @game_member.user_id).first
             winner_email = user.email 
             winner_first_name = user.first_name
             winner_user_id = user.id 
@@ -248,7 +248,7 @@ puts "Updating game end statuses..."
             UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
             player_cut, fitsby_money_won, total_money_processed )
           else 
-            user = User.where(:id => @game_member.user_id).first_name
+            user = User.where(:id => @game_member.user_id).first
             winner_email = user.email 
             winner_first_name = user.first_name
             UserMailer.congratulate_winner_of_free_game(winner_email, winner_first_name).deliver ###TODO TODO TODO TODO TODO fix this mailer 
@@ -263,7 +263,7 @@ puts "Updating game end statuses..."
             goal_days = @goal_days
             money_lost = @game.wager
             game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id).first_name
+            user = User.where(:id => @game_member.user_id).first
             loser_email = user.email 
             loser_first_name = user.first_name
             loser_user_id = user.id 
