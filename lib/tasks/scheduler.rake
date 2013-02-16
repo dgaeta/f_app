@@ -213,6 +213,7 @@ puts "Updating game end statuses..."
 
     while @c < @number_of_finished_games 
       @game = Game.find(@finished_games[@c])
+      @c += 1
       #######1st_step add up total time at gym for all players #######
       @players = GameMember.where(:game_id => @game.id)
       @number_of_players = @players.count  
@@ -224,6 +225,7 @@ puts "Updating game end statuses..."
 
       while @d < @number_of_players  do ####gives everyone a loss (changes the winner's losses later)
         @game_member = @players[@d]
+        @d += 1 
         @goal_days = @game.goal_days
         @stat = Stat.where(:winners_id => @game_member.user_id).first
 
@@ -251,7 +253,7 @@ puts "Updating game end statuses..."
             winner_first_name = user.first_name
             UserMailer.congratulate_winner_of_free_game(winner_email, winner_first_name).deliver ###TODO TODO TODO TODO TODO fix this mailer 
           end
-          @d += 1 
+
         else 
           @stat.losses += 1 
           @stat.games_played += 1 
@@ -283,7 +285,6 @@ puts "Updating game end statuses..."
             loser_user_id = user.id 
             UserMailer.notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days).deliver  
           end
-          @d += 1 
         end 
     
         ############# Start the PUSH notification ##########################################
@@ -299,12 +300,12 @@ puts "Updating game end statuses..."
         while @e < @num_of_players_to_send_push do 
           user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
           user = User.find(user_ids[@e])
+          @e += 1 
           if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-            @e += 1 
+
           else
             device = Gcm::Device.find(user.device_id)
             @registration_ids << device.registration_id
-            @e += 1 
           end
         end
     
@@ -317,7 +318,7 @@ puts "Updating game end statuses..."
         @game.game_active = 0
         @game.is_private = "TRUE"
         @game.save
-        @d += 1
+
       end
     end
   end
