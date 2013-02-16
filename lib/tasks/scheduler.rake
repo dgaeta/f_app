@@ -304,8 +304,10 @@ puts "Updating game end statuses..."
           if (user.enable_notifications == "FALSE") or (user.device_id == "0")
 
           else
-            device = Gcm::Device.find(user.device_id)
-            @registration_ids << device.registration_id
+            device = Gcm::Device.where(:id => user.device_id).first
+            unless device.nil?
+              @registration_ids << device.registration_id
+            end
           end
         end
     
