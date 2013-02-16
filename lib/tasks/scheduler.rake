@@ -226,6 +226,7 @@ puts "Updating game end statuses..."
       while @d < @number_of_players  do ####gives everyone a loss (changes the winner's losses later)
         @game_member = @players[@d]
         @d += 1 
+        @game_member.active = 0
         @goal_days = @game.goal_days
         @stat = Stat.where(:winners_id => @game_member.user_id).first
 
