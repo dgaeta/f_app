@@ -243,6 +243,7 @@ puts "Updating game end statuses..."
             game_id = @game_member.game_id
             user = User.where(:id => @game_member.user_id).first
             winner_email = user.email 
+            number_of_players = @game.players
             winner_first_name = user.first_name
             winner_user_id = user.id 
             player_cut = (@game.stakes * 0.92) / @game.players
