@@ -7,7 +7,7 @@ class UserMailer < ActionMailer::Base
     mail(:to => user.email, :subject => "Welcome to Fitsby, #{@user.first_name}!")
   end
 
-  def congratulate_winner_of_paid_game(winner_email, winner_first_name, game_id, player_cut) ##make views
+  def congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut) ##make views
     @winner_email = winner_email
     @winner_first_name = winner_first_name
     @player_cut = sprintf("%.2f", player_cut)

@@ -221,17 +221,29 @@ puts "Updating game end statuses..."
       #######1st_step add up total time at gym for all players #######
       @players = GameMember.where(:game_id => @game.id)
       @number_of_players = @players.count  
-   
-      @players = GameMember.where(:game_id => @game.id)
+
+      @counter = 0 
+      @number_of_players
+      @numberOfWinners = 0 
+      @goal_days = @game.goal_days
+
+      while @counter < @number_of_players do 
+        @member = @players[@counter]
+        if @member.successful_checks >= @goal_days
+          then @numberOfWinners += 1 
+        else 
+          puts "not a winner"
+        end
+        @counter += 1
+      end
+
    
       @d = 0
-      @number_of_players
 
       while @d < @number_of_players  do ####gives everyone a loss (changes the winner's losses later)
         @game_member = @players[@d]
         @d += 1 
         @game_member.active = 0
-        @goal_days = @game.goal_days
         @stat = Stat.where(:winners_id => @game_member.user_id).first
 
         if @game_member.successful_checks >= @goal_days
@@ -246,10 +258,10 @@ puts "Updating game end statuses..."
             number_of_players = @game.players
             winner_first_name = user.first_name
             winner_user_id = user.id 
-            player_cut = (@game.stakes * 0.92) / @game.players
+            player_cut = (@game.stakes - (@numberOfWinners * @game.wager)) / @numberOfWinners
             fitsby_percentage = 0.08
-            fitsby_money_won = (@game.stakes * @fitsby_percentage) + (0.50 * number_of_players)
-            total_money_processed = (@game.stakes + (@game.players * 0.50))
+            fitsby_money_won = ((@game.stakes - (@numberOfWinners * @game.wager)) * fitsby_percentage) + (0.50 * @number_of_players)
+            total_money_processed = ((@game.stakes - (@numberOfWinners * @game.wager)) + ((@game.players - @numberOfWinners) * 0.50))
             UserMailer.congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
             UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
             player_cut, fitsby_money_won, total_money_processed )
