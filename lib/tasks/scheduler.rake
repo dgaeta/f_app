@@ -264,7 +264,7 @@ puts "Updating game end statuses..."
             total_money_processed = ((@game.stakes - (@numberOfWinners * @game.wager)) + ((@game.players - @numberOfWinners) * 0.50))
             UserMailer.congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
             UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
-            player_cut, fitsby_money_won, total_money_processed )
+            player_cut, fitsby_money_won, total_money_processed).deliver
           else 
             user = User.where(:id => @game_member.user_id).first
             winner_email = user.email 

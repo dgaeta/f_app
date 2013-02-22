@@ -35,30 +35,20 @@ class UserMailer < ActionMailer::Base
     mail(:to => loser_email, :subject => "Oh no #{@loser_first_name}! You just lost a game of Fitsby")
   end
 
+
   def email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
   player_cut, fitsby_money_won, total_money_processed)   ##make view
     @game_id = game_id
     @winner_first_name = winner_first_name
     @winner_email = winner_email
     @winner_user_id = winner_user_id
-    @winner_money_won = sprintf("%.2f",player_cut)
+    @player_cut = sprintf("%.2f",player_cut)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
     @total_money_processed = total_money_processed
     @url  = "http://fitsby.com"
     mail(:to => "payments@fitsby.com", :subject => "Pay User")
   end
 
-  def email_ourselves_to_pay_1_winner(game_id, winner1, winner1_money_won, fitsby_money_won, 
-  total_amount_charged_to_losers, total_money_processed)   ##make view
-    @game_id = game_id
-    @winner1 = winner1
-    @winner1_money_won = sprintf("%.2f", winner1_money_won)
-    @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
-    @total_amount_charged_to_losers = total_amount_charged_to_losers
-    @total_money_processed = total_money_processed
-    @url  = "http://fitsby.com"
-    mail(:to => "payments@fitsby.com", :subject => "Pay winner")
-  end
 
   def reset_password_email(user)
   @user = user
