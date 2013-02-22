@@ -265,6 +265,7 @@ puts "Updating game end statuses..."
             money_lost = @game.wager
             game_id = @game_member.game_id
             user = User.where(:id => @game_member.user_id).first
+            loser_checkins = @game_member.successful_checks
             loser_email = user.email 
             loser_first_name = user.first_name
             loser_user_id = user.id 
@@ -457,6 +458,8 @@ end
       end
     end
   end
+
+
 
 
 
