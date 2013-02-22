@@ -41,7 +41,7 @@ class UserMailer < ActionMailer::Base
     @winner_first_name = winner_first_name
     @winner_email = winner_email
     @winner_user_id = winner_user_id
-    @winner_money_won = sprintf("%.2f", winner1_money_won)
+    @winner_money_won = sprintf("%.2f",player_cut)
     @fitsby_money_won = sprintf("%.2f", fitsby_money_won)
     @total_money_processed = total_money_processed
     @url  = "http://fitsby.com"
