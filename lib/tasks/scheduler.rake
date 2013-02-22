@@ -1,6 +1,10 @@
 require 'rubygems'
 gem 'places'
 
+require "stripe"
+Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
+
+
 desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do
