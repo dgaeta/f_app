@@ -9,7 +9,7 @@ desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do
   puts "Updating games start statuses..."
-  @all_games = Game.where(:game_initialized => 1)
+  @all_games = Game.where(:game_active => 1)
 
   unless @all_games.empty?
     @a = 0 
@@ -25,11 +25,12 @@ task :auto_start_games => :environment do
 	   if @game.players >= 2 and @diff <= 0  ### CASE 1 = has 2 players and start date is here
 	      then 
         @game.game_initialized = 1 
+        @game.was_recently_initiated = 1
         
         if @game.players <= 3   #### checks to see if the stucture is 3 winners but less than 3 users 
           then 
           @game.winning_structure = 1 
-          @game.was_recently_initiated = 1
+          
           @game.save 
           else
           @game.save 
@@ -80,7 +81,7 @@ task :auto_start_games => :environment do
         @num3 = @game.players
         @game_members = GameMember.where(:game_id => @game.id)
         @time_now = Time.now.to_i - 21420
-while @c < @num3 do 
+        while @c < @num3 do 
           @member = @game_members[@c]
           @member.active = 1
           @member.activated_at = @time_now
@@ -98,6 +99,7 @@ while @c < @num3 do
 	   
 
      elsif @game.players < 2 and @diff <= 0 
+        @start = @game.game_start_date
 	      @new_start_date = @start +  (24*60*60)
 	      @new_end_date = @end + (1*24*60*60)
 	      @game.game_start_date = @new_start_date 
