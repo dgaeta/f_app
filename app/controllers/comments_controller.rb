@@ -178,7 +178,6 @@ def game_comments
      end
      notification.data = {:registration_ids => @registration_ids,
       :data => {:message_text => "New Comment from Game #{@game.id}                                   "}}
-     notification.save
      unless @registration_ids.empty?
        notification.save
      end

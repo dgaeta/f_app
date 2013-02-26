@@ -9,7 +9,7 @@ desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do
   puts "Updating games start statuses..."
-  @all_games = Game.where(:game_initialized => 0)
+  @all_games = Game.where(:game_initialized => 1)
 
   unless @all_games.empty?
     @a = 0 
@@ -202,7 +202,8 @@ puts "Updating game end statuses..."
    @diff = @today_integer - @end_date_integer
 
    if @diff >= 0 
-     then @finished_games << @game.id 
+     then
+     @finished_games << @game.id 
      @b += 1
      else 
      puts "game #{@game.id} is not ready to end"
@@ -223,7 +224,6 @@ puts "Updating game end statuses..."
       @number_of_players = @players.count  
 
       @counter = 0 
-      @number_of_players
       @numberOfWinners = 0 
       @goal_days = @game.goal_days
 
@@ -240,7 +240,7 @@ puts "Updating game end statuses..."
    
       @d = 0
 
-      while @d < @number_of_players  do ####gives everyone a loss (changes the winner's losses later)
+      while @d < @number_of_players  do 
         @game_member = @players[@d]
         @d += 1 
         @game_member.active = 0
@@ -258,10 +258,11 @@ puts "Updating game end statuses..."
             number_of_players = @game.players
             winner_first_name = user.first_name
             winner_user_id = user.id 
-            player_cut = (@game.stakes - (@numberOfWinners * @game.wager)) / @numberOfWinners
             fitsby_percentage = 0.08
-            fitsby_money_won = ((@game.stakes - (@numberOfWinners * @game.wager)) * fitsby_percentage) + (0.50 * @number_of_players)
-            total_money_processed = ((@game.stakes - (@numberOfWinners * @game.wager)) + ((@game.players - @numberOfWinners) * 0.50))
+            numberOfLosers = number_of_players - @numberOfWinners
+            player_cut = ((numberOfLosers * @game.wager) / @numberOfWinners) * ( 1- fitsby_percentage)
+            fitsby_money_won = ((numberOfLosers * @game.wager) * fitsby_percentage) + (0.50 * numberOfLosers)
+            total_money_processed = ((numberOfLosers * @game.wager) + (numberOfLosers * 0.50))
             UserMailer.congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
             UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
             player_cut, fitsby_money_won, total_money_processed).deliver
@@ -478,8 +479,15 @@ end
 
 
 
-
-
+a = 0
+while a < @all_games.count do
+ @game  = @all_games[a]
+ @start = @game.game_start_date
+@new_start_date = @start +  (24*60*60)
+@game.game_start_date = @new_start_date
+@game.save 
+a += 1
+end
 
 
 
