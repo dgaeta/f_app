@@ -1,4 +1,3 @@
-require 'rubygems'
 gem 'places'
 
 require "stripe"
@@ -262,7 +261,7 @@ puts "Updating game end statuses..."
             winner_user_id = user.id 
             fitsby_percentage = 0.08
             numberOfLosers = number_of_players - @numberOfWinners
-            player_cut = ((numberOfLosers * @game.wager) / @numberOfWinners) * ( 1- fitsby_percentage)
+            player_cut = ((numberOfLosers * @game.wager) * ( 1- fitsby_percentage))/ @numberOfWinners
             fitsby_money_won = ((numberOfLosers * @game.wager) * fitsby_percentage) + (0.50 * numberOfLosers)
             total_money_processed = ((numberOfLosers * @game.wager) + (numberOfLosers * 0.50))
             UserMailer.congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
@@ -480,16 +479,6 @@ end
   end
 
 
-
-a = 0
-while a < @all_games.count do
- @game  = @all_games[a]
- @start = @game.game_start_date
-@new_start_date = @start +  (24*60*60)
-@game.game_start_date = @new_start_date
-@game.save 
-a += 1
-end
 
 
 
