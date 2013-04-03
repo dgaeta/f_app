@@ -21,7 +21,7 @@ task :auto_start_games => :environment do
       @time_now = Time.now.to_i - 21420
       @diff = @start - @time_now
 
-	   if @game.players >= 2 and @diff <= 0  ### CASE 1 = has 2 players and start date is here
+	   if @game.players >= 2 and @diff <= 0 and @game.game_initialized == 0 ### CASE 1 = has 2 players and start date is here
 	      then 
         @game.game_initialized = 1 
         @game.was_recently_initiated = 1
