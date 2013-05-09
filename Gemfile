@@ -39,6 +39,7 @@ end
  gem "time_diff", "~> 0.2.2"
  gem 'thin'
  gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+ gem "delayed_job"
 
 
 
