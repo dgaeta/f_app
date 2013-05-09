@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Requester:</b>
+  <%= @checklocation.requester_id %>
+</p>
+
+<p>
+  <b>Gym name:</b>
+  <%= @checklocation.gym_name %>
+</p>
+
+<p>
+  <b>Geo lat:</b>
+  <%= @checklocation.geo_lat %>
+</p>
+
+<p>
+  <b>Geo long:</b>
+  <%= @checklocation.geo_long %>
+</p>
+
+
+<%= link_to 'Edit', edit_checklocation_path(@checklocation) %> |
+<%= link_to 'Back', checklocations_path %>

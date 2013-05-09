@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 require 'json'
+#require 'gibbon'
 
   # GET /users
   # GET /users.json
@@ -46,12 +47,22 @@ require 'json'
   def create
     @user = User.new(params[:user])
     @user.save
+    @user.email = @user.email.downcase
+    @user.save
 
     stat = Stat.new(:winners_id => @user.id )
     stat.save
 
     respond_to do |format|
       if @user.save
+        gb = Gibbon.new
+        #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]    
+        gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
+        'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
+
+        @user.email = @user.email.downcase
+        @user.save
+
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
           :email => @user.email }
@@ -59,12 +70,13 @@ require 'json'
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
-        false_json = { :status => "fail."} 
+        false_json = { :status => "fail.", :errors => @user.errors } 
         format.json { render json: JSON.pretty_generate(false_json) }
         format.html { render action: "new" }
       end
     end
   end
+
 
   # PUT /users/1
   # PUT /users/1.json
@@ -87,6 +99,11 @@ require 'json'
   def destroy
     @user = User.find(params[:id])
     @user.destroy
+    session[:current_user_id] = nil
+    gb = Gibbon.new
+    #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]
+    gb.list_unsubscribe(:id => "3c9272b951", :email_address => @user.email, :delete_member => true, 
+      :send_goodbye => false, :send_notify => false)
 
     respond_to do |format|
       format.html { redirect_to root_url }
@@ -109,7 +126,7 @@ require 'json'
   def get_and_save_stripe_info
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
-    user = User.where(:id => params[:id]).first
+    user = User.where(:id => params[:user_id]).first
     user_email = user.email
 
     # get the credit card details submitted by Android
@@ -122,9 +139,150 @@ require 'json'
     customer = Stripe::Customer.create(
       :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
       :email => user_email ) 
+    user.update_attributes(:customer_id => customer.id)
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
-    user.update_attributes(:customer_id => customer.id)
+
+    if user.save
+      then 
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
   end
+
+
+def change_email 
+    user = User.where(:id => params[:user_id]).first
+
+    old_email = user.email 
+    user.email = params[:new_email]
+    user.save
+
+    if user.save 
+      then 
+      gb = Gibbon.new
+      #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
+      gb.list_unsubscribe(:id => "3c9272b951", :email_address => old_email, :delete_member => true, 
+      :send_goodbye => false, :send_notify => false)
+      gb.list_subscribe(:id => "3c9272b951", :email_address => user.email, :merge_vars => {'fname' => user.first_name, 
+      'lname' => user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
+      #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
+      # UPDATE USER'S EMAIL ON STRIPE TOO:
+    Stripe.api_key = @stripe_api_key
+    unless user.customer_id.nil?
+      cu = Stripe::Customer.retrieve(user.customer_id) 
+      cu.email = user.email
+      cu.save
+
+    end
+    # END
+       true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+      else
+         false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+    end
+  end
+ 
+  def append_text_field 
+    user = User.where(:id => params[:user_id]).first 
+
+    if user 
+      then 
+      user.num_of_texts_sent += 1 
+      user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      else 
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
+
+  def push_registration 
+    @registration_id = params[:registration_id] 
+    @user_id = params[:user_id]
+    @user = User.where(:id => @user_id).first
+
+    if @user.device_id == "0" 
+      then 
+      @device = Gcm::Device.create(:registration_id => @registration_id)
+      @device.save
+      @user.device_id = @device.id
+      @user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
+
+  def push_disable
+    @user_id = params[:user_id]
+    @user = User.find(@user_id)
+
+    if @user 
+      then 
+      @user.enable_notifications = "FALSE"
+      @user.save
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      else 
+      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end 
+
+  def push_enable
+    @user_id = params[:user_id]
+    @user = User.find(@user_id)
+
+    if @user 
+      then 
+      @user.enable_notifications = "TRUE"
+      @user.save
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+      else 
+      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
+      render(json: JSON.pretty_generate(false_json))
+    end 
+  end  
+
+  def upload_profile_picture
+    @user = User.where(:id => params[:user_id]).first 
+    @profile_picture = params[:profile_picture]
+
+    @user.profile_picture = @profile_picture
+    @user.save
+
+    if @user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+   end
+
+   def user_deletion
+    @user = User.where(:id => params[:user_id]).first
+    user_id = @user.id
+
+    if @user
+      UserMailer.user_deletion(user_id).deliver
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
+
 end

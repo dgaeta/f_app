@@ -54,4 +54,6 @@ production:
   username: kxheoznvrncbda
   password: IUDs-wD2W5o_rVdhr6PYsPCgJv
   host: ec2-23-21-161-153.compute-1.amazonaws.com
+  port: 54322FFJEgHk_ROu_a
+  host: ec2-54-243-245-115.compute-1.amazonaws.com
   port: 5432

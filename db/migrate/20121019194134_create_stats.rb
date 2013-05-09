@@ -2,13 +2,15 @@ class CreateStats < ActiveRecord::Migration
   def change
     create_table :stats do |t|
       t.integer :winners_id
-      t.integer :money_earned
-      t.integer :games_won
-      t.integer :games_played
-      t.integer :first_place_finishes
-      t.integer :second_place_finishes
-      t.integer :third_place_finishes
-      t.integer :losses
+      t.integer :money_earned,:default => 0
+      t.integer :games_won, :default => 0
+      t.integer :games_played, :default => 0
+      t.integer :first_place_finishes, :default => 0
+      t.integer :second_place_finishes, :default => 0
+      t.integer :third_place_finishes, :default => 0
+      t.integer :losses, :default => 0
+      t.integer :total_minutes_at_gym , :default => 0
+      t.integer :successful_checks, :default => 0
 
       t.timestamps
     end

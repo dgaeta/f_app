@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -31,16 +31,31 @@ end
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
- gem 'jbuilder'
+ #gem 'jbuilder'
 
- gem 'rabl'
- gem 'yajl-ruby'
+ #gem 'rabl'
+ #gem 'yajl-ruby'
  gem 'pry-rails', :group => :development
  gem "time_diff", "~> 0.2.2"
  gem 'thin'
  gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
  gem "delayed_job"
+<<<<<<< HEAD
 
+=======
+ gem 'gibbon'
+ gem 'stalker'
+ gem "bcrypt-ruby", "~> 3.0.1"
+ gem 'places'
+ gem 'heroku'
+ gem 'gcm_on_rails'
+ gem 'geocoder'
+
+ #gem 'paperclip'
+ #gem "nokogiri", "~> 1.5.6"
+ #gem 'aws-sdk'
+ 
+>>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
 
 
 # Use unicorn as the app server
