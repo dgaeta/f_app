@@ -6,125 +6,29 @@ Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
 
 desc "This task is called by the Heroku scheduler add-on"
 
-task :auto_start_games => :environment do
-  puts "Updating games start statuses..."
-  @all_games = Game.where(:game_active => 1)
+task :auto_start_games => :environment do  
+  @all_Active_Games = Game.where(:game_active => 1)
+  @not_flag = @all_Active_Games > 0
+  @started_games = []
 
-  unless @all_games.empty?
-    @a = 0 
-    @num1 = @all_games.count
-
-    while @a < @num1 do ####start cycling through the games to see what the status is 
-		  @game = Game.where(:id => @all_games[@a]).first
-		  @start = @game.game_start_date
-		  @end = @game.game_end_date
-      @time_now = Time.now.to_i - 21420
-      @diff = @start - @time_now
-
-	   if @game.players >= 2 and @diff <= 0 and @game.game_initialized == 0 ### CASE 1 = has 2 players and start date is here
-	      then 
-        @game.game_initialized = 1 
-        @game.was_recently_initiated = 1
-        
-        if @game.players <= 3   #### checks to see if the stucture is 3 winners but less than 3 users 
-          then 
-          @game.winning_structure = 1 
-          
-          @game.save 
-          else
-          @game.save 
-        end  
-	     
-        ### Make the comment that the game is ready to start
-        @comment = Comment.new(:from_game_id => @game.id , :from_user_id => 101,  :email => "team@fitsby.com",
-        :bold => "TRUE", :first_name => "ANNOUNCEMENT",  :last_name => " " , :message => "The game has started!",
-        :stamp => Time.now)
-        @comment.email = "team@fitsby.com"
-        @comment.from_user_id = 101
-        @comment.bold = "TRUE"
-        @comment.save
-        ### End comment 
-
-        ########### game start push begin ##############
-        notification = Gcm::Notification.new
-        device = Gcm::Device.all.first
-        notification.device = device
-        notification.collapse_key = "game_start"
-        notification.delay_while_idle = true
-        
-        @b = 0 
-        @num2 = @game.players
-        @registration_ids = []
-        user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
-        
-        while @b < @num2 do ### Gather registration ids 
-          user = User.find(user_ids[@b])
-          if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-            @b += 1 
-            else
-            device = Gcm::Device.find(user.device_id)
-            @registration_ids << device.registration_id
-            @b += 1 
-          end
-        end
-        
-        notification.data = {:registration_ids => @registration_ids,
-        :data => {:message_text => "Your Fitsby Game #{@game.id} has started!                              "}}
-        unless @registration_ids.empty?
-          notification.save
-        end
-    
-        ########### End of push notifications ###############
-        ########### make game members active  ###############
-        @c = 0 
-        @num3 = @game.players
-        @game_members = GameMember.where(:game_id => @game.id)
-        @time_now = Time.now.to_i - 21420
-        while @c < @num3 do 
-          @member = @game_members[@c]
-          @member.active = 1
-          @member.activated_at = @time_now
-          @member.save 
-          @c += 1 
-        end 
-        
-        ########## end make member active  #################
-	      puts "started game #{@game.id}"
-	    
-
-      elsif @game.players >= 2 and @diff > 0
-	      @game.game_initialized = 0
-	      puts "game #{@game.id} time hasnt passed to start, but has enough players"
-	   
-
-     elsif @game.players < 2 and @diff <= 0 
-        @start = @game.game_start_date
-	      @new_start_date = @start +  (24*60*60)
-	      @new_end_date = @end + (1*24*60*60)
-	      @game.game_start_date = @new_start_date 
-	      @game.game_end_date = @new_end_date
-	      @game.save 
-        @comment = Comment.new(:from_game_id => @game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
-        :last_name => " " , :bold => "TRUE", 
-        :message => "The game start date has been pushed forward 1 day! (Need at least 2 players).", 
-        :stamp => Time.now)
-        @comment.email = "team@fitsby.com"
-        @comment.from_user_id = 101
-        @comment.bold = "TRUE"
-        @comment.save
-        puts "game #{@game.id} not enough players at start date, added 1 more days to start date"
-	   
-
-     elsif @game.players < 2 and @diff > 0
-	     @game.game_initialized = 0
-	     puts "game #{@game.id} does not have enough players and time hasnt passed"
-     end
-	   
-      @a += 1 ### Move on to next game
-	  end
+  unless @all_Active_Games.length == 0
+    @all_Active_Games.each do |x|
+      if x.players >= 2 
+        x.winning_structure = 1 if x.players < 3
+        Comments.gameStartComment(x.id)
+        Game.gameHasStartedPush(x)
+        x.game_initialized = 1 
+        x.was_recently_initiated = 1
+        @started_games << x.id
+      else 
+        Game.addDaytoStartandEnd(x.id)
+        Comment.gamePostponedComment(x.id)
+      end
+    end
   end
-  puts "done."
+  puts "started games #{@started_games}"
 end
+
 
 
 
@@ -150,7 +54,7 @@ task :add_gyms_to_google => :environment do
 
        while @a < @num do
         @gym = @unadded[@a]
-        @add = @client.add(:lat => @gym.geo_lat , :lng => @gym.geo_long, :accuracy => 50,
+        @add = @client.add(:lat => @gym.geo_lat , :lng => @gym.geo_long, :accuracy => 100,
          :name => @gym.gym_name, :types => "gym")
         @gym.added_to_google = 1 
         @gym.save

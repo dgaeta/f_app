@@ -40,9 +40,9 @@ end
  gem 'thin'
  gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
  gem "delayed_job"
-<<<<<<< HEAD
 
-=======
+
+
  gem 'gibbon'
  gem 'stalker'
  gem "bcrypt-ruby", "~> 3.0.1"
@@ -55,7 +55,6 @@ end
  #gem "nokogiri", "~> 1.5.6"
  #gem 'aws-sdk'
  
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
 
 
 # Use unicorn as the app server

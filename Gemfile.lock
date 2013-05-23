@@ -52,12 +52,7 @@ GEM
     configatron (2.9.1)
       yamler (>= 0.1.0)
     daemons (1.1.9)
-<<<<<<< HEAD
     delayed_job (3.0.3)
-=======
-    delayed_job (3.0.4)
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
-      activesupport (~> 3.0)
     erubis (2.7.0)
     eventmachine (1.0.0)
     excon (0.16.10)
@@ -197,14 +192,10 @@ DEPENDENCIES
   bcrypt-ruby (~> 3.0.1)
   coffee-rails (~> 3.2.1)
   delayed_job
-<<<<<<< HEAD
-  jbuilder
-=======
   gcm_on_rails
   geocoder
   gibbon
   heroku
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
   jquery-rails
   pg (= 0.12.2)
   places
