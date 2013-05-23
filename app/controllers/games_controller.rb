@@ -596,20 +596,20 @@ def winners_and_losers
 
   end
 
-  def getUserIDSofGame(@game_id)
-    @gameMembers = GameMember.where(:game_id => @game_id)
+  def getUserIDSofGame(game_id)
+    @gameMembers = GameMember.where(:game_id => game_id)
     @gameMembers.each do |g|
       g.active = 1
       g.activated_at = Time.now.to_i
       g.save 
     end
-    arrayOfUserIds = GameMember.where(:game_id => @game_id).pluck(:user_id)
+    arrayOfUserIds = GameMember.where(:game_id => game_id).pluck(:user_id)
     puts arrayOfUserIds
     return arrayOfUserIds  
   end
 
-  def addDayToStartandEnd(@game_id)
-    @game = Game.where(:id => @game_id).first
+  def addDayToStartandEnd(game_id)
+    @game = Game.where(:id => game_id).first
     @start = @game.game_start_date
     @new_start_date = @start +  (24*60*60)
     @new_end_date = @end + (1*24*60*60)
