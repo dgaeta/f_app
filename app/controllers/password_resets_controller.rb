@@ -1,16 +1,14 @@
-<<<<<<< HEAD
 class PasswordResetsController < ApplicationController
   skip_before_filter :require_login
-=======
+
 require 'bcrypt'
 class PasswordResetsController < ApplicationController
 include BCrypt
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
+
     
   # request password reset.
   # you get here when the user entered his email in the reset password form and submitted it.
   def create 
-<<<<<<< HEAD
     @user = User.find_by_email(params[:email])
         
     # This line sends an email to the user with instructions on how to reset their password (a url with a random token)
@@ -19,7 +17,6 @@ include BCrypt
     # Tell the user instructions have been sent whether or not email was found.
     # This is to not leak information to attackers about which emails exist in the system.
     redirect_to(root_path, :notice => 'Instructions have been sent to your email.')
-=======
     @user = User.where(:email => params[:email].downcase).first
         
     if @user == nil 
@@ -37,7 +34,6 @@ include BCrypt
         render(json: JSON.pretty_generate(true_json))
         
       end
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
   end
     
   # This is the reset password form.
@@ -61,8 +57,6 @@ include BCrypt
       render :action => "edit"
     end
   end
-<<<<<<< HEAD
-=======
 
   def change_password 
     @user = User.where(:id => params[:user_id]).first
@@ -206,6 +200,4 @@ include BCrypt
   end
 
 
-
->>>>>>> 7a8507c307f09874803370a3866b776ce8854cbf
 end
