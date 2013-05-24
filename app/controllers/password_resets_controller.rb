@@ -183,21 +183,20 @@ include BCrypt
       'lname' => user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
       #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
       # UPDATE USER'S EMAIL ON STRIPE TOO:
-    Stripe.api_key = @stripe_api_key
-    unless user.customer_id.nil?
-      cu = Stripe::Customer.retrieve(user.customer_id) 
-      cu.email = user.email
-      cu.save
-
-    end
-    # END
+      Stripe.api_key = @stripe_api_key
+      unless user.customer_id.nil?
+       cu = Stripe::Customer.retrieve(user.customer_id) 
+        cu.email = user.email
+        cu.save
+      end
+      # END
        true_json =  { :status => "okay"  }
         render(json: JSON.pretty_generate(true_json))
-      else
+    else
          false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
     end
   end
-
+  end
 
 end
