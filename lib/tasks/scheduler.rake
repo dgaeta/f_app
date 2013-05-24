@@ -16,7 +16,7 @@ task :auto_start_games => :environment do
     while count < all_Active_Games.length
       if all_Active_Games[count].players >= 2 
         all_Active_Games[count].winning_structure = 1 if all_Active_Games[count].players < 3
-        Comments.gameStartComment(all_Active_Games[count].id)
+        Comment.gameStartComment(all_Active_Games[count].id)
         Game.gameHasStartedPush(x)
         all_Active_Games[count].game_initialized = 1 
         all_Active_Games[count].was_recently_initiated = 1
