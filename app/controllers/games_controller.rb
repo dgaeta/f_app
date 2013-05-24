@@ -655,7 +655,7 @@ def winners_and_losers
        then
        finished_games << game.id 
        count += 1
-       else 
+      else 
        puts "game #{game.id} is not ready to end"
        count += 1 
       end 
@@ -689,10 +689,8 @@ def winners_and_losers
       else 
         number_of_losers = game.players - number_of_winners
         Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers)
-
-
       end
-
+    end
   end
 
   def notifyWinner(game_id, user_id, number_of_winners, wager, num_of_players, successful_checks)
@@ -709,7 +707,9 @@ def winners_and_losers
       UserMailer.congratulate_winner_of_game(user.email, user.first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
       UserMailer.email_ourselves_to_pay_winner_of_game(game_id, user.first_name, user.email, user.id, 
       player_cut, fitsby_money_won, total_money_processed).deliver
+    end
   end
+
 
   def notifyLoser(game_id, user_id, number_of_losers)
     game = Game.where(:id => game_id)
