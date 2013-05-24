@@ -27,6 +27,7 @@ task :auto_start_games => :environment do
     end
   end
   puts "started games #{@started_games}"
+  
 end
 
 
