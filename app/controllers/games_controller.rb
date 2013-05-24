@@ -550,7 +550,7 @@ def winners_and_losers
      @time_now = (Time.now - 21600)
      @diff = @time_now.to_i - @start_date
 
-     if @diff >= 0 
+    if @diff >= 0 
       @today = @time_now.to_date.yday
       @end_day = Time.at(@end_date).to_date.yday
       @days_remaining = @end_day - @today
@@ -593,7 +593,6 @@ def winners_and_losers
       notification.save
     end
     puts @registration_ids
-
   end
 
   def gameHasEndedPush(game_id)
@@ -616,8 +615,7 @@ def winners_and_losers
       :data => {:message_text => "Your Fitsby Game #{game.id} has ended!                              "}}  
       notification.save
     end
-    puts @registration_ids
-    
+    puts @registration_ids  
   end
 
   def getUserIDSofGame(game_id)
@@ -740,5 +738,7 @@ def winners_and_losers
       end 
     end
   end
+
+
 
 end
