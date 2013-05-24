@@ -732,13 +732,10 @@ def winners_and_losers
         loser_checkins).deliver ###TODO TODO TODO TODO TODO fix this mailer 
 
       Stripe::Charge.create(
-        :amount => ((game.wager * 100) + 50), # (example: 1000 is $10)
-        :currency => "usd",
-        :customer => user.customer_id)
-      end 
+      :amount => ((game.wager * 100) + 50), # (example: 1000 is $10)
+      :currency => "usd",
+      :customer => user.customer_id)
     end
   end
-
-
 
 end
