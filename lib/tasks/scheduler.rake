@@ -7,27 +7,8 @@ Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
 desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do  
-  @all_Active_Games = Game.where(:game_active => 1)
-  @not_flag = @all_Active_Games > 0
-  @started_games = []
 
-  unless @all_Active_Games.length == 0
-    @all_Active_Games.each do |x|
-      if x.players >= 2 
-        x.winning_structure = 1 if x.players < 3
-        Comments.gameStartComment(x.id)
-        Game.gameHasStartedPush(x)
-        x.game_initialized = 1 
-        x.was_recently_initiated = 1
-        @started_games << x.id
-      else 
-        Game.addDaytoStartandEnd(x.id)
-        Comment.gamePostponedComment(x.id)
-      end
-    end
-  end
-  puts "started games #{@started_games}"
-
+  ruby "auto_start_games/games_controller.rb"
 end
 
 
