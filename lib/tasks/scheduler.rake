@@ -1,6 +1,7 @@
 gem 'places'
 
 require "stripe"
+
 Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
 
 
@@ -12,17 +13,18 @@ task :auto_start_games => :environment do
   started_games = []
 
   unless all_Active_Games.length == 0
-    all_Active_Games.each do |x|
-      if x.players >= 2 
-        x.winning_structure = 1 if x.players < 3
-        Comments.gameStartComment(x.id)
+    count = 0 
+    while count < all_Active_Games.length
+      if all_Active_Games[count].players >= 2 
+        all_Active_Games[count].winning_structure = 1 if all_Active_Games[count].players < 3
+        Comments.gameStartComment(all_Active_Games[count].id)
         Game.gameHasStartedPush(x)
-        x.game_initialized = 1 
-        x.was_recently_initiated = 1
-        started_games << x.id
+        all_Active_Games[count].game_initialized = 1 
+        all_Active_Games[count].was_recently_initiated = 1
+        started_games << all_Active_Games[count].id
       else 
-        Game.addDaytoStartandEnd(x.id)
-        Comment.gamePostponedComment(x.id)
+        Game.addDaytoStartandEnd(all_Active_Games[count].id)
+        Comment.gamePostponedComment(all_Active_Games[count].id)
       end
     end
   end
