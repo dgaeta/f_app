@@ -474,4 +474,5 @@ def push_position_change
   render(json: JSON.pretty_generate(true_json))
 end
 
+  
 end

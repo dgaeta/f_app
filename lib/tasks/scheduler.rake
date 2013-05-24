@@ -27,21 +27,11 @@ task :auto_start_games => :environment do
     end
   end
   puts "started games #{@started_games}"
-  
+
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 task :add_gyms_to_google => :environment do
       @client = Places::Client.new(:api_key => 'AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY')
@@ -69,188 +59,28 @@ end
 
 
 
-
-
-
-
-
-
-
 task :auto_end_games => :environment do
-puts "Updating game end statuses..."
-  @all_games = Game.where(:game_initialized => 1).pluck(:id) #get all games 
- 
-  @a = 0  #integer to place hold
-  @number_of_all_games = @all_games.count #integer value of how many games there are
-  @active_games = []
+  puts "Updating game end statuses..."
 
-  while @a < @number_of_all_games do         # get all games that are currently alive and allowing check ins (initialized)
-    @game = Game.find(@all_games[@a])
-    if @game.game_active == 1 
-     then 
-     @active_games << @all_games[@a]
-     @a += 1 
-     else 
-     @a += 1 
-    end
-  end 
-  puts "Game(s) #{@active_games} are active and initialized"
+  all_init_and_active_Games = Game.where(:game_initialized => 1, :game_active => 1)
+  finished_games = Game.findAndReturnFinishedGames(all_init_and_active_Games)
 
-
-  @b = 0 
-  @number_of_active_and_intialized_games =  @active_games.count
-  @finished_games = []
-
-  while @b < @number_of_active_and_intialized_games  do     ##check which of the previous games have reached the end date 
-   @game = Game.where(:id => @active_games[@b]).first
-   @end_date_integer = @game.game_end_date 
-   @today_integer = Time.now.to_i - 21600
-   @diff = @today_integer - @end_date_integer
-
-   if @diff >= 0 
-     then
-     @finished_games << @game.id 
-     @b += 1
-     else 
-     puts "game #{@game.id} is not ready to end"
-     @b += 1 
-    end 
-  end 
-  puts "Game(s) #{@finished_games} have finished"
-
-  unless @finished_games.empty?
-    @c = 0 
-    @number_of_finished_games = @finished_games.count
-
-    while @c < @number_of_finished_games 
-      @game = Game.find(@finished_games[@c])
-      @c += 1
-      #######1st_step add up total time at gym for all players #######
-      @players = GameMember.where(:game_id => @game.id)
-      @number_of_players = @players.count  
-
-      @counter = 0 
-      @numberOfWinners = 0 
-      @goal_days = @game.goal_days
-
-      while @counter < @number_of_players do 
-        @member = @players[@counter]
-        if @member.successful_checks >= @goal_days
-          then @numberOfWinners += 1 
-        else 
-          puts "not a winner"
-        end
-        @counter += 1
-      end
-
-   
-      @d = 0
-
-      while @d < @number_of_players  do 
-        @game_member = @players[@d]
-        @d += 1 
-        @game_member.active = 0
-        @stat = Stat.where(:winners_id => @game_member.user_id).first
-
-        if @game_member.successful_checks >= @goal_days
-          @stat.games_won += 1 
-          @stat.games_played += 1 
-          @stat.save
-
-         unless @game.wager == 0 
-            game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id).first
-            winner_email = user.email 
-            number_of_players = @game.players
-            winner_first_name = user.first_name
-            winner_user_id = user.id 
-            fitsby_percentage = 0.08
-            numberOfLosers = number_of_players - @numberOfWinners
-            player_cut = ((numberOfLosers * @game.wager) * ( 1- fitsby_percentage))/ @numberOfWinners
-            fitsby_money_won = ((numberOfLosers * @game.wager) * fitsby_percentage) + (0.50 * numberOfLosers)
-            total_money_processed = ((numberOfLosers * @game.wager) + (numberOfLosers * 0.50))
-            UserMailer.congratulate_winner_of_game(winner_email, winner_first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
-            UserMailer.email_ourselves_to_pay_winner_of_game(game_id, winner_first_name, winner_email, winner_user_id, 
-            player_cut, fitsby_money_won, total_money_processed).deliver
-          else 
-            user = User.where(:id => @game_member.user_id).first
-            winner_email = user.email 
-            winner_first_name = user.first_name
-            UserMailer.congratulate_winner_of_free_game(winner_email, winner_first_name).deliver ###TODO TODO TODO TODO TODO fix this mailer 
-          end
-
-        else 
-          @stat.losses += 1 
-          @stat.games_played += 1 
-          @stat.save
-
-          unless @game.wager == 0 
-            goal_days = @goal_days
-            money_lost = @game.wager
-            game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id).first
-            loser_checkins = @game_member.successful_checks
-            loser_email = user.email 
-            loser_first_name = user.first_name
-            loser_user_id = user.id 
-            UserMailer.notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days).deliver ###TODO TODO TODO TODO TODO fix this mailer 
-
-            Stripe::Charge.create(
-            :amount => ((@game.wager * 100) + 50), # (example: 1000 is $10)
-            :currency => "usd",
-            :customer => user.customer_id)
-
-          else 
-            goal_days = @goal_days
-            money_lost = 0
-            loser_checkins = @game_member.successful_checks
-            game_id = @game_member.game_id
-            user = User.where(:id => @game_member.user_id).first
-            loser_email = user.email 
-            loser_first_name = user.first_name
-            loser_user_id = user.id 
-            UserMailer.notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days).deliver  
-          end
-        end 
-    
-        ############# Start the PUSH notification ##########################################
-        notification = Gcm::Notification.new
-        notification.device = Gcm::Device.all.first
-        notification.collapse_key = "game_start"
-        notification.delay_while_idle = true
-      
-        @e = 0 
-        @num_of_players_to_send_push = @game.players
-        @registration_ids = []
-    
-        while @e < @num_of_players_to_send_push do 
-          user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
-          user = User.find(user_ids[@e])
-          @e += 1 
-          if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-
-          else
-            device = Gcm::Device.where(:id => user.device_id).first
-            unless device.nil?
-              @registration_ids << device.registration_id
-            end
-          end
-        end
-    
-        notification.data = {:registration_ids => @registration_ids,
-        :data => {:message_text => "Your Fitsby Game #{@game.id} has ended!                                   "}}
-        unless @registration_ids.empty?
-          notification.save
-        end
-        ############ PUSH END ###########################################
-        @game.game_active = 0
-        @game.is_private = "TRUE"
-        @game.save
-
-      end
+  unless finished_games.length == 0
+    count = 0
+    while count < finished_games.length
+      game = finished_games[count]
+      playerIDs = GameMember.where(:game_id => game.id)
+      winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
+      Game.decidedAndNotifyResults(playerIDs, winnerGameMemberIDs.count , game.goal_days)
+      Game.gameHasEndedPush(game.id)
+      game.game_active = 0
+      game.is_private = "TRUE"
+      game.save
     end
   end
-end   
+end
+
+
 
 
 

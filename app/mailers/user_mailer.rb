@@ -23,16 +23,26 @@ class UserMailer < ActionMailer::Base
   end
 
 
-  def notify_loser(money_lost, game_id, loser_email, loser_first_name, loser_user_id, loser_checkins, goal_days )   ##make view
-  #  @loser_email = loser_email
-  #  @loser_checkins = loser_checkins
-  #  @game_id = game_id
-  #  @money_lost = money_lost
-  #  @loser_first_name = loser_first_name
-  #  @loser_user_id = loser_user_id 
-  #  @goal_days = goal_days
-  #  @url  = "http://fitsby.com"
-  #  mail(:to => loser_email, :subject => "Oh no #{@loser_first_name}! You just lost a game of Fitsby")
+  def notify_loser_of_free_game(game_id, loser_email, loser_first_name, loser_user_id, loser_checkins )   ##make view
+    game_id = game_id
+    loser_email = loser_email
+    loser_first_name = loser_first_name
+    loser_user_id = loser_user_id
+    loser_checkins = loser_checkins
+    @url  = "http://fitsby.com"
+    mail(:to => loser_email, :subject => "Oh no #{loser_first_name}! You just lost a game of Fitsby")
+  end
+
+  def notify_loser_of_paid_game(money_lost, game_id, loser_email, loser_first_name, loser_user_id, 
+        loser_checkins)
+    money_lost = money_lost
+    game_id = game_id
+    loser_email = loser_email
+    loser_first_name = loser_first_name
+    loser_user_id = loser_user_id
+    loser_checkins = loser_checkins
+    @url  = "http://fitsby.com"
+    mail(:to => loser_email, :subject => "Oh no #{loser_first_name}! You just lost a game of Fitsby")
   end
 
 
