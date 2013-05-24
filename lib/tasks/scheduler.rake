@@ -9,7 +9,6 @@ desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do  
   all_Active_Games = Game.where(:game_active => 1)
-  not_flag = all_Active_Games > 0
   started_games = []
 
   unless all_Active_Games.length == 0
