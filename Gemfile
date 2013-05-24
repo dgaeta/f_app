@@ -51,6 +51,9 @@ end
  gem 'gcm_on_rails'
  gem 'geocoder'
 
+
+
+
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"
  #gem 'aws-sdk'
