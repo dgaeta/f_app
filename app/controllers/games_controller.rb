@@ -572,7 +572,7 @@ def winners_and_losers
     end
   end
 
-  def gameHasStartedPush(game_id)
+  def self.gameHasStartedPush(game_id)
     @user_ids = getUserIDSofGame(@game_id)
     @registration_ids = []
     @user_ids.each do |x|
@@ -595,7 +595,7 @@ def winners_and_losers
     puts @registration_ids
   end
 
-  def gameHasEndedPush(game_id)
+  def self.gameHasEndedPush(game_id)
     @user_ids = getUserIDSofGame(@game_id)
     @registration_ids = []
     @user_ids.each do |x|
@@ -618,7 +618,7 @@ def winners_and_losers
     puts @registration_ids  
   end
 
-  def getUserIDSofGame(game_id)
+  def self.getUserIDSofGame(game_id)
     @gameMembers = GameMember.where(:game_id => game_id)
     @gameMembers.each do |g|
       g.active = 1
@@ -630,7 +630,7 @@ def winners_and_losers
     return arrayOfUserIds  
   end
 
-  def addDayToStartandEnd(game_id)
+  def self.addDayToStartandEnd(game_id)
     @game = Game.where(:id => game_id).first
     @start = @game.game_start_date
     @new_start_date = @start +  (24*60*60)
@@ -640,7 +640,7 @@ def winners_and_losers
     @game.save 
   end
 
-  def findAndReturnFinishedGames(all_init_and_active_Games)
+  def self.findAndReturnFinishedGames(all_init_and_active_Games)
    count = 0 
     while count < all_init_and_active_Games.length do     ##check which of the previous games have reached the end date 
      game = Game.where(:id => all_init_and_active_Games[count]).first
@@ -662,7 +662,7 @@ def winners_and_losers
     return finished_games  
   end
 
-  def winnerIDs(playerIDs, goal_days)
+  def self.winnerIDs(playerIDs, goal_days)
     winnerGameMemberIDs = []
     if gameMember.successful_checks >= goal_days
       winnerGameMemberIDs << gameMember.id
@@ -670,7 +670,7 @@ def winners_and_losers
     return winnerGameMemberIDs
   end
 
-  def decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
+  def self.decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
     count = 0 
     while count < playerIDs.length
       gameMember = playerIDs[count]
@@ -691,7 +691,7 @@ def winners_and_losers
     end
   end
 
-  def notifyWinner(game_id, user_id, number_of_winners, wager, num_of_players, successful_checks)
+  def self.notifyWinner(game_id, user_id, number_of_winners, wager, num_of_players, successful_checks)
     user = User.where(:id => user_id).first
     if wager == 0 
       UserMailer.congratulate_winner_of_free_game(user.email, user.first_name, 
@@ -709,7 +709,7 @@ def winners_and_losers
   end
 
 
-  def notifyLoser(game_id, user_id, number_of_losers)
+  def self.notifyLoser(game_id, user_id, number_of_losers)
     game = Game.where(:id => game_id)
     user = User.where(:id => user_id).first
     stat = Stat.where(:winners_id => user.id)
