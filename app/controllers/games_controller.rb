@@ -572,7 +572,7 @@ def winners_and_losers
     end
   end
 
-  def gameHasStartedPush(@game_id)
+  def gameHasStartedPush(game_id)
     @user_ids = getUserIDSofGame(@game_id)
     @registration_ids = []
     @user_ids.each do |x|
