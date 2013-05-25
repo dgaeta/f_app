@@ -189,8 +189,11 @@ def game_comments
      render(json: JSON.pretty_generate(false_json) )
     end
   end
+ 
+end
 
-  def self.gameStartComment(game_id)
+
+def Comment.gameStartComment(game_id)
     @comment = Comment.new(:from_game_id => game.id , :from_user_id => 101,  :email => "team@fitsby.com",
     :bold => "TRUE", :first_name => "ANNOUNCEMENT",  :last_name => " " , :message => "The game has started!",
     :stamp => Time.now)
@@ -200,7 +203,7 @@ def game_comments
     @comment.save
   end
 
-  def self.gamePostponedComment(game_id)
+  def Comment.gamePostponedComment(game_id)
     @comment = Comment.new(:from_game_id => game.id, :email => "team@fitsby.com", :from_user_id => 101, :first_name => "ANNOUNCEMENT", 
         :last_name => " " , :bold => "TRUE", 
         :message => "The game start date has been pushed forward 1 day! (Need at least 2 players).", 
@@ -210,5 +213,3 @@ def game_comments
         @comment.bold = "TRUE"
         @comment.save
   end
-
-end
