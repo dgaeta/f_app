@@ -11,7 +11,8 @@ class Game < ActiveRecord::Base
     registration_ids = []
     count = 0 
     while count < user_ids.count
-      unless use.push_enabled == 'False'
+    	user = User.where(:id => user_ids[count])
+      unless user.push_enabled == 'False'
         device = Gcm::Device.find(x.device_id)
         registration_ids << device.registration_id 
       end
