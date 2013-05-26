@@ -7,13 +7,15 @@ class Game < ActiveRecord::Base
   :game_initialized, :winning_structure
 
   def self.gameHasStartedPush(game_id)
-    @user_ids = getUserIDSofGame(@game_id)
-    @registration_ids = []
-    @user_ids.each do |x|
-      unless x.push_enabled == 'False'
+    user_ids = getUserIDSofGame(game_id)
+    registration_ids = []
+    count = 0 
+    while count < user_ids.count
+      unless use.push_enabled == 'False'
         device = Gcm::Device.find(x.device_id)
-        @registration_ids << device.registration_id 
+        registration_ids << device.registration_id 
       end
+      count += 1 
     end
 
     unless @registration_ids.empty?
@@ -22,17 +24,17 @@ class Game < ActiveRecord::Base
       notification.device = device
       notification.collapse_key = "game_start"
       notification.delay_while_idle = true
-      notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "Your Fitsby Game #{game.id} has started!                              "}}  
+      notification.data = {:registration_ids => registration_ids,
+      :data => {:message_text => "Your Fitsby Game #{game_id} has started!                              "}}  
       notification.save
     end
-    puts @registration_ids
+    puts registration_ids
   end
 
   def self.gameHasEndedPush(game_id)
-    @user_ids = getUserIDSofGame(@game_id)
-    @registration_ids = []
-    @user_ids.each do |x|
+    user_ids = getUserIDSofGame(game_id)
+    registration_ids = []
+    user_ids.each do |x|
       unless x.push_enabled == 'False'
         device = Gcm::Device.find(x.device_id)
         @registration_ids << device.registration_id 
@@ -53,11 +55,13 @@ class Game < ActiveRecord::Base
   end
 
   def self.getUserIDSofGame(game_id)
-    @gameMembers = GameMember.where(:game_id => game_id)
-    @gameMembers.each do |g|
-      g.active = 1
-      g.activated_at = Time.now.to_i
-      g.save 
+    gameMembers = GameMember.where(:game_id => game_id)
+    count = 0 
+    while count < gameMembers.count
+      gameMembers[count].active = 1
+      gameMembers[count].activated_at = Time.now.to_i
+      gameMembers[count].save 
+      count += 1
     end
     arrayOfUserIds = GameMember.where(:game_id => game_id).pluck(:user_id)
     puts arrayOfUserIds
@@ -172,5 +176,5 @@ class Game < ActiveRecord::Base
     end
   end
 
-  
+
 end

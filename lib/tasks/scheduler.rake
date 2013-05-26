@@ -29,6 +29,7 @@ task :auto_start_games => :environment do
         Comment.gamePostponedComment(all_Active_Games[count].id)
       end
     end
+    count += 1
   end
   puts "started games #{started_games}"
 
