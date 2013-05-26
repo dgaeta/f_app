@@ -1,8 +1,8 @@
 gem 'places'
 
 require "stripe"
-require "comments_controller.#!/usr/bin/env ruby -wKU"
-require "games_controller.#!/usr/bin/env ruby -wKU"
+load "comments_controller.rb"
+load "games_controller.rb"
 
 Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
 
