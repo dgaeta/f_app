@@ -1,6 +1,7 @@
 gem 'places'
 
 require "stripe"
+require_relative "../../app/controllers/application_controller"
 require_relative "../../app/controllers/comments_controller"
 require_relative "../../app/controllers/games_controller"
 
