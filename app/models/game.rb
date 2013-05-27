@@ -19,7 +19,7 @@ class Game < ActiveRecord::Base
       count += 1 
     end
 
-    unless @registration_ids.empty?
+    unless @registration_ids.length == 0 
       notification = Gcm::Notification.new
       device = Gcm::Device.all.first
       notification.device = device
