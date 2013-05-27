@@ -21,7 +21,7 @@ class Game < ActiveRecord::Base
 
     unless registration_ids.empty?
       notification = Gcm::Notification.new
-      device = Gcm::Device.all.first
+      device = Gcm::Device.all[0]
       notification.device = device
       notification.collapse_key = "game_start"
       notification.delay_while_idle = true
