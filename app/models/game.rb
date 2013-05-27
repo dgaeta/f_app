@@ -13,7 +13,7 @@ class Game < ActiveRecord::Base
     while count < user_ids.count
     	user = User.where(:id => user_ids[count]).first
       unless user.enable_notifications == 'False'
-        device = Gcm::Device.find(x.device_id)
+        device = Gcm::Device.find(user.device_id)
         registration_ids << device.registration_id 
       end
       count += 1 
