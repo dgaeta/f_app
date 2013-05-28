@@ -50,7 +50,7 @@ end
  gem 'heroku'
  gem 'gcm_on_rails'
  gem 'geocoder'
-
+ gem 'pushmeup'
 
 
 

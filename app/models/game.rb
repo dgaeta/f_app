@@ -6,28 +6,35 @@ class Game < ActiveRecord::Base
   attr_accessible :creator_id, :duration, :is_private, :wager, :players, :stakes, :game_start_date, :game_end_date, :creator_first_name, 
   :game_initialized, :winning_structure
 
+
+
+	GCM.host = 'https://android.googleapis.com/gcm/send'
+    # https://android.googleapis.com/gcm/send is default
+
+    GCM.format = :json
+    # :json is default and only available at the moment
+
+    GCM.key = "AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY"
+    # this is the apiKey obtained from here https://code.google.com/apis/console/
+
   def self.gameHasStartedPush(game_id)
     user_ids = getUserIDSofGame(game_id)
-    registration_ids = []
+    destination  = []
     count = 0 
     while count < user_ids.count
     	user = User.where(:id => user_ids[count]).first
       unless user.enable_notifications == 'False'
         device = Gcm::Device.find(user.device_id)
-        registration_ids << device.registration_id 
+        destination << device.registration_id 
       end
       count += 1 
     end
 
-    unless registration_ids.empty?
+    unless destination.empty?
       notification = Gcm::Notification.new
-      device = Gcm::Device.all[0]
-      notification.device = device
-      notification.collapse_key = "game_start"
-      notification.delay_while_idle = true
-      notification.data = {:registration_ids => registration_ids,
-      :data => {:message_text => "Your Fitsby Game #{game_id} has started!                              "}}  
-      notification.save
+      data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
+      GCM.send_notification( destination, data, :collapse_key => "game_start", 
+      	:time_to_live => 3600, :delay_while_idle => false )
     end
     puts registration_ids
   end
