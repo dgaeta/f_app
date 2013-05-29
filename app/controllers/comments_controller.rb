@@ -202,7 +202,7 @@ def game_comments
   end
 
   def deleteEntireGamesComments(game_id)
-    comments = Comment.where(:from_game_id = game_id).first
+    comments = Comment.where(:from_game_id => game_id).first
 
     comments.each do |comment|
       comment.destroy
