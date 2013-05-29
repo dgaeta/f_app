@@ -15,7 +15,6 @@
 //= require bootstrap
 //= require_tree .
 //= require jquery.ui.core
-//= require jquery.ui.theme
 //= require jquery.ui.all
 //= require jquery.validate.min
 
