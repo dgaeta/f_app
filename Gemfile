@@ -48,10 +48,10 @@ end
  gem "bcrypt-ruby", "~> 3.0.1"
  gem 'places'
  gem 'heroku'
- gem 'gcm_on_rails'
  gem 'geocoder'
  gem 'pushmeup'
  gem 'bootstrap-sass', '2.1'
+
 
 
 
