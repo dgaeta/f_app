@@ -24,14 +24,13 @@ class Game < ActiveRecord::Base
     while count < user_ids.count
     	user = User.where(:id => user_ids[count]).first
       unless user.enable_notifications == 'False'
-        device = Gcm::Device.find(user.device_id)
+        device = user.device_registration
         destination << device.registration_id 
       end
       count += 1 
     end
 
     unless destination.empty?
-      notification = Gcm::Notification.new
       data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
       GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	:time_to_live => 3600, :delay_while_idle => false )
@@ -44,20 +43,15 @@ class Game < ActiveRecord::Base
     registration_ids = []
     user_ids.each do |x|
       unless x.push_enabled == 'False'
-        device = Gcm::Device.find(x.device_id)
-        @registration_ids << device.registration_id 
+        device = user.device_registration
+        destination << device.registration_id 
       end
     end
 
     unless @registration_ids.empty?
-      notification = Gcm::Notification.new
-      device = Gcm::Device.all.first
-      notification.device = device
-      notification.collapse_key = "game_start"
-      notification.delay_while_idle = true
-      notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "Your Fitsby Game #{game.id} has ended!                              "}}  
-      notification.save
+      data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
+      GCM.send_notification( destination, data, :collapse_key => "game_start", 
+      	:time_to_live => 3600, :delay_while_idle => false )
     end
     puts @registration_ids  
   end
