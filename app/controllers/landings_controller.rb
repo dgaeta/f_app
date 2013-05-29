@@ -89,7 +89,7 @@ class LandingsController < ApplicationController
     
   end
 
-  def FAQ
+  def faq
     
   end
 
