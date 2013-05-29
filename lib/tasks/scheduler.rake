@@ -21,7 +21,7 @@ task :auto_start_games => :environment do
         Comment.gameStartComment(game.id)
         Game.gameHasStartedPush(game)
         game.game_start_date = (Time.now.to_i - 21600)
-        game.game_end_date = ((Time.now.to_i -21600) + (game.duration * (24*60*60)))
+        game.game_end_date = (((Time.now.to_i) -21600) + (game.duration * (24*60*60)))
         game.game_initialized = 1 
         game.was_recently_initiated = 1
         started_games << game.id
