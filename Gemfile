@@ -51,7 +51,7 @@ end
  gem 'geocoder'
  gem 'pushmeup'
  gem 'bootstrap-sass', '2.1'
-gem 'jquery-ui-rails'
+ gem 'jquery-ui-rails'
 
 
 
