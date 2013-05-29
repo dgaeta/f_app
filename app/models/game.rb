@@ -25,7 +25,7 @@ class Game < ActiveRecord::Base
     	user = User.where(:id => user_ids[count]).first
       unless user.enable_notifications == 'False'
         device = user.device_registration
-        destination << device.registration_id 
+        destination << device
       end
       count += 1 
     end
@@ -44,7 +44,7 @@ class Game < ActiveRecord::Base
     user_ids.each do |x|
       unless x.push_enabled == 'False'
         device = user.device_registration
-        destination << device.registration_id 
+        destination << device
       end
     end
 
