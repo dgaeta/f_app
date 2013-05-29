@@ -72,7 +72,7 @@ class Game < ActiveRecord::Base
 
   	def self.addDayToStartAndEnd(game_id)
     	game = Game.where(:id => game_id).first
-    	new_start_date =  ((Time.now.to_i - 21600 ) +  (24*60*60) )
+    	new_start_date =  (((Time.now.to_i) - 21600 ) +  (24*60*60) )
     	new_end_date = (((Time.now.to_i) - 21600 ) + (game.duration * (24*60*60) ) )
     	game.game_start_date = new_start_date 
     	game.game_end_date = new_end_date
