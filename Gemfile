@@ -51,6 +51,7 @@ end
  gem 'gcm_on_rails'
  gem 'geocoder'
  gem 'pushmeup'
+ gem 'bootstrap-sass', '2.1'
 
 
 

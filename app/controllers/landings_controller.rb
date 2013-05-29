@@ -80,4 +80,30 @@ class LandingsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def about
+    
+  end
+
+  def contact
+    
+  end
+
+  def FAQ
+    
+  end
+
+  def terms
+    
+  end
+
+  def privacy 
+
+  end
+
+  def blog
+    
+  end
+
+
 end

@@ -9,6 +9,14 @@ FApp::Application.routes.draw do
 
   get "password_resets/update"
 
+  #Landing page routes
+  get "landings/about"
+  get "landings/contact"
+  get "landings/FAQ"
+  get "landings/terms"
+  get "landings/privacy"
+  get "landings/blog"
+
   resources :stats
 
   resources :game_members
