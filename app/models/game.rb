@@ -71,13 +71,12 @@ class Game < ActiveRecord::Base
   end
 
   def self.addDayToStartandEnd(game_id)
-    @game = Game.where(:id => game_id).first
-    @start = @game.game_start_date
-    @new_start_date = @start +  (24*60*60)
-    @new_end_date = @end + (1*24*60*60)
-    @game.game_start_date = @new_start_date 
-    @game.game_end_date = @new_end_date
-    @game.save 
+    game = Game.where(:id => game_id).first
+    new_start_date = (Time.now -21600) +  (24*60*60)
+    new_end_date = (Time.now -21600) + (game.duration * (24*60*60))
+    game.game_start_date = new_start_date 
+    game.game_end_date = new_end_date
+    game.save 
   end
 
   def self.findAndReturnFinishedGames(all_init_and_active_Games)
