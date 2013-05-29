@@ -191,8 +191,30 @@ def game_comments
   end
  
 
+  def deleteSingleComment(comment_id)
+    @comment = Comment.find(comment_id)
+    @comment.destroy 
+  end
 
+  def deleteSingleCommentAPI
+    @comment = Comment.find(:id => params[:comment_id])
+    @comment.destroy 
+  end
 
-  
+  def deleteEntireGamesComments(game_id)
+    comments = Comment.where(:from_game_id = game_id).first
+
+    comments.each do |comment|
+      comment.destroy
+    end
+  end
+
+  def deleteEntireGamesCommentsAPI
+    comments = Comment.where(:from_game_id => params[:from_game_id]).first
+
+    comments.each do |comment|
+      comment.destroy
+    end
+  end
 
 end

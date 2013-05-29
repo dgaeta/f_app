@@ -1,27 +1,24 @@
 FApp::Application.routes.draw do
-  resources :decidedlocations
+ 
+ #Landing page routes
 
-  resources :checklocations
-
-  get "password_resets/create"
-
-  get "password_resets/edit"
-
-  get "password_resets/update"
-
-  #Landing page routes
-  get "landings/about"
-  get "landings/contact"
-  get "landings/FAQ"
-  get "landings/terms"
-  get "landings/privacy"
-  get "landings/blog"
+  root :to => "landings#index"
+  match '/about',    to: 'landings#about'
+  match '/contact',  to: 'landings#contact'
+  match '/FAQ',      to: 'landings#FAQ'
+  match '/terms',    to: 'landings#terms'
+  match '/privacy',  to: 'landings#privacy'
+  match '/blog',     to: 'landings#blog'
 
   resources :stats
 
   resources :game_members
 
   resources :comments
+  get "deleteSingleComment"          => "comments#deleteSingleComment",          :as => "deleteSingleComment"
+  get "deleteEntireGamesComments"    => "comments#deleteEntireGamesComments",    :as => "deleteEntireGamesComments"
+  get "deleteSingleCommentAPI"       => "comments#deleteSingleCommentAPI",       :as => "deleteSingleCommentAPI"
+  get "deleteEntireGamesCommentsAPI" => "comments#deleteEntireGamesCommentsAPI", :as => "deleteEntireGamesCommentsAPI"
 
   resources :games
 
@@ -32,6 +29,16 @@ FApp::Application.routes.draw do
   resources :users
 
   resources :password_resets
+
+  resources :decidedlocations
+
+  resources :checklocations
+
+  get "password_resets/create"
+
+  get "password_resets/edit"
+
+  get "password_resets/update"
 
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
@@ -116,8 +123,4 @@ FApp::Application.routes.draw do
   match "upload_profile_picture", :to => "users#upload_profile_picture", :via => "post"
   match "user_deletion", :to => "users#user_deletion", :via => "post"
 
-
-
-
-  root :to => "landings#index"
 end
