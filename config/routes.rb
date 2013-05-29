@@ -5,7 +5,7 @@ FApp::Application.routes.draw do
   root :to => "landings#index"
   match '/about',    to: 'landings#about'
   match '/contact',  to: 'landings#contact'
-  match '/FAQ',      to: 'landings#FAQ'
+  match '/faq',      to: 'landings#faq'
   match '/terms',    to: 'landings#terms'
   match '/privacy',  to: 'landings#privacy'
   match '/blog',     to: 'landings#blog'

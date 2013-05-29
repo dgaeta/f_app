@@ -3,7 +3,7 @@
     <ul>      
 
         <p>
-         <%= link_to "About",   about_path %>
+         <%= link_to "About",   about_url %>
           &nbsp;&nbsp;
           <a href="#" data-reveal-id="AboutModal" 
           onclick="_gaq.push(['_trackEvent', 'href', 'About', 'About modal']);">About</a> <!--Google Analytics tracking event click on About-->
@@ -11,9 +11,9 @@
           <a href="#" data-reveal-id="ContactModal"
           onclick="_gaq.push(['_trackEvent', 'href', 'Contact', 'Contact modal']);">Contact</a> <!--Google Analytics tracking event click on Contact -->
           &nbsp;&nbsp;
-         <li><%= link_to "FAQ",  faq_path %></li>
+         <li><%= link_to "FAQ",  faq_url %></li>
           &nbsp;&nbsp;
-          <li><%= link_to "Terms",    terms_path %></li>
+          <li><%= link_to "Terms",    terms_url %></li>
           &nbsp;&nbsp;  
           <a href="privacy.html">Privacy</a>
           &nbsp;&nbsp; 
