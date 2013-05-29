@@ -11,15 +11,3 @@
  *= require_self
  *= require_tree .
  */
-
-
-  stylesheet_link_tag "/stylesheets/foundation.css" # =>
-  <link href="/stylesheets/custom.css" media="screen" rel="stylesheet" type="text/css" />
-
-  stylesheet_link_tag "faq-terms-privacy" # =>
-  <link href="/stylesheets/faq-terms-privacy.css" media="screen" rel="stylesheet" type="text/css" />
-
-  stylesheet_link_tag "foundation" # =>
-  <link href="/stylesheets/foundation.css" media="screen" rel="stylesheet" type="text/css" />
-
-  stylesheet_link_tag :all, :recursive => true 
