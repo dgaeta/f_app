@@ -5,7 +5,7 @@ class LandingsController < ApplicationController
     @landings = Landing.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html #index.html.erb
       format.json { render json: @landings }
     end
   end
