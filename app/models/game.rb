@@ -34,8 +34,8 @@ class Game < ActiveRecord::Base
       data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
       GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	:time_to_live => 3600, :delay_while_idle => false )
+       puts destination
     end
-    puts registration_ids
   end
 
   def self.gameHasEndedPush(game_id)
