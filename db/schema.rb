@@ -153,6 +153,8 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.datetime "last_activity_at"
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
+    t.integer  "num_of_games",  :default => 0 
+    t.integer[] "in_games"                  
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
