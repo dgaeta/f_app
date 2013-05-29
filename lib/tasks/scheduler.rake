@@ -15,21 +15,20 @@ task :auto_start_games => :environment do
   started_games = []
 
   unless all_Active_Games.length == 0
-    count = 0 
-    while count < all_Active_Games.length
-      if all_Active_Games[count].players >= 2 
-        all_Active_Games[count].winning_structure = 1 if all_Active_Games[count].players < 3
-        Comment.gameStartComment(all_Active_Games[count].id)
-        Game.gameHasStartedPush(all_Active_Games[count])
-        all_Active_Games[count].game_initialized = 1 
-        all_Active_Games[count].was_recently_initiated = 1
-        started_games << all_Active_Games[count].id
+    all_Active_Games.each do |game|
+      if game.players >= 2 
+        game.winning_structure = 1 if game.players < 3
+        Comment.gameStartComment(game.id)
+        Game.gameHasStartedPush(game)
+        game.game_initialized = 1 
+        game.was_recently_initiated = 1
+        started_games << game.id
+        game.save
       else 
-        Game.addDaytoStartandEnd(all_Active_Games[count].id)
-        Comment.gamePostponedComment(all_Active_Games[count].id)
+        Game.addDaytoStartandEnd(game.id)
+        Comment.gamePostponedComment(game.id)
       end
     end
-    count += 1
   end
   puts "started games #{started_games}"
 
