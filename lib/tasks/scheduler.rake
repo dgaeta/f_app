@@ -27,7 +27,7 @@ task :auto_start_games => :environment do
         started_games << game.id
         game.save
       else 
-        Game.addDaytoStartandEnd(game.id)
+        Game.addDayToStartAndEnd(game.id)
         Comment.gamePostponedComment(game.id)
       end
     end

@@ -17,67 +17,67 @@ class Game < ActiveRecord::Base
     GCM.key = "AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY"
     # this is the apiKey obtained from here https://code.google.com/apis/console/
 
-  def self.gameHasStartedPush(game_id)
-    user_ids = getUserIDSofGame(game_id)
-    destination  = []
-    count = 0 
-    while count < user_ids.count
+  	def self.gameHasStartedPush(game_id)
+     user_ids = getUserIDSofGame(game_id)
+     destination  = []
+     count = 0 
+     while count < user_ids.count
     	user = User.where(:id => user_ids[count]).first
       unless user.enable_notifications == 'False'
-        device = user.device_registration
-        destination << device
+         device = user.device_registration
+         destination << device
       end
       count += 1 
-    end
+     end
 
-    unless destination.empty?
-      data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-      GCM.send_notification( destination, data, :collapse_key => "game_start", 
-      	:time_to_live => 3600, :delay_while_idle => false )
-       puts destination
-    end
-  end
+     unless destination.empty?
+         data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
+         GCM.send_notification( destination, data, :collapse_key => "game_start", 
+      	 :time_to_live => 3600, :delay_while_idle => false )
+         puts destination
+    	end
+  	end
 
   def self.gameHasEndedPush(game_id)
-    user_ids = getUserIDSofGame(game_id)
-    registration_ids = []
-    user_ids.each do |x|
-      unless x.push_enabled == 'False'
-        device = user.device_registration
-        destination << device
+     user_ids = getUserIDSofGame(game_id)
+     registration_ids = []
+     user_ids.each do |x|
+     	unless x.enable_notifications == 'False'
+     	 	device = user.device_registration
+         destination << device
+      	end
       end
-    end
 
-    unless @registration_ids.empty?
-      data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-      GCM.send_notification( destination, data, :collapse_key => "game_start", 
+     unless @registration_ids.empty?
+        data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
+        GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	:time_to_live => 3600, :delay_while_idle => false )
+       end
+     puts @registration_ids  
     end
-    puts @registration_ids  
-  end
 
-  def self.getUserIDSofGame(game_id)
-    gameMembers = GameMember.where(:game_id => game_id)
-    count = 0 
-    while count < gameMembers.count
-      gameMembers[count].active = 1
-      gameMembers[count].activated_at = Time.now.to_i
-      gameMembers[count].save 
-      count += 1
+  	def self.getUserIDSofGame(game_id)
+	    gameMembers = GameMember.where(:game_id => game_id)
+	    count = 0 
+	    while count < gameMembers.count
+	      gameMembers[count].active = 1
+	      gameMembers[count].activated_at = Time.now.to_i
+	      gameMembers[count].save 
+	      count += 1
+	    end
+	    arrayOfUserIds = GameMember.where(:game_id => game_id).pluck(:user_id)
+	    puts arrayOfUserIds
+	    return arrayOfUserIds  
+  	end
+
+  	def self.addDayToStartAndEnd(game_id)
+    	game = Game.where(:id => game_id).first
+    	new_start_date = (Time.now -21600) +  (24*60*60)
+    	new_end_date = (Time.now -21600) + (game.duration * (24*60*60))
+    	game.game_start_date = new_start_date 
+    	game.game_end_date = new_end_date
+    	game.save 
     end
-    arrayOfUserIds = GameMember.where(:game_id => game_id).pluck(:user_id)
-    puts arrayOfUserIds
-    return arrayOfUserIds  
-  end
-
-  def self.addDayToStartandEnd(game_id)
-    game = Game.where(:id => game_id).first
-    new_start_date = (Time.now -21600) +  (24*60*60)
-    new_end_date = (Time.now -21600) + (game.duration * (24*60*60))
-    game.game_start_date = new_start_date 
-    game.game_end_date = new_end_date
-    game.save 
-  end
 
   def self.findAndReturnFinishedGames(all_init_and_active_Games)
    count = 0 
