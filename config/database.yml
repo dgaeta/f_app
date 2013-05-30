@@ -13,12 +13,14 @@
 # gem 'pg'
 #
 development:
+  host: localhost
   adapter: postgresql
+  port: 5433
   encoding: unicode
-  database: koo
+  database: postgres
   pool: 5
-  username: dannygaeta
-  password: mula2010
+  username: postgres
+  password: 
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
