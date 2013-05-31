@@ -7,13 +7,21 @@ class SorceryCore < ActiveRecord::Migration
       t.text   :last_name
       t.string :crypted_password, :default => nil
       t.string :salt,             :default => nil
-      t.text   :customer_idm :default => 0 
+      t.text   :customer_id, :default => 0 
       t.integer :token, :default => 0
       t.integer :num_of_texts, :default => 0 
-      t.integer :device_id
+      t.boolean :device_registered, :default => false
       t.integer :check_in_geo_lat, :default => 0 #change to double precision in db
       t.integer :check_in_geo_long, :default => 0 #change to double precision in db
       t.integer :enable_notifications, :default => 1
+      t.string  :reset_password_token
+      t.datetime :reset_password_token_expires_at
+      t.datetime :reset_password_email_sent_at
+      t.datetime :last_login_at
+      t.datetime :last_logout_at
+      t.datetime :last_activity_at
+      t.string   :remember_me_token
+      t.datetime :remember_me_token_expires_at
 
       t.timestamps
     end

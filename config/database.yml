@@ -15,18 +15,18 @@
 development:
   host: localhost
   adapter: postgresql
-  port: 5433
+  port: 5432
   encoding: unicode
   database: postgres
   pool: 5
-  username: postgres
-  password: 
+  username: dannygaeta
+  password: mula2010
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
   #host: localhost
-  #port: 5432
+  #port: 5433
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public

@@ -15,6 +15,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
+  gem 'zurb-foundation', '~> 2.2'
 end
 
 gem 'jquery-rails'
@@ -55,6 +56,7 @@ end
  gem "therubyracer"
  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
  gem "twitter-bootstrap-rails"
+ gem "psych", "~> 1.3.4"
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

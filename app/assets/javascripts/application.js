@@ -12,10 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require foundation
 //= require bootstrap
 //= require_tree .
 //= require jquery.ui.core
 //= require jquery.ui.all
-//= require twitter/bootstrap
-
+//= require twitter/bootstrap 
+//= require jquery.min
+//= require general
+//= require "foundation"
 

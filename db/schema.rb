@@ -58,29 +58,38 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.integer  "daily_checkins",             :default => 0
     t.integer  "total_minutes_at_gym",       :default => 0
     t.integer  "end_game_checks_evaluation", :default => 0
-    t.float    "check_out_geo_lat",          :default => 0.0
-    t.float    "check_out_geo_long",         :default => 0.0
+    t.integer  "check_out_geo_lat",          :default => 0
+    t.integer  "check_out_geo_long",         :default => 0
     t.text     "full_name"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
     t.integer  "place",                      :default => 0
+    t.integer  "last_checkin_date",          :default => 0
+    t.integer  "activated_at",               :default => 0
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.boolean  "is_game_over",               :default => false
+    t.integer  "last_checkout_date",         :default => 0
+    t.integer  "activated_at",               :default => 0
+    t.integer  "active"                      :default => 0 
+
   end
 
   create_table "games", :force => true do |t|
     t.integer  "creator_id"
     t.boolean  "is_private"
     t.integer  "duration"
-    t.integer  "wager",              :default => 0
+    t.integer  "wager",                  :default => 0
     t.integer  "players"
     t.integer  "stakes"
     t.integer  "game_end_date"
     t.integer  "game_start_date"
     t.string   "creator_first_name"
-    t.integer  "game_initialized",   :default => 0
-    t.integer  "game_active",        :default => 1
-    t.integer  "winning_structure",  :default => 3
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.integer  "game_initialized",       :default => 0
+    t.integer  "game_active",            :default => 1
+    t.integer  "winning_structure",      :default => 3
+    t.integer  "was_recently_initiated", :default => 0
+    t.integer  "goal_days"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
   end
 
   create_table "gcm_devices", :force => true do |t|
@@ -138,10 +147,10 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.string   "salt"
     t.text     "customer_id",                     :default => "0"
     t.integer  "token",                           :default => 0
-    t.integer  "num_of_texts",                    :default => 0
-    t.integer  "device_id"
-    t.float    "check_in_geo_lat",                :default => 0.0
-    t.float    "check_in_geo_long",               :default => 0.0
+    t.integer  "num_of_texts_sent",                    :default => 0
+    t.boolean  "device_registered"
+    t.integer  "check_in_geo_lat",                :default => 0
+    t.integer  "check_in_geo_long",               :default => 0
     t.integer  "enable_notifications",            :default => 1
     t.datetime "created_at",                                       :null => false
     t.datetime "updated_at",                                       :null => false
@@ -153,8 +162,10 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.datetime "last_activity_at"
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
-    t.integer  "num_of_games",  :default => 0 
-    t.integer[] "in_games"                  
+    t.character "gcm_registration_id"
+    t.integer[] "in_games"
+
+
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"

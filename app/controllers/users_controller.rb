@@ -284,5 +284,31 @@ def change_email
     end
   end
 
+  def checkPushRegistration
+    @user = User.where(:id => params[:user_id]).first
+    android_id = ""
+    android_id = params[:android_id]
+    false_json = { :status => "fail."}
+    true_json =  { :status => "okay" }
+
+    render(json: JSON.pretty_generate(false_json)) if (@user.nil? || android_id.empty?)
+    if @user.device_registered == false
+      @user.gcm_registration_id = android_id    
+      @user.save
+      render(json: JSON.pretty_generate(true_json))
+    else
+      render(json: JSON.pretty_generate(true_json))
+    end
+  end
+
+
+  def deleteUser
+    @user
+    
+  end
 
 end
+
+
+
+
