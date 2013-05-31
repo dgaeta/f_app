@@ -34,6 +34,7 @@ FApp::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  config.serve_static_assets = true
 
   
 config.action_mailer.perform_deliveries = true #try to force sending in development 
