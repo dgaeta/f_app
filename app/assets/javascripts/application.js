@@ -19,6 +19,5 @@
 //= require jquery.ui.all
 //= require twitter/bootstrap 
 //= require jquery.min
-//= require general
 //= require "foundation"
 
