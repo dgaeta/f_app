@@ -143,7 +143,7 @@ class GamesController < ApplicationController
     @user = User.where(:id => params[:user_id]).first
     @wager = params[:wager]
 
-    unless GameMember.where(:user_id=>params[:user_id]).first
+    unless @user.num_of_games > 1s
       unless @wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
@@ -161,19 +161,23 @@ class GamesController < ApplicationController
             # save the customer ID in your database so you can use it later
       end
       
+
       @stat = Stat.where(:winners_id => @user.id).first 
       @stat.games_played += 1 
       @stat.save
       @game = Game.new(params[:game])
       @game.creator_id = @user.id
       @game.players = 1
-      @game.save
       @first_name = @user.first_name.downcase
       @game.creator_first_name = @user.first_name
       @game.stakes = @game.wager
       @game.is_private = params[:is_private]
       @game.goal_days = params[:goal_days]
       @game.save
+      @user.game_history += 1 
+      @user.num_of_games += 1 
+      @user.in_games << @game.id
+      @user.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
       @gamemember.save
@@ -347,7 +351,7 @@ def winners_and_losers
 
     if user.save 
       then 
-      unless GameMember.where(:user_id=>params[:user_id]).first
+      unless GameMember.where(:user_id=>params[:user_i]).first
         unless @game.wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]

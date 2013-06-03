@@ -11,7 +11,7 @@ Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
 desc "This task is called by the Heroku scheduler add-on"
 
 task :auto_start_games => :environment do  
-  all_Active_Games = Game.where(:game_active => 1)
+  all_Active_Games = Game.where(:game_active => 1, :game_initialized => 0)
   started_games = []
 
   unless all_Active_Games.length == 0
@@ -19,7 +19,7 @@ task :auto_start_games => :environment do
       if game.players >= 2 
         game.winning_structure = 1 if game.players < 3
         Comment.gameStartComment(game.id)
-        Game.gameHasStartedPush(game)
+        Game.gameHasStartedPush(game) #### updates user events here 
         GameMember.activatePlayers(game.id)
         game.game_start_date = (Time.now.to_i - 21600)
         game.game_end_date = (((Time.now.to_i) -21600) + (game.duration * (24*60*60)))
@@ -221,9 +221,18 @@ end
     end
   end
 
+  task :two_days_of_no_activity => :environment do 
+    puts "checking for game member inactivity..."
+    game_members = GameMember.where(:successful_checks => "0", :active => "1")
+    count = 0 
 
+    while count < game_members.length do 
+      player = game_members[count]
+      if ((Time.now.to_i - 21600) - player.activated_at) > (2*24*60*60)
 
+  end
 
+/Applications/Xcode.app/Contents/Developer
 
 
 
