@@ -57,6 +57,8 @@ end
  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
  gem "twitter-bootstrap-rails"
  gem "psych", "~> 1.3.4"
+ gem 'push-core'
+ gem 'push-gcm'
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

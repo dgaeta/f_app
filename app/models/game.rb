@@ -110,6 +110,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
+    ###updates user attributes in game.notifyWinner and self.notifyLoser
     count = 0 
     while count < playerIDs.length
       gameMember = playerIDs[count]
@@ -133,6 +134,11 @@ class Game < ActiveRecord::Base
 
   def self.notifyWinner(game_id, user_id, number_of_winners, wager, num_of_players, successful_checks)
     user = User.where(:id => user_id).first
+    user.in_game = 0
+    user.save
+    stat = Stat.where(:winners_id => user.id)
+    stat.games_won += 1
+    stat.save
     if wager == 0 
       UserMailer.congratulate_winner_of_free_game(user.email, user.first_name, 
         successful_checks).deliver
@@ -140,6 +146,8 @@ class Game < ActiveRecord::Base
       fitsby_percentage = 0.08
       number_of_losers = number_of_players - number_of_winners
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
+      stat.money_won = player_cut
+      stat.save
       fitsby_money_won = ((number_of_losers * wager) * fitsby_percentage) + (0.50 * number_of_losers)
       total_money_processed = ((number_of_losers * wager) + (number_of_losers * 0.50))
       UserMailer.congratulate_winner_of_game(user.email, user.first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
@@ -152,6 +160,8 @@ class Game < ActiveRecord::Base
   def self.notifyLoser(game_id, user_id, number_of_losers)
     game = Game.where(:id => game_id)
     user = User.where(:id => user_id).first
+    user.in_game = 0 
+    user.save
     stat = Stat.where(:winners_id => user.id)
     stat.losses += 1 
     stat.games_played += 1 

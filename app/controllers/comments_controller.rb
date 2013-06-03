@@ -141,47 +141,14 @@ def game_comments
     @user_id = @comment.from_user_id
 
     user = User.where(:id => @user_id).first
+    user.comments_made +=1 
+    user.save
 
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
     @comment.email = user.email
     @comment.save
 
-    if @comment.save
-  ########## push start ################
-     notification = Gcm::Notification.new
-     if user.device_id == "0" 
-      device = Gcm::Device.all.first
-      notification.device_id = device.id
-     else 
-      notification.device_id = Gcm::Device.where(:id => user.device_id).pluck(:id).first
-     end
-     notification.collapse_key = "newsfeed"
-     notification.delay_while_idle = true
-     @game = Game.find(@comment.from_game_id)
-     @a = 0 
-     @num = @game.players
-     @registration_ids = []
-     user_ids = GameMember.where(:game_id => @game.id).pluck(:user_id)
-     while @a < @num do 
-      user = User.find(user_ids[@a])
-      if (user.enable_notifications == "FALSE") or (user.device_id == "0")
-        @a += 1 
-      else
-        unless @comment.from_user_id == user.id
-        device = Gcm::Device.find(user.device_id)
-        puts "#{user.id}"
-        @registration_ids << device.registration_id
-        end
-        @a += 1 
-      end
-     end
-     notification.data = {:registration_ids => @registration_ids,
-      :data => {:message_text => "New Comment from Game #{@game.id}                                   "}}
-     unless @registration_ids.empty?
-       notification.save
-     end
-  ######### push end #####################
      true_json =  { :status => "okay"}
      render(json: JSON.pretty_generate(true_json))
     else

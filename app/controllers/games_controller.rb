@@ -351,7 +351,7 @@ def winners_and_losers
 
     if user.save 
       then 
-      unless GameMember.where(:user_id=>params[:user_i]).first
+      unless @user.num_of_games > 1 
         unless @game.wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
@@ -391,6 +391,8 @@ def winners_and_losers
         c.bold = "False"
         c.email = user.email 
         c.save
+        user.num_of_games += 1 
+        user.save
 
 
        

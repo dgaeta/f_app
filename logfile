@@ -1,2 +1,8 @@
 FATAL:  lock file "postmaster.pid" already exists
 HINT:  Is another postmaster (PID 79917) running in data directory "/usr/local/var/postgres/data"?
+postgres cannot access the server configuration file "/usr/local/var/postgres/9.2/data/postgresql.conf": No such file or directory
+2013-06-03 15:29:17 CDT FATAL:  could not create shared memory segment: Invalid argument
+2013-06-03 15:29:17 CDT DETAIL:  Failed system call was shmget(key=5433001, size=41271296, 03600).
+2013-06-03 15:29:17 CDT HINT:  This error usually means that PostgreSQL's request for a shared memory segment exceeded your kernel's SHMMAX parameter.  You can either reduce the request size or reconfigure the kernel with larger SHMMAX.  To reduce the request size (currently 41271296 bytes), reduce PostgreSQL's shared memory usage, perhaps by reducing shared_buffers or max_connections.
+	If the request size is already small, it's possible that it is less than your kernel's SHMMIN parameter, in which case raising the request size or reconfiguring SHMMIN is called for.
+	The PostgreSQL documentation contains more information about shared memory configuration.
