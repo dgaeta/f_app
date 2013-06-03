@@ -60,11 +60,11 @@ html, body { font-family: 'MuseoSans-300', 'ITCFranklinGothicStd-DmCd', Arial, s
 
 
 /* FOOTER */
-.footer { color: #393939; float: right; font-size: 0.7em }
+.footer { color: #393939; float: right; font-size: 0.7em; margin-top: 45px; }
 .footer a { color: #174873; text-decoration: none }
 .footer img { border: 0 }
 .footer a:hover { color: black }
-#footer_links ul li { list-style-type: none; padding-right: 20px;}
+.footer li {  padding-right: 20px;}
 #made_with_love { color: #393939; font-family: 'Microsoft PhagsPa'; font-size: 1em; float: right; }
 #made_with_love img { height: 10px }
 .fb-like { float: right }
