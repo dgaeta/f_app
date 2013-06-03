@@ -22,6 +22,8 @@ class SorceryCore < ActiveRecord::Migration
       t.datetime :last_activity_at
       t.string   :remember_me_token
       t.datetime :remember_me_token_expires_at
+      t.integer  :game_history, :default => 0 
+      t.integer  :comments_made, :default => 0 
 
       t.timestamps
     end

@@ -28,9 +28,12 @@ class Comment < ActiveRecord::Base
 
   def self.deleteEntireGamesComments(game_id)
     comments = Comment.where(:from_game_id => game_id)
+    count = 0 
 
-    comments.each do |comment|
+    while count < comments.length do 
+      comment = comments[count]
       comment.destroy
+      count += 1 
     end
   end
 
