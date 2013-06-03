@@ -147,8 +147,9 @@ def game_comments
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
     @comment.email = user.email
-    @comment.save
+    
 
+    if @comment.save
      true_json =  { :status => "okay"}
      render(json: JSON.pretty_generate(true_json))
     else
