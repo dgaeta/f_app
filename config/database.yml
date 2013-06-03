@@ -15,7 +15,7 @@
 development:
   host: localhost
   adapter: postgresql
-  port: 5432
+  port: 5433
   encoding: unicode
   database: postgres
   pool: 5

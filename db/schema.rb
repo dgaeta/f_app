@@ -163,7 +163,7 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
     t.character "gcm_registration_id"
-    t.integer[] "in_games"
+    t.integer    "in_game",                         :default => 0 
     t.integer   "comments_made",                   :default => 0 
     t.integer   "game_history",                     :default => 0 
 

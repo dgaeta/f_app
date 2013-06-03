@@ -176,7 +176,7 @@ class GamesController < ApplicationController
       @game.save
       @user.game_history += 1 
       @user.num_of_games += 1 
-      @user.in_games << @game.id
+      @user.in_game = @game.id
       @user.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
