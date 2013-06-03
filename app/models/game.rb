@@ -80,21 +80,17 @@ class Game < ActiveRecord::Base
     end
 
   def self.findAndReturnFinishedGames(all_init_and_active_Games)
-   count = 0 
-    while count < all_init_and_active_Games.length do     ##check which of the previous games have reached the end date 
-     game = Game.where(:id => all_init_and_active_Games[count]).first
+   finished_games =[]
+
+   all_init_and_active_Games.length.each do |game|    ##check which of the previous games have reached the end date 
      end_date_integer = game.game_end_date 
      today_integer = Time.now.to_i - 21600
-     diff = today_integer - end_date_integer
-
-     finished_games =[]
+     diff = today_integer - end_date_integer     
      if diff >= 0 
        then
        finished_games << game.id 
-       count += 1
       else 
        puts "game #{game.id} is not ready to end"
-       count += 1 
       end 
     end 
     puts "Game(s) #{finished_games} have finished"

@@ -172,8 +172,6 @@ class GameMembersController < ApplicationController
 
   def check_out_request
    @user = User.find(params[:user_id])
-   @geo_lat = params[:latitude]
-   @geo_long = params[:longitude]
    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
    number_of_games = @all_of_users_games.count
    dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], 
@@ -201,7 +199,7 @@ class GameMembersController < ApplicationController
       
     unless @init_games == nil  
       last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-      @time_now = Time.now.to_i - 21420
+      @time_now = (Time.now.to_i - 21420)
           
       total_minutes_at_gym = @time_now - last_checkin[0] 
       @stat = Stat.where(:winners_id => @user.id).first
@@ -219,13 +217,15 @@ class GameMembersController < ApplicationController
 
         while @a < @num2  do
           game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-          game_member.last_checkin_date = (Time.now - 21420).mday
+          game_member.last_checkin_date = (Time.now - 21600).mday
           last_checkin = game_member.checkins
-          @time_now = Time.now.to_i - 21420
+          @time_now = T(ime.now.to_i - 21600)
           @minutes = ((@time_now - last_checkin) / 60 )
           game_member.checkouts = @minutes
-          game_member.last_checkout_date = (Time.now - 21420).mday
+          game_member.last_checkout_date = (Time.now - 21600).mday
           game_member.total_minutes_at_gym += @minutes
+          @stat.total_minutes_at_gym += total_minutes_at_gym
+          @stat.save
           game_member.successful_checks += 1
           game_member.check_out_geo_lat = @geo_lat
           game_member.check_out_geo_long = @geo_long
