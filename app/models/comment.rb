@@ -27,7 +27,7 @@ class Comment < ActiveRecord::Base
 
 
   def self.deleteEntireGamesComments(game_id)
-    comments = Comment.where(:from_game_id => game_id).first
+    comments = Comment.where(:from_game_id => game_id)
 
     comments.each do |comment|
       comment.destroy
