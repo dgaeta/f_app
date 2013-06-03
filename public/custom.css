@@ -64,7 +64,7 @@ html, body { font-family: 'MuseoSans-300', 'ITCFranklinGothicStd-DmCd', Arial, s
 .footer a { color: #174873; text-decoration: none }
 .footer img { border: 0 }
 .footer a:hover { color: black }
-.footer li {  padding-right: 20px;}
+.footer ul li {  padding-right: 20px; display: inline;}
 #made_with_love { color: #393939; font-family: 'Microsoft PhagsPa'; font-size: 1em; float: right; }
 #made_with_love img { height: 10px }
 .fb-like { float: right }
