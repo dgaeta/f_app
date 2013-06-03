@@ -12,7 +12,6 @@
  *= require foundation
  *= require_tree .
  *= require jquery.ui.all
- *= require bootstrap_and_overrides
  *= require "foundation" 
  */
  
