@@ -141,11 +141,9 @@ class GamesController < ApplicationController
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
     @user = User.where(:id => params[:user_id]).first
-    @user_email = @user.email
     @wager = params[:wager]
 
-
-    unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first
+    unless GameMember.where(:user_id=>params[:user_id]).first
       unless @wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
@@ -349,7 +347,7 @@ def winners_and_losers
 
     if user.save 
       then 
-      unless GameMember.where(:user_id=>params[:user_id], :game_id => params[:game_id]).first
+      unless GameMember.where(:user_id=>params[:user_id]).first
         unless @game.wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]

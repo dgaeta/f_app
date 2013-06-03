@@ -115,6 +115,7 @@ class Game < ActiveRecord::Base
       gameMember = playerIDs[count]
       stat = Stat.where(:winners_id => gameMember.user_id).first
       gameMember.active = 0
+      gameMember.is_game_over = "TRUE"
       gameMember.save
       game = Game.where(:id => gameMember.game_id)
       if gameMember.successful_checks >= goal_days

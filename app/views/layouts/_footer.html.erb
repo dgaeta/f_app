@@ -1,33 +1,35 @@
+  
+
+<html>
+
+<body>
+
 <footer class="footer">
   
-  <link rel="stylesheet" href="/foundation.css"> </link>
-  <link rel="stylesheet" href="/custom.css"> </link>
-  <script src="/modernizr.foundation.js"></script> 
-  <script src="/foundation.min.js"></script>
-  <script src="/simple.carousel.js"></script>
   
-  
-  
+
+
   <nav>
     <ul>      
 
         <p>
           &nbsp;&nbsp; 
-          <a href="fitsby.com/about" data-reveal-id="AboutModal" 
-          onclick="_gaq.push(['_trackEvent', 'href', 'About', 'About modal']);">About</a> <!--Google Analytics tracking event click on About-->
+          <!--<a href="fitsby.com/about" data-reveal-id="AboutModal" 
+          onclick="_gaq.push(['_trackEvent', 'href', 'About', 'About modal']);">About</a>--> <!--Google Analytics tracking event click on About-->
+          <li ><%= link_to "About", '/about' %></li>
           &nbsp;&nbsp;  
-          <a href="fitsby.com/contact">Contact</a>      
+          <li ><%= link_to "Contact", '/faq' %></li>
+          <!--<a href="fitsby.com/contact">Contact</a>      
           <a href="#" data-reveal-id="ContactModal"
-          onclick="_gaq.push(['_trackEvent', 'href', 'Contact', 'Contact modal']);">Contact</a> <!--Google Analytics tracking event click on Contact -->
+          onclick="_gaq.push(['_trackEvent', 'href', 'Contact', 'Contact modal']);">Contact</a>--> <!--Google Analytics tracking event click on Contact -->
           &nbsp;&nbsp;
-         <a href="fitsby.com/faq">FAQ</a>
+          <li ><%= link_to "FAQ", '/faq' %></li>
           &nbsp;&nbsp;
-          <a href="fitsby.com/terms">Terms</a>
-          &nbsp;&nbsp;  
-          <a href="fitsby.com/privacy">Privacy</a>
+          <li ><%= link_to "Privacy", '/privacy' %></li>
           &nbsp;&nbsp; 
-          <a href="http://fitsby.posterous.com"
-          onsubmit="that=this;_gaq.push(['_trackEvent','href','Blog','Posterous Blog']);setTimeout(function() { that.submit() }, 200);return false;" >Blog</a>
+          <!--<a href="http://fitsby.posterous.com"
+          onsubmit="that=this;_gaq.push(['_trackEvent','href','Blog','Posterous Blog']);setTimeout(function() { that.submit() }, 200);return false;" >Blog</a>-->
+          <a href="http://fitsby.posterous.com" target="_blank">Blog</a>
           &nbsp;&nbsp;
           <a href="https://www.facebook.com/pages/Fitsby/405270759527533" target="_blank"><img src="/assets/facebook_icon.jpg" height="17px" style="top: 4px; position: relative;" alt=""></a>
           &nbsp; 
@@ -39,3 +41,10 @@
           <span id="made_with_love">&nbsp;Crafted with <img src="/assets/heart.jpg" alt="love"> in Champaign, IL&nbsp;</span>
         </p>
 </footer>
+
+
+
+</body>
+
+</html>
+

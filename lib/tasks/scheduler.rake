@@ -20,6 +20,7 @@ task :auto_start_games => :environment do
         game.winning_structure = 1 if game.players < 3
         Comment.gameStartComment(game.id)
         Game.gameHasStartedPush(game)
+        GameMember.activatePlayers(game.id)
         game.game_start_date = (Time.now.to_i - 21600)
         game.game_end_date = (((Time.now.to_i) -21600) + (game.duration * (24*60*60)))
         game.game_initialized = 1 
@@ -80,6 +81,7 @@ task :auto_end_games => :environment do
       Game.decidedAndNotifyResults(playerIDs, winnerGameMemberIDs.count , game.goal_days)
       Game.gameHasEndedPush(game.id)
       game.game_active = 0
+      game.game_initialized = 0 
       game.is_private = "TRUE"
       game.save
     end

@@ -60,10 +60,14 @@ html, body { font-family: 'MuseoSans-300', 'ITCFranklinGothicStd-DmCd', Arial, s
 
 
 /* FOOTER */
-.footer { color: #393939; float: right; font-size: 0.7em }
+
+.footer { color: #393939; float: right; font-size: 0.7em; margin-top: 15px; }
 .footer a { color: #174873; text-decoration: none }
 .footer img { border: 0 }
 .footer a:hover { color: black }
+.footer ul{list-style-type: none; margin: 0; padding: 0;}
+.footer ul li{ color: #174873;  display: inline;}
+#footer_links:hover ul li{text-decoration: none; color: black;}
 #made_with_love { color: #393939; font-family: 'Microsoft PhagsPa'; font-size: 1em; float: right; }
 #made_with_love img { height: 10px }
 .fb-like { float: right }
