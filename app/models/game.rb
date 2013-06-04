@@ -131,6 +131,7 @@ class Game < ActiveRecord::Base
         number_of_losers = (game.players - number_of_winners)
         Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers, gameMember.successful_checks)
       end
+      count += 1 
     end
   end
 
