@@ -83,7 +83,7 @@ class Game < ActiveRecord::Base
    finished_games =[]
 
    all_init_and_active_Games.each do |game|    ##check which of the previous games have reached the end date 
-     end_date_integer = game.game_end_date 
+     end_date_integer = game.game_end_datre 
      today_integer = Time.now.to_i - 21600
      diff = today_integer - end_date_integer     
      if diff >= 0 
@@ -99,8 +99,11 @@ class Game < ActiveRecord::Base
 
   def self.winnerIDs(playerIDs, goal_days)
     winnerGameMemberIDs = []
-    if gameMember.successful_checks >= goal_days
-      winnerGameMemberIDs << gameMember.id
+    playerIDs.each do |id|
+      gameMember = GameMember.where(:user_id => id).first
+      if gameMember.successful_checks >= goal_days
+        winnerGameMemberIDs << gameMember.id
+      end
     end
     return winnerGameMemberIDs
   end

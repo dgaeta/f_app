@@ -73,9 +73,8 @@ task :auto_end_games => :environment do
   finished_games = Game.findAndReturnFinishedGames(all_init_and_active_Games)
 
   unless finished_games.length == 0
-    count = 0
-    while count < finished_games.length
-      game = finished_games[count]
+    finished_games.each do |game|
+      game = Game.where(:id => game)
       playerIDs = GameMember.where(:game_id => game.id)
       winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
       Game.decidedAndNotifyResults(playerIDs, winnerGameMemberIDs.count , game.goal_days)  ###updates user attributes
