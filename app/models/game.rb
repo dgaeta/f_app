@@ -120,7 +120,7 @@ class Game < ActiveRecord::Base
       gameMember.active = 0
       gameMember.is_game_over = "TRUE"
       gameMember.save
-      game = Game.where(:id => gameMember.game_id)
+      game = Game.where(:id => gameMember.game_id).first
       if gameMember.successful_checks >= goal_days
         stat.games_won += 1 
         stat.games_played += 1 
