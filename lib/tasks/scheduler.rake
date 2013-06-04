@@ -77,11 +77,6 @@ task :auto_end_games => :environment do
       game = Game.where(:id => id).first
       playerIDs = GameMember.where(:game_id => game.id)
       winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
-      if winnerGameMemberIDs.nil?
-        winnerGameMemberIDs = 0
-      else 
-        winnerGameMemberIDs = winnerGameMemberIDs.length
-      end
       Game.decideAndNotifyResults(playerIDs, winnerGameMemberIDs , game.goal_days)  ###updates user attributes
       Game.gameHasEndedPush(game.id)
       game.game_active = 0
