@@ -129,7 +129,7 @@ class Game < ActiveRecord::Base
          game.wager, game.players, gameMember.successful_checks)
       else 
         number_of_losers = (game.players - number_of_winners)
-        Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers)
+        Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers, gameMember.successful_checks)
       end
     end
   end
@@ -159,7 +159,7 @@ class Game < ActiveRecord::Base
   end
 
 
-  def self.notifyLoser(game_id, user_id, number_of_losers)
+  def self.notifyLoser(game_id, user_id, number_of_losers, loser_checkins)
     game = Game.where(:id => game_id)
     user = User.where(:id => user_id).first
     user.in_game = 0 
@@ -168,7 +168,6 @@ class Game < ActiveRecord::Base
     stat.losses += 1 
     stat.games_played += 1 
     stat.save
-    loser_checkins = GameMember.where(user_id => user_id, :game_id => game_id).pluck(:successful_checks)
     
     if game.wager == 0          
       loser_email = user.email 
