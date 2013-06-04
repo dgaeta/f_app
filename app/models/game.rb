@@ -164,7 +164,7 @@ class Game < ActiveRecord::Base
     user = User.where(:id => user_id).first
     user.in_game = 0 
     user.save
-    stat = Stat.where(:winners_id => user.id)
+    stat = Stat.where(:winners_id => user.id).first
     stat.losses += 1 
     stat.games_played += 1 
     stat.save
