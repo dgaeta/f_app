@@ -160,7 +160,7 @@ class Game < ActiveRecord::Base
 
 
   def self.notifyLoser(game_id, user_id, number_of_losers, loser_checkins)
-    game = Game.where(:id => game_id)
+    game = Game.where(:id => game_id).first
     user = User.where(:id => user_id).first
     user.in_game = 0 
     user.save
