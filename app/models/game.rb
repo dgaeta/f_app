@@ -99,13 +99,16 @@ class Game < ActiveRecord::Base
 
   def self.winnerIDs(playerIDs, goal_days)
     winnerGameMemberIDs = []
-    playerIDs.each do |id|
-      gameMember = GameMember.where(:user_id => id).first
+    playerIDs.each do |gameMember|
       if gameMember.successful_checks >= goal_days
         winnerGameMemberIDs << gameMember.id
       end
     end
-    return winnerGameMemberIDs
+    if winnerGameMemberIDs.length == 0 
+      return 0 
+    else 
+      return winnerGameMemberIDs
+    end
   end
 
   def self.decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
@@ -125,7 +128,7 @@ class Game < ActiveRecord::Base
         Game.notifyWinner(gameMember.game_id, gameMember.user_id, number_of_winners,
          game.wager, game.players, gameMember.successful_checks)
       else 
-        number_of_losers = game.players - number_of_winners
+        number_of_losers = (game.players - number_of_winners)
         Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers)
       end
     end

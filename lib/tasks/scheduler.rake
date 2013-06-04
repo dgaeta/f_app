@@ -73,11 +73,11 @@ task :auto_end_games => :environment do
   finished_games = Game.findAndReturnFinishedGames(all_init_and_active_Games)
 
   unless finished_games.length == 0
-    finished_games.each do |game|
-      game = Game.where(:id => game)
+    finished_games.each do |id|
+      game = Game.where(:id => id).first
       playerIDs = GameMember.where(:game_id => game.id)
       winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
-      Game.decidedAndNotifyResults(playerIDs, winnerGameMemberIDs.count , game.goal_days)  ###updates user attributes
+      Game.decideAndNotifyResults(playerIDs, winnerGameMemberIDs.count , game.goal_days)  ###updates user attributes
       Game.gameHasEndedPush(game.id)
       game.game_active = 0
       game.game_initialized = 0 
@@ -93,38 +93,17 @@ end
 
 task :make_games_private_1_day_after => :environment do 
   puts "Making games private..."
-  @all_games = Game.where(:was_recently_initiated => 1).pluck(:id) #get all games that were recently initialized
+  @init_and_active = Game.where(:game_initialized => 1, :game_active => 1) #get all games that were recently initialized
 
-  #check to see if they have more than 1 player
-
-  @placeHolder = 0 
-  @numberOfRecentlyInitializedGames = @all_games.count
-  @gamesThatNeedToBePrivatized = Array.new
-
-  unless @all_games.empty?
-    while @placeHolder < @numberOfRecentlyInitializedGames do        
-      @game = Game.where(:id => @all_games[@placeHolder]).first
-      if @game.players > 1 
-        @gamesThatNeedToBePrivatized << @game.id
-        @placeHolder += 1
-      else 
-        @placeHolder += 1
+  unless @init_and_active.nil?
+    @init_and_active.each do |game|
+      game_start_integer = game.game_start_date
+      now_integer = (Time.now.to_i - 21600)
+      diff = now_integer - game_start_integer
+      if diff >= 0 
+        game.is_private = "TRUE"
+        game.save
       end
-    end 
-
-
-    @a = 0 
-    @num1 = @gamesThatNeedToBePrivatized.count 
-
-    unless @gamesThatNeedToBePrivatized.empty?
-      while @a < @num1 do        
-        @game = Game.find(@gamesThatNeedToBePrivatized[@a])
-        @game.is_private = "TRUE"
-        @game.was_recently_initiated = 0 
-        @game.save
-        puts "made game #{@game.id} private"
-        @a += 1
-      end 
     end
   end  
 end
