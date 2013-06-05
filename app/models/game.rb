@@ -26,6 +26,7 @@ class Game < ActiveRecord::Base
       unless (user.enable_notifications == 'False' || user.device_registered == "FALSE")
          device = user.gcm_registration_id
          destination << device
+         puts "sent to user <% user.id %>"
       end
       count += 1 
      end
@@ -34,26 +35,27 @@ class Game < ActiveRecord::Base
          data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
          GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	 :time_to_live => 3600, :delay_while_idle => false )
-         puts destination
     	end
   	end
 
   def self.gameHasEndedPush(game_id)
      user_ids = getUserIDSofGame(game_id)
-     registration_ids = []
-     user_ids.each do |x|
-     	unless x.enable_notifications == 'False'
-     	 	device = user.device_registration
+     destination = []
+     user_ids.each do |id|
+      user = User.where(:id => id).first
+     	unless (user.enable_notifications == 'False' || user.device_registered == "FALSE")
+     	 	 device = user.gcm_registration_id
          destination << device
+         puts "sent to user <% user.id %>"
       	end
+
       end
 
-     unless @registration_ids.empty?
+     unless destination.empty?
         data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
         GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	:time_to_live => 3600, :delay_while_idle => false )
-       end
-     puts @registration_ids  
+      end  
     end
 
   	def self.getUserIDSofGame(game_id)
