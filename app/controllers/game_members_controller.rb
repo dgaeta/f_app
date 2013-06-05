@@ -171,123 +171,26 @@ class GameMembersController < ApplicationController
   end
 
   def check_out_request
-   @user = User.find(params[:user_id])
-   @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-   number_of_games = @all_of_users_games.count
-   dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], 
-    [@geo_lat,@geo_long])
-   dist_in_meters = dist_in_miles * 1609.34
-   gym_name = params[:gym_name]
+    @user = User.find(params[:user_id])
+    all_of_users_gamesMembers = GameMember.where(:user_id => @user.id, :active => 1)
+    dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], [geo_lat, geo_long])
+    dist_in_meters = dist_in_miles * 1609.34
+    gym_name = params[:gym_name]
+    init_games = []
+    false_json = { :status => "fail.", :error => error_string} 
 
-    @i = 0
-    @num = number_of_games
-    @init_games = []
-
-    while @i < @num  do
-      game = Game.where(:id => @all_of_users_games[@i], :game_active => "1").first
-      unless game == nil 
-        if (game.game_initialized == 1 ) & (game.game_active == 1)
-          @init_games << @all_of_users_games[@i]  
-          @i +=1
-        else         
-          @i +=1
-        end
-      else 
-        @i += 1
-      end 
-    end
-      
-    unless @init_games == nil  
-      last_checkin = GameMember.where( :user_id => @user.id,:game_id => @init_games[0]).pluck(:checkins)
-      @time_now = (Time.now.to_i - 21420)
-          
-      total_minutes_at_gym = @time_now - last_checkin[0] 
-      @stat = Stat.where(:winners_id => @user.id).first
-      @stat.total_minutes_at_gym += (total_minutes_at_gym / 60)
-      @stat.save
-         
-
-      if ((total_minutes_at_gym > 1800) & (total_minutes_at_gym <  18000 )) & (dist_in_meters <= 50000)
-        @stat = Stat.where(:winners_id => @user.id).first
-        @stat.successful_checks += 1
-        @stat.save
-
-        @a = 0
-        @num2 = @init_games.count
-
-        while @a < @num2  do
-          game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-          game_member.last_checkin_date = (Time.now - 21600).mday
-          last_checkin = game_member.checkins
-          @time_now = T(ime.now.to_i - 21600)
-          @minutes = ((@time_now - last_checkin) / 60 )
-          game_member.checkouts = @minutes
-          game_member.last_checkout_date = (Time.now - 21600).mday
-          game_member.total_minutes_at_gym += @minutes
-          @stat.total_minutes_at_gym += total_minutes_at_gym
-          @stat.save
-          game_member.successful_checks += 1
-          game_member.check_out_geo_lat = @geo_lat
-          game_member.check_out_geo_long = @geo_long
-          game_member.save
-          comment = Comment.new(:from_user_id => game_member.user_id, :from_game_id => @init_games[@a] ,
-          :message => "#{@user.first_name} just completed a #{@minutes} minute workout at #{gym_name}.", :stamp => Time.now)
-          comment.first_name = @user.first_name
-          comment.last_name = @user.last_name
-          comment.email = @user.email 
-          comment.bold = "FALSE" 
-          comment.checkin = "TRUE"
-          comment.save
-          @a +=1
-         end
-         
-         true_json =  { :status => "okay"}
-         render(json: JSON.pretty_generate(true_json))
-         
-      elsif (total_minutes_at_gym < 1800) or (total_minutes_at_gym > 18000 )
-        @a = 0 
-        @num2 = @init_games.count
-        while @a < @num2  do
-        game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-        game_member.checkouts = 0
-        game_member.save
-        @a += 1 
-        end
-
-        puts "Time error"
-        puts "#{total_minutes_at_gym}"
-        error_string = "Time must be more than 30 minutes and less than 5 hours"
-        false_json = { :status => "fail.", :error => error_string} 
-        render(json: JSON.pretty_generate(false_json))
-
-      #elsif (dist_in_meters > 50000)
-        #@a = 0 
-        #@num2 = @init_games.count
-        #while @a < @num2  do
-        #game_member = GameMember.where( :user_id => @user.id, :game_id => @init_games[@a]).first
-        #game_member.checkouts = 0
-        #game_member.save
-        #@a += 1 
-        #end
-
-        ##puts "coordinates error"
-        #puts "#{dist_in_meters}"
-        #error_string = "Location is not the same as check in - Log out to restart"
-        #false_json = { :status => "fail.", :error => error_string} 
-        #render(json: JSON.pretty_generate(false_json))
-      else 
-        error_string = "Error"
-        false_json = { :status => "fail.", :error => error_string} 
-        render(json: JSON.pretty_generate(false_json))
-      end
-    else 
-      puts "no games error"
-      error_string = "Sorry, you aren't in any games."
-      false_json = { :status => "fail.", :error => error_string} 
-      render(json: JSON.pretty_generate(false_json))
-    end
+    render(json: JSON.pretty_generate(false_json)); return; if (all_of_users_gamesMembers.empty?)
+    timeNow = (Time.now.to_i - 21600)
+    player = all_of_users_gamesMembers[0]
+    checkinTime = player.checkins
+    diff = timeNow - checkinTime
+    render(json: JSON.pretty_generate(false_json)); return; if (diff < 0)
+    
+    all_of_users_gameMembers.each do |member|
+      member.successful_checks += 1 
+      member.save
+    end      
   end
-
 
  
 
