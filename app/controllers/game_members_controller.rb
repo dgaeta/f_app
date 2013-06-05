@@ -93,16 +93,13 @@ class GameMembersController < ApplicationController
   def number_of_players 
     number_of_players = GameMember.where("game_id = ?", params[:game_id]).pluck(:game_id)
     
-    if number_of_players == nil 
-      then 
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      else
-        true_json =  { :status => "okay" , :number_of_players => number_of_players }
-        render(json: JSON.pretty_generate(true_json))
-    end
-
-   
+    if number_of_players == nil  
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    else
+      true_json =  { :status => "okay" , :number_of_players => number_of_players }
+      render(json: JSON.pretty_generate(true_json))
+    end  
   end
 
  
@@ -145,12 +142,10 @@ class GameMembersController < ApplicationController
       @calendar_day_now = (Time.now - 21400).mday       #WHATS THE CALENDAR DAY TODAY?
       
       if @last_checkout_mday == @calendar_day_now  
-        then 
-         @error = "Only 1 check-in per day is allowed"
-         false_json = { :status => "fail.", :error => @error} 
-         render(json: JSON.pretty_generate(false_json))
+        @error = "Only 1 check-in per day is allowed"
+        false_json = { :status => "fail.", :error => @error} 
+        render(json: JSON.pretty_generate(false_json))
       else
-
         @a = 0
         @num2 = @init_games.count
 
@@ -179,12 +174,18 @@ class GameMembersController < ApplicationController
     init_games = []
     false_json = { :status => "fail.", :error => error_string} 
 
-    render(json: JSON.pretty_generate(false_json)); return; if (all_of_users_gamesMembers.empty?)
+    if (all_of_users_gamesMembers.empty?)
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end 
     timeNow = (Time.now.to_i - 21600)
     player = all_of_users_gamesMembers[0]
     checkinTime = player.checkins
     diff = timeNow - checkinTime
-    render(json: JSON.pretty_generate(false_json)); return; if (diff < 0)
+    if (diff < 0)
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end 
     
     all_of_users_gameMembers.each do |member|
       member.successful_checks += 1 
@@ -197,10 +198,10 @@ class GameMembersController < ApplicationController
   def leaderboard 
     leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
 
-      goal_days = Game.where(:id => params[:game_id]).pluck(:goal_days)
+    goal_days = Game.where(:id => params[:game_id]).pluck(:goal_days)
        
 
-      leaderboard_stats = leaderboard_stats.map do |member|
+    leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
@@ -209,14 +210,12 @@ class GameMembersController < ApplicationController
     end
 
     if leaderboard_stats == nil 
-      then 
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      else
-        true_json =  { :status => "okay" , :leaderboard => leaderboard_stats, :goal_days => goal_days }
-        render(json: JSON.pretty_generate(true_json))
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    else
+      true_json =  { :status => "okay" , :leaderboard => leaderboard_stats, :goal_days => goal_days }
+      render(json: JSON.pretty_generate(true_json))
     end
-   
   end
 
   def stakes
