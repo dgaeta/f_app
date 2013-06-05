@@ -105,63 +105,34 @@ class GameMembersController < ApplicationController
  
  def check_in_request
     @user = User.find(params[:user_id])
-    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
-    @number_of_games = @all_of_users_games.count
-    @geo_lat = params[:latitude]
-    @geo_long = params[:longitude]
-    @user.check_in_geo_lat = @geo_lat
-    @user.check_in_geo_long = @geo_long
-    @user.save
+    all_of_users_gameMembers = GameMember.where(:user_id => @user.id, :active => 1)
+    geo_lat = params[:latitude]
+    geo_long = params[:longitude]
+    #@user.check_in_geo_lat = @geo_lat
+    #@user.check_in_geo_long = @geo_long
  
-   ###LOOP TO GET ACTIVE GAMES USER IS IN  
-    @i = 0
-    @num = @number_of_games
-    @init_games = []
-
-    while @i < @num  do
-      game = Game.where(:id => @all_of_users_games[@i]).first
-      if (game.game_initialized == 1) & (game.game_active == 1)
-        @init_games << @all_of_users_games[@i]
-        @i +=1
-      else
-        @i +=1
-      end
+    if (all_of_users_gameMembers.empty?)
+      error_string = "Games have not Started"
+      false_json = { :status => "fail.", :error => error_string} 
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end  
+    last_checkin_time = all_of_users_gameMembers[0].checkins
+    last_checkin_yday = Time.at(last_checkin_time).to_date.yday
+    if (last_checkin_yday == Time.now.to_date.yday)
+      error_string = "Only 1 check-in per day is allowed"
+      false_json = { :status => "fail.", :error => error_string} 
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end 
+    checked_in_for_games = []
+    all_of_users_gameMembers.each do |player|
+      player.checkins = (Time.now.to_i - 21420)
+      player.save
+      checked_in_for_games << player.game_id
     end
-   ## END LOOP 
-
-   ###IF STATEMENT TO SEE IF THEY HAVE ANY ACTIVE GAMES, THEN CHECK IF CHECKIN ALLOWED 
-     
-    if @init_games[0] == nil #########GET OUT IF NO ACTIVE GAMES
-      @error = "You can\'t check in right now because none of your games have started"
-      false_json = { :status => "fail.", :error => @error }
-      render(json: JSON.pretty_generate(false_json)) 
-    else ########## CHECKING IF CHECK INS ALLOWED#################################################################################
-      @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[0]).first
-      @last_checkout_mday = @game_member.last_checkout_date #GRAB FIRST GAME MEMBER AND GIVE ME THE LAST CHECKING INTEGER
-    
-      @calendar_day_now = (Time.now - 21400).mday       #WHATS THE CALENDAR DAY TODAY?
-      
-      if @last_checkout_mday == @calendar_day_now  
-        @error = "Only 1 check-in per day is allowed"
-        false_json = { :status => "fail.", :error => @error} 
-        render(json: JSON.pretty_generate(false_json))
-      else
-        @a = 0
-        @num2 = @init_games.count
-
-       while @a < @num2  do
-          @game_member = GameMember.where(:user_id => @user.id, :game_id => @init_games[@a]).first #find the current user and then bring him and his whole data down from the cloud
-          @time =Time.now.to_i - 21420
-          @game_member.checkins = @time
-          @game_member.save 
-          @checked_in_for_games_variable = []
-          @checked_in_for_games_variable << @game_member.game.id
-          @a += 1
-        end
-        true_json =  { :status => "okay", :checked_in_for_games_variable => @checked_in_for_games_variable}
-        render(json: JSON.pretty_generate(true_json))
-      end
-      ######################################################################################################################
+    true_json =  { :status => "okay", :checked_in_for_games_variable => checked_in_for_games}
+    render(json: JSON.pretty_generate(true_json))
     end
   end
 
@@ -170,10 +141,8 @@ class GameMembersController < ApplicationController
     all_of_users_gameMembers = GameMember.where(:user_id => @user.id, :active => 1)
     #dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], geo_lat, geo_long)
     #dist_in_meters = dist_in_miles * 1609.34
-    gym_name = params[:gym_name]
-    init_games = []
-    
-
+    #gym_name = params[:gym_name]
+   
     if (all_of_users_gameMembers.empty?)
       error_string = "Games have not Started"
       false_json = { :status => "fail.", :error => error_string} 

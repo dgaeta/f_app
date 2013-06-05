@@ -61,6 +61,7 @@ require 'json'
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
 
         @user.email = @user.email.downcase
+        @user.signup_date
         @user.save
 
         auto_login(@user)
@@ -204,20 +205,16 @@ def change_email
   end 
 
   def push_registration 
-    @registration_id = params[:registration_id] 
-    @user_id = params[:user_id]
-    @user = User.where(:id => @user_id).first
+    registration_id = params[:registration_id] 
+    user_id = params[:user_id]
+    @user = User.where(:id => user_id).first
 
-    if @user.device_registered == "FALSE" 
-      then 
-      @user.gcm_registration_id =  @registration_id
+    unless @user.device_registered == "TRUE" 
+      @user.gcm_registration_id =  registration_id
       @user.save 
-      true_json =  { :status => "okay"  }
-      render(json: JSON.pretty_generate(true_json))
-    else 
-      false_json = { :status => "fail."} #######ASK BRENT IF WE WANT RENDER FALSE FOR THIS 
-      render(json: JSON.pretty_generate(false_json))
     end 
+     true_json =  { :status => "okay"  }
+     render(json: JSON.pretty_generate(true_json))
   end 
 
   def push_disable
