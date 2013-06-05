@@ -84,9 +84,9 @@ class Game < ActiveRecord::Base
 
    all_init_and_active_Games.each do |game|    ##check which of the previous games have reached the end date 
      end_date_integer = game.game_end_date 
-     today_integer = Time.now.to_i - 21600
-     diff = today_integer - end_date_integer     
-     if diff >= 0 
+     today_integer = (Time.now.to_i - 21600)
+     diff = (today_integer - end_date_integer     
+     if diff >= 0 )
        then
        finished_games << game.id 
       else 
