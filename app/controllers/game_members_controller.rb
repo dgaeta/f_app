@@ -167,7 +167,7 @@ class GameMembersController < ApplicationController
 
   def check_out_request
     @user = User.find(params[:user_id])
-    all_of_users_gamesMembers = GameMember.where(:user_id => @user.id, :active => 1)
+    all_of_users_gameMembers = GameMember.where(:user_id => @user.id, :active => 1)
     #dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], geo_lat, geo_long)
     #dist_in_meters = dist_in_miles * 1609.34
     gym_name = params[:gym_name]
@@ -194,7 +194,9 @@ class GameMembersController < ApplicationController
     all_of_users_gameMembers.each do |member|
       member.successful_checks += 1 
       member.save
-    end      
+    end   
+    true_json =  { :status => "okay"}
+    render(json: JSON.pretty_generate(true_json))   
   end
 
  
