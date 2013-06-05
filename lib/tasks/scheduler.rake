@@ -199,16 +199,7 @@ end
     end
   end
 
-  task :two_days_of_no_activity => :environment do 
-    puts "checking for game member inactivity..."
-    game_members = GameMember.where(:successful_checks => "0", :active => "1")
-    count = 0 
 
-    while count < game_members.length do 
-      player = game_members[count]
-      if ((Time.now.to_i - 21600) - player.activated_at) > (2*24*60*60)
-
-  end
 
 
 
