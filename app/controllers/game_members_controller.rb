@@ -284,27 +284,26 @@ class GameMembersController < ApplicationController
     while @a < @num do 
       b = Game.where(:id => g[@a], :game_active => "1").first
       unless b == nil 
-      if b.game_active == 1
-        then @array << b.id 
-        @a += 1
+        if b.game_active == 1
+          then @array << b.id 
+          @a += 1
+        else 
+          @a +=1
+        end
       else 
-        @a +=1
+        @a += 1 
       end
-    else 
-      @a += 1 
     end
-    end
-
 
     unless g.nil?
-      then
       true_json =  { :status => "okay" , :games_user_is_in => @array }
-        render(json: JSON.pretty_generate(true_json)) 
-      else
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      end
+      render(json: JSON.pretty_generate(true_json)) 
+    else
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
     end
+  end
+
 
 def push_position_change
   @user_id = params[:user_id]
