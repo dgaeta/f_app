@@ -23,8 +23,8 @@ class Game < ActiveRecord::Base
      count = 0 
      while count < user_ids.count
     	user = User.where(:id => user_ids[count]).first
-      unless user.enable_notifications == 'False'
-         device = user.device_registration
+      unless (user.enable_notifications == 'False' || user.device_registered == "FALSE")
+         device = user.gcm_registration_id
          destination << device
       end
       count += 1 
