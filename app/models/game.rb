@@ -190,5 +190,17 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def self.loadGameStatsAndPlayers(game_id)
+    game = Game.where(:id => game_id).first
+    
+    players = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
+    player_list = players.map do |member|
+      {:user_id => member.user.id,
+      :first_name => member.user.first_name,
+      :successful_checks => member.successful_checks, 
+      :email => member.user.email}
+    end   
+  end
+
 
 end
