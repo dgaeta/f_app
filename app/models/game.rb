@@ -114,6 +114,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
+    @number_of_winners = number_of_winners
     ###updates user attributes in game.notifyWinner and self.notifyLoser
     count = 0 
     while count < playerIDs.length
@@ -127,10 +128,10 @@ class Game < ActiveRecord::Base
         stat.games_won += 1 
         stat.games_played += 1 
         stat.save
-        Game.notifyWinner(gameMember.game_id, gameMember.user_id, number_of_winners,
+        Game.notifyWinner(gameMember.game_id, gameMember.user_id, @number_of_winners,
          game.wager, game.players, gameMember.successful_checks)
       else 
-        number_of_losers = (game.players - number_of_winners)
+        number_of_losers = (game.players - @number_of_winners)
         Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers, gameMember.successful_checks)
       end
       count += 1 
@@ -149,7 +150,7 @@ class Game < ActiveRecord::Base
         successful_checks).deliver
     else
       fitsby_percentage = 0.08
-      number_of_losers = number_of_players - number_of_winners
+      number_of_losers = (number_of_players - number_of_winners)
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
       stat.money_won = player_cut
       stat.save
