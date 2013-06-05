@@ -174,14 +174,14 @@ class GameMembersController < ApplicationController
     init_games = []
     
 
-    if (all_of_users_gamesMembers.empty?)
+    if (all_of_users_gameMembers.empty?)
       error_string = "Games have not Started"
       false_json = { :status => "fail.", :error => error_string} 
       render(json: JSON.pretty_generate(false_json))
       return
     end 
     timeNow = (Time.now.to_i - 21600)
-    player = all_of_users_gamesMembers[0]
+    player = all_of_users_gameMembers[0]
     checkinTime = player.checkins
     diff = timeNow - checkinTime
     if (diff < 0)
