@@ -190,7 +190,7 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def self.gameLoadPlayers(game_id)
+  def self.gameLoadPlayers
     game = Game.where(:id => game_id).first
     
     players = GameMember.includes(:user).where(:game_id => game_id).order("successful_checks DESC")
