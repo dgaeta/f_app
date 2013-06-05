@@ -133,7 +133,6 @@ class GameMembersController < ApplicationController
     end
     true_json =  { :status => "okay", :checked_in_for_games_variable => checked_in_for_games}
     render(json: JSON.pretty_generate(true_json))
-    end
   end
 
   def check_out_request
