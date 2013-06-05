@@ -145,12 +145,13 @@ class Game < ActiveRecord::Base
     stat = Stat.where(:winners_id => user.id).first
     stat.games_won += 1
     stat.save
+    game.where(:id => game_id).first
     if wager == 0 
       UserMailer.congratulate_winner_of_free_game(user.email, user.first_name, 
         successful_checks).deliver
     else
       fitsby_percentage = 0.08
-      number_of_losers = (num_of_players - number_of_winners)
+      number_of_losers = (game.players - number_of_winners)
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
       stat.money_won = player_cut
       stat.save
