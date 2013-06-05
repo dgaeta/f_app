@@ -208,11 +208,9 @@ def change_email
     @user_id = params[:user_id]
     @user = User.where(:id => @user_id).first
 
-    if @user.device_id == "0" 
+    if @user.device_registered == "FALSE" 
       then 
-      @device = Gcm::Device.create(:registration_id => @registration_id)
-      @device.save
-      @user.device_id = @device.id
+      @user.gcm_registration_id =  @registration_id
       @user.save 
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
@@ -302,7 +300,7 @@ def change_email
   end
 
 
-  def deleteUser
+  def delgeteUser
     @user
     
   end
