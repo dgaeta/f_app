@@ -190,10 +190,10 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def self.gamePositions(game_id)
+  def self.game(game_id)
     game = Game.where(:id => game_id).first
     
-    players = GameMember.includes(:user).where(:game_id => game_id]).order("successful_checks DESC")
+    players = GameMember.includes(:user).where(:game_id => game_id).order("successful_checks DESC")
     player_list = players.map do |member|
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
