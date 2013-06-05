@@ -351,7 +351,7 @@ def winners_and_losers
 
     if user.save 
       then 
-      unless @user.num_of_games > 1 
+      unless GameMember.where(:user_id => user.id, :game_id => @game.id)
         unless @game.wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]

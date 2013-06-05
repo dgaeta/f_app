@@ -15,6 +15,12 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name
   validates_presence_of :last_name
 
-  
+  def self.new(first_name, last_name, email)
+    user = User.new
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.save
+  end
 
 end
