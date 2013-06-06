@@ -6,9 +6,9 @@ class Session < ActiveRecord::Base
     players = GameMember.where(:user_id => @user.id, :is_game_over => "FALSE")
     
     if players.empty?
-      stat = Stat.where(:winners_id => @user.id).first
-      unless stat.nil?
-      	 stat.delete
+      stat = Stat.where(:winners_id => @user.id)
+      unless stat.empty?
+      	 stat[0].delete
       end
       players =  GameMember.where(:user_id => @user_id)
       unless players.empty?
