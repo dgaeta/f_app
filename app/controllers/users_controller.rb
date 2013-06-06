@@ -63,7 +63,7 @@ require 'json'
         @user.email = @user.email.downcase
         today = Time.now.to_date
         @user.signup_day = today.day.to_i
-        @user.sign_month = today.month.to_i
+        @user.signup_month = today.month.to_i
         @user.signup_year = today.year.to_i
         @user.save
 
