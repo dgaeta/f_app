@@ -152,7 +152,7 @@ class Game < ActiveRecord::Base
       fitsby_percentage = 0.08
       number_of_losers = (num_of_players - number_of_winners)
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
-      stat.money_won += player_cut
+      stat.money_earned += player_cut
       stat.save
       fitsby_money_won = ((number_of_losers * wager) * fitsby_percentage) + (0.50 * number_of_losers)
       total_money_processed = ((number_of_losers * wager) + (number_of_losers * 0.50))
