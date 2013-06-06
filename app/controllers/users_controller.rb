@@ -251,10 +251,14 @@ require 'json'
 
    def user_deletion
     @user = User.where(:id => params[:user_id]).first
-    user_id = @user.id
-
-    if @user
-      UserMailer.user_deletion(user_id).deliver
+    sess = Session.new
+    sess.user_id = @user.id
+    date = Time.now.to_date
+    date_string = date.month.to_s + "-" + date.day.to_s + "-" + date.year.to_s
+    sess.date_of_request = date_string
+    
+    if sess.save
+      UserMailer.user_deletion(@user_id).deliver
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
     else

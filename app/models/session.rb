@@ -23,7 +23,7 @@ class Session < ActiveRecord::Base
       gb.list_unsubscribe(:id => "3c9272b951", :email_address => @user.email, :delete_member => true, 
       :send_goodbye => false, :send_notify => false)
       puts "User" + " " + @user.id.to_s + " " + "deleted"
-      user.delete
+      @user.delete
     end
   end
 
