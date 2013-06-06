@@ -239,7 +239,7 @@ class GameMembersController < ApplicationController
   end
 
   def games_user_is_in 
-    g = GameMember.where(:user_id => params[:user_id], :is_game_over => "FALSE").pluck(:game_id)
+    g = GameMember.where(:user_id => params[:user_id], :is_game_over => "FALSE")
 
     unless g.nil?
       true_json =  { :status => "okay" , :games_user_is_in => @array }
