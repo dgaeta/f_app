@@ -64,13 +64,11 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.integer  "place",                      :default => 0
     t.integer  "last_checkin_date",          :default => 0
     t.integer  "activated_at",               :default => 0
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.boolean  "is_game_over",               :default => false
     t.integer  "last_checkout_date",         :default => 0
-    t.integer  "activated_at",               :default => 0
-    t.integer  "active"                      :default => 0 
-
+    t.integer  "active",                     :default => 0
   end
 
   create_table "games", :force => true do |t|
@@ -145,15 +143,14 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.text     "last_name"
     t.string   "crypted_password"
     t.string   "salt"
-    t.text     "customer_id",                     :default => "0"
-    t.integer  "token",                           :default => 0
-    t.integer  "num_of_texts_sent",                    :default => 0
-    t.boolean  "device_registered"
-    t.integer  "check_in_geo_lat",                :default => 0
-    t.integer  "check_in_geo_long",               :default => 0
-    t.integer  "enable_notifications",            :default => 1
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.text     "customer_id",                                    :default => "0"
+    t.integer  "token",                                          :default => 0
+    t.integer  "num_of_texts_sent",                              :default => 0
+    t.integer  "check_in_geo_lat",                               :default => 0
+    t.integer  "check_in_geo_long",                              :default => 0
+    t.integer  "enable_notifications",                           :default => 1
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
@@ -162,12 +159,13 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.datetime "last_activity_at"
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
-    t.character "gcm_registration_id"
-    t.integer    "in_game",                         :default => 0 
-    t.integer   "comments_made",                   :default => 0 
-    t.integer   "game_history",                     :default => 0 
-
-
+    t.string   "gcm_registration_id"
+    t.string   "in_games",                        :limit => nil
+    t.boolean  "device_registered",                              :default => false
+    t.integer  "num_of_games",                                   :default => 0
+    t.integer  "comments_made",                                  :default => 0
+    t.integer  "game_history",                                   :default => 0
+    t.date     "signup_date"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
