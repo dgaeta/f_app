@@ -154,52 +154,6 @@ end
 
 
 
- task :end_games_now => :environment do 
-    @allGames = Game.all 
-
-    @counter = 0 
-    @numberOfGames = @allGames.count
-    @timeNow = Time.now.to_i - 21420
-
-    while @counter < @numberOfGames do 
-      @selectedGame = @allGames[@counter]
-      @gameEndDate = @selectedGame.game_end_date 
-      if (@timeNow > @gameEndDate)
-        @selectedGame.game_active = 0
-        @selectedGame.save
-        @counter += 1 
-        puts "game #{@selectedGame.id} status changed to 0"
-      else 
-        @counter += 1 
-      end
-    end
-  end 
-
-
-  task :make_games_private_now => :environment do
-    puts "making games private..."
-    @allGames = Game.where(:is_private => "FALSE")
-
-    unless @allGames.empty?
-      @counter = 0 
-      @numberOfGames = @allGames.count
-      @timeNow = Time.now.to_i - 21420
-      @timeNow = @timeNow.to_i
-
-      while @counter < @numberOfGames do 
-        @game = @allGames[@counter]
-        if @game.game_start_date < @timeNow
-          @game.is_private = "TRUE"
-          @game.save
-          @counter += 1 
-        else 
-          @counter += 1 
-        end 
-      end
-    end
-  end
-
-
 
 
 

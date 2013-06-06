@@ -16,5 +16,4 @@ class GameMember < ActiveRecord::Base
   		end	
   	end
 
-
 end
