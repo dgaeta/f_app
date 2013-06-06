@@ -10,6 +10,7 @@ class GameMember < ActiveRecord::Base
 
   		while count < game_members.length do
   			@player = game_members[count]
+        @player.active = 1
   			@player.activated_at = (Time.now.to_i - 21600)
   			@player.save
   			count += 1  
