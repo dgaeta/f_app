@@ -9,7 +9,9 @@ class Session < ActiveRecord::Base
       stat = Stat.where(:winners_id => @user.id).first
       stat.delete
       players =  GameMember.where(:user_id => @user_id)
-      players.each { |p| p.delete }
+      unless players.empty
+      	 players.each { |p| p.delete }
+      end
       games = Game.where(:creator_id => @user.id)
       unless games.empty?
         games.each do |game| 
@@ -18,9 +20,9 @@ class Session < ActiveRecord::Base
         end
       end 
       gb = Gibbon.new
-      gb.list_unsubscribe(:id => "3c9272b951", :email_address => user.email, :delete_member => true, 
+      gb.list_unsubscribe(:id => "3c9272b951", :email_address => @user.email, :delete_member => true, 
       :send_goodbye => false, :send_notify => false)
-      puts "User" + user.id + "deleted"
+      puts "User" + " " + @user.id.to_s + " " + "deleted"
       user.delete
     end
   end
