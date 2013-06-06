@@ -15,25 +15,4 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name
   validates_presence_of :last_name
 
-  def self.deleteUser(user_id)
-    @user = User.where(:id => user_id).first
-    players = GameMember.where(:user_id => @user.id, :is_game_over => "FALSE")
-    
-    if players.empty?
-      stat = Stat.where(:winners_id => @user.id).first
-      stat.delete
-      players =  GameMember.where(:user_id => @user_id)
-      players.each { |p| p.delete }
-      games = Game.where(:creator_id => @user.id)
-      unless games.empty?
-        games.each do |game| 
-          game.creator_id = 101
-          game.save 
-        end
-      end 
-      puts "User" + user.id + "deleted"
-      user.delete
-    end
-  end
-
 end
