@@ -404,12 +404,9 @@ def winners_and_losers
   end
 
   def countdown
-    @game = Game.where(:id => params[:game_id]).first
-    
-    
-
-
-     unless @game == nil
+  @game = Game.where(:id => params[:game_id]).first    
+  
+   unless @game == nil
       then
         if @game.game_initialized == 0 
            game_start_date = @game.game_start_date
@@ -441,7 +438,7 @@ def winners_and_losers
         @string = "Get started by creating or join a game!"
       end
   
-    if (@game == nil) or (days_remaining == nil)
+    if (@game == nil) || (days_remaining == nil)
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
