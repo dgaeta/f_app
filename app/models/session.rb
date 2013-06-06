@@ -17,6 +17,9 @@ class Session < ActiveRecord::Base
           game.save 
         end
       end 
+      gb = Gibbon.new
+      gb.list_unsubscribe(:id => "3c9272b951", :email_address => user.email, :delete_member => true, 
+      :send_goodbye => false, :send_notify => false)
       puts "User" + user.id + "deleted"
       user.delete
     end
