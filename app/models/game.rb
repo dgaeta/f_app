@@ -99,7 +99,7 @@ class Game < ActiveRecord::Base
     return finished_games  
   end
 
-  def self.winnerIDs(playerIDs, goal_days)
+  def self.countWinnerIDs(playerIDs, goal_days)
     winnerGameMemberIDs = []
     playerIDs.each do |gameMember|
       if gameMember.successful_checks >= goal_days
@@ -109,7 +109,7 @@ class Game < ActiveRecord::Base
     if winnerGameMemberIDs.length == 0 
       return 0 
     else 
-      return winnerGameMemberIDs
+      return winnerGameMemberIDs.length
     end
   end
 
@@ -145,15 +145,14 @@ class Game < ActiveRecord::Base
     stat = Stat.where(:winners_id => user.id).first
     stat.games_won += 1
     stat.save
-    game.where(:id => game_id).first
     if wager == 0 
       UserMailer.congratulate_winner_of_free_game(user.email, user.first_name, 
         successful_checks).deliver
     else
       fitsby_percentage = 0.08
-      number_of_losers = (game.players - number_of_winners)
+      number_of_losers = (num_of_players - number_of_winners)
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
-      stat.money_won = player_cut
+      stat.money_won += player_cut
       stat.save
       fitsby_money_won = ((number_of_losers * wager) * fitsby_percentage) + (0.50 * number_of_losers)
       total_money_processed = ((number_of_losers * wager) + (number_of_losers * 0.50))

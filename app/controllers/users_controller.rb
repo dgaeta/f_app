@@ -61,7 +61,8 @@ require 'json'
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
 
         @user.email = @user.email.downcase
-        @user.signup_date
+        today = Time.now.to_date
+        @user.signup_date = today.yday.to_s + "-" + today.year.to_s
         @user.save
 
         auto_login(@user)

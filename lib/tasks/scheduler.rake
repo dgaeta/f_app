@@ -76,8 +76,8 @@ task :auto_end_games => :environment do
     finished_games.each do |id|
       game = Game.where(:id => id).first
       playerIDs = GameMember.where(:game_id => game.id)
-      winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
-      Game.decideAndNotifyResults(playerIDs, winnerGameMemberIDs , game.goal_days)  ###updates user attributes
+      numberOfWinners = Game.countWinnerIDs(playerIDs, game.goal_days) 
+      Game.decideAndNotifyResults(playerIDs, numberOfWinners , game.goal_days)  ###updates user attributes
       Game.gameHasEndedPush(game.id)
       game.game_active = 0
       game.game_initialized = 0 
