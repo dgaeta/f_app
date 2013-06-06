@@ -128,8 +128,7 @@ require 'json'
   def get_and_save_stripe_info
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
-    user = User.where(:id => params[:user_id]).first
-    user_email = user.email
+    @user = User.where(:id => params[:user_id]).first
 
     # get the credit card details submitted by Android
     credit_card_number = params[:credit_card_number]
@@ -138,15 +137,15 @@ require 'json'
     credit_card_cvc = params[:credit_card_cvc]
     
     # create a Customer
-    customer = Stripe::Customer.create(
+    @customer = Stripe::Customer.create(
       :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-      :email => user_email ) 
-    user.update_attributes(:customer_id => customer.id)
+      :email => @user.email ) 
+    @user.update_attributes(:customer_id => @customer.id)
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
 
-    if user.save
+    if @user.save
       then 
        true_json =  { :status => "okay"  }
         render(json: JSON.pretty_generate(true_json))
@@ -157,46 +156,41 @@ require 'json'
   end
 
 
-def change_email 
-    user = User.where(:id => params[:user_id]).first
+  def change_email 
+    @user = User.where(:id => params[:user_id]).first
+    false_json = { :status => "fail."} 
+    render(json: JSON.pretty_generate(false_json)) if @user.empty?
 
-    old_email = user.email 
-    user.email = params[:new_email]
-    user.save
-
-    if user.save 
-      then 
-      gb = Gibbon.new
-      #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
-      gb.list_unsubscribe(:id => "3c9272b951", :email_address => old_email, :delete_member => true, 
+    old_email = @user.email 
+    @user.email = params[:new_email]
+    @user.save  
+    
+    gb = Gibbon.new
+    #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
+    gb.list_unsubscribe(:id => "3c9272b951", :email_address => old_email, :delete_member => true, 
       :send_goodbye => false, :send_notify => false)
-      gb.list_subscribe(:id => "3c9272b951", :email_address => user.email, :merge_vars => {'fname' => user.first_name, 
-      'lname' => user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
-      #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
-      # UPDATE USER'S EMAIL ON STRIPE TOO:
+    gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
+      'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
+    #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
+    # UPDATE USER'S EMAIL ON STRIPE TOO:
     Stripe.api_key = @stripe_api_key
-    unless user.customer_id.nil?
-      cu = Stripe::Customer.retrieve(user.customer_id) 
-      cu.email = user.email
+    unless @user.customer_id.nil?
+      cu = Stripe::Customer.retrieve(@user.customer_id) 
+      cu.email = @user.email
       cu.save
-
     end
-    # END
-       true_json =  { :status => "okay"  }
-        render(json: JSON.pretty_generate(true_json))
-      else
-         false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-    end
+      
+    true_json =  { :status => "okay"  }
+    render(json: JSON.pretty_generate(true_json))  
   end
  
   def append_text_field 
-    user = User.where(:id => params[:user_id]).first 
+    @user = User.where(:id => params[:user_id]).first 
 
-    if user 
+    if @user 
       then 
-      user.num_of_texts_sent += 1 
-      user.save 
+      @user.num_of_texts_sent += 1 
+      @user.save 
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
       else 
@@ -207,8 +201,7 @@ def change_email
 
   def push_registration 
     registration_id = params[:registration_id] 
-    user_id = params[:user_id]
-    @user = User.where(:id => user_id).first
+    @user = User.where(:id => params[:user_id]).first
 
     unless @user.device_registered == "TRUE" 
       @user.gcm_registration_id =  registration_id
@@ -219,8 +212,7 @@ def change_email
   end 
 
   def push_disable
-    @user_id = params[:user_id]
-    @user = User.find(@user_id)
+    @user = User.where(:id => params[:user_id]).first
 
     if @user 
       then 
@@ -235,8 +227,7 @@ def change_email
   end 
 
   def push_enable
-    @user_id = params[:user_id]
-    @user = User.find(@user_id)
+    @user = User.where(:id => params[:user_id]).first
 
     if @user 
       then 
@@ -251,13 +242,8 @@ def change_email
   end  
 
   def upload_profile_picture
-    @user = User.where(:id => params[:user_id]).first 
-    @profile_picture = params[:profile_picture]
+   #######################
 
-    @user.profile_picture = @profile_picture
-    @user.save
-
-    if @user.save 
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
     else 
