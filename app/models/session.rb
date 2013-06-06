@@ -7,9 +7,11 @@ class Session < ActiveRecord::Base
     
     if players.empty?
       stat = Stat.where(:winners_id => @user.id).first
-      stat.delete
+      unless stat.nil?
+      	 stat.delete
+      end
       players =  GameMember.where(:user_id => @user_id)
-      unless players.empty
+      unless players.empty?
       	 players.each { |p| p.delete }
       end
       games = Game.where(:creator_id => @user.id)
