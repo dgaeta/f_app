@@ -207,11 +207,11 @@ class GamesController < ApplicationController
   end
 
   def public_games
-    public_games = Game.where(:is_private => "false", :game_active => 1)
+    @public_games = Game.where(:is_private => "false", :game_active => 1)
     @user = User.find(params[:user_id])
-    all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
-    unless all_of_users_games.empty?  
+    unless @all_of_users_games.empty?  
           h = Hash.new(0)
              @a = 0 
              @num1 = @public_games.count
