@@ -62,7 +62,9 @@ require 'json'
 
         @user.email = @user.email.downcase
         today = Time.now.to_date
-        @user.signup_date = today.yday.to_s + "-" + today.year.to_s
+        @user.signup_day = today.day.to_i
+        @user.sign_month = today.month.to_i
+        @user.signup_year = today.year.to_i
         @user.save
 
         auto_login(@user)
@@ -254,9 +256,10 @@ require 'json'
     sess = Session.new
     sess.user_id = @user.id
     date = Time.now.to_date
-    date_string = date.month.to_s + "-" + date.day.to_s + "-" + date.year.to_s
-    sess.date_of_request = date_string
-    
+    sess.request_month = date.month
+    sess.request_day = date.day
+    sess.request_year = date.year
+
     if sess.save
       UserMailer.user_deletion(@user_id).deliver
       true_json =  { :status => "okay"  }

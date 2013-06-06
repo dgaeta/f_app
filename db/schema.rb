@@ -120,6 +120,9 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
   create_table "sessions", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "request_month"
+    t.integer  "request_day"
+    t.integer  "request_year"
   end
 
   create_table "stats", :force => true do |t|
@@ -165,7 +168,9 @@ ActiveRecord::Schema.define(:version => 20121219034120) do
     t.integer  "num_of_games",                                   :default => 0
     t.integer  "comments_made",                                  :default => 0
     t.integer  "game_history",                                   :default => 0
-    t.date     "signup_date"
+    t.integer  "signup_month"
+    t.integer  "signup_day"
+    t.integer  "signup_year"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
