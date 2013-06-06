@@ -56,7 +56,6 @@ end
  gem "therubyracer"
  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
  gem "twitter-bootstrap-rails"
- gem "psych", "~> 2.0.0"
  gem 'push-core'
  gem 'push-gcm'
 
