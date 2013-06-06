@@ -1,4 +1,5 @@
 class Game < ActiveRecord::Base
+  require "stripe"
   
   belongs_to :user
   has_many :game_members, :dependent => :destroy
@@ -164,6 +165,7 @@ class Game < ActiveRecord::Base
 
 
   def self.notifyLoser(game_id, user_id, number_of_losers, loser_checkins)
+    Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
     game = Game.where(:id => game_id).first
     user = User.where(:id => user_id).first
     user.in_game = 0 
