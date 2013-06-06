@@ -16,11 +16,15 @@ class Session < ActiveRecord::Base
       end
       games = Game.where(:creator_id => @user.id)
       unless games.empty?
-        games.each do |game| 
+         games.each do |game| 
           game.creator_id = 101
           game.save 
         end
       end 
+      comments = Comment.where(:from_user_id => @user.id)
+      unless comments.empty?
+      	 comments.each { |c| c.delete }
+       end
       gb = Gibbon.new
       gb.list_unsubscribe(:id => "3c9272b951", :email_address => @user.email, :delete_member => true, 
       :send_goodbye => false, :send_notify => false)

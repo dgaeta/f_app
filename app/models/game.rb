@@ -207,4 +207,30 @@ class Game < ActiveRecord::Base
     end   
   end
 
+  def self.auto_start_games
+    all_Active_Games = Game.where(:game_active => 1, :game_initialized => 0)
+    started_games = []
+
+    unless all_Active_Games.length == 0
+      all_Active_Games.each do |game|
+        if game.players >= 2 
+          game.winning_structure = 1 if game.players < 3
+          Comment.gameStartComment(game.id)
+          Game.gameHasStartedPush(game) #### updates user events here 
+          GameMember.activatePlayers(game.id)
+          game.game_start_date = (Time.now.to_i - 21600)
+          game.game_end_date = (((Time.now.to_i) -21600) + (game.duration * (24*60*60)))
+          game.game_initialized = 1 
+          game.was_recently_initiated = 1
+          started_games << game.id
+          game.save
+        else 
+          Game.addDayToStartAndEnd(game.id)
+          Comment.gamePostponedComment(game.id)
+        end
+      end
+    end
+    puts "started games #{started_games}"
+  end
+
 end
