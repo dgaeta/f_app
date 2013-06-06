@@ -173,10 +173,16 @@ class GamesController < ApplicationController
       @game.stakes = @game.wager
       @game.is_private = params[:is_private]
       @game.goal_days = params[:goal_days]
+      @game.duration =  params[:duration]  ####delete in production
       @game.save
       @user.game_history += 1 
       @user.num_of_games += 1 
-      @user.in_game = @game.id
+      #if @user.in_games.nil?
+       # array = []
+       # @user.in_games = array.push(@game.id)
+      #else
+       # @user.in_games << @game.id
+      #end
       @user.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
