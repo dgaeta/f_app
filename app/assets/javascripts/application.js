@@ -17,6 +17,7 @@
 //= require_tree .
 //= require jquery.ui.core
 //= require jquery.ui.all
+//= require twitter/bootstrap 
 //= require jquery.min
 //= require "foundation"
 
