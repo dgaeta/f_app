@@ -152,7 +152,7 @@ task :send_notification_to_inactive_game_members => :environment do
 end
 
 
-task :auto_end_games => :environment do
+task :fitsby_daily_report => :environment do
   puts "Sending fitsby report"
 
   Landing.fitsbyDailyStatus
