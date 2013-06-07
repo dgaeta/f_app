@@ -152,11 +152,19 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
   end
 
   def reset_password_email(user)
-  @user = user
-  @url  = "http://0.0.0.0:3000/password_resets/#{@user.reset_password_token}/edit"
-  mail(:to => user.email,
-       :subject => "Your password has been reset")
-end
+    @user = user
+    @url  = "http://0.0.0.0:3000/password_resets/#{@user.reset_password_token}/edit"
+    mail(:to => user.email,
+         :subject => "Your password has been reset")
+  end
+
+  def fitsby_daily_report(number_of_users, month, day, year)
+    @number_of_users = number_of_users
+    @month = month
+    @day = day 
+    @year = year
+    mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
+  end
 
 end
 
