@@ -165,7 +165,7 @@ task :fitsby_daily_report => :environment do
   else
     usersSignedUpYesterday =  usersSignedUpYesterday.length
   end
-  UserMailer.fitsby_daily_report(usersSignedUpYesterday, dateNow.month, dateNow.day, dateNow.year).deliver
+  UserMailer.fitsby_daily_report(usersSignedUpYesterday, dateNow.month, yesterday, dateNow.year).deliver
 end
 
 
