@@ -156,7 +156,7 @@ task :fitsby_daily_report => :environment do
   puts "Sending fitsby report"
 
   dateNow = Time.now.to_date
-  usersSignedUpYesterday = User.where(:signup_month => dateNow.month, :signup_day => dateNow.day, 
+  usersSignedUpYesterday = User.where(:signup_month => dateNow.month, :signup_day => (dateNow.day - 1), 
    :signup_year => dateNow.year)
 
   if usersSignedUpYesterday.empty?
