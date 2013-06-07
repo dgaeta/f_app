@@ -9,6 +9,7 @@ FApp::Application.routes.draw do
   match '/terms',    to: 'landings#terms'
   match '/privacy',  to: 'landings#privacy'
   match '/blog',     to: 'landings#blog'
+  
 
  
 

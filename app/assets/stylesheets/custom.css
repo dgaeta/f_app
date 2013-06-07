@@ -61,11 +61,11 @@ html, body { font-family: 'MuseoSans-300', 'ITCFranklinGothicStd-DmCd', Arial, s
 
 /* FOOTER */
 
-.footer { color: #393939; float: right; font-size: 0.7em; margin-top: 15px; }
-.footer a { color: #174873; text-decoration: none }
+.footer { color: #393939; float: right; font-size: 0.7em; border-top: 1px solid #eaeaea; }
+.footer a { color: #174873; text-decoration: none; }
 .footer img { border: 0 }
 .footer a:hover { color: black }
-.footer ul{list-style-type: none; margin: 0; padding: 0;}
+.footer ul{list-style-type: none; margin-top: 45px; padding: 0; padding-top: 5px;}
 .footer ul li{ color: #174873;  display: inline;}
 #footer_links:hover ul li{text-decoration: none; color: black;}
 #made_with_love { color: #393939; font-family: 'Microsoft PhagsPa'; font-size: 1em; float: right; }
