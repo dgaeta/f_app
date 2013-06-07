@@ -155,8 +155,16 @@ end
 task :fitsby_daily_report => :environment do
   puts "Sending fitsby report"
 
-  Landing.fitsbyDailyStatus
+  dateNow = Time.now.to_date
+  usersSignedUpYesterday = User.where(:signup_month => dateNow.month, :signup_day => dateNow.day, 
+   :signup_year => dateNow.year)
 
+  if usersSignedUpYesterday.empty?
+    usersSignedUpYesterday = 0 
+  else
+    usersSignedUpYesterday =  usersSignedUpYesterday.length
+  end
+  fitsby_daily_status(usersSignedUpYesterday, dateNow.month, dateNow.day, dateNow.year).deliver!
 end
 
 
