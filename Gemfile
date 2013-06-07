@@ -7,17 +7,17 @@ gem 'rails', '3.2.11'
 
 gem 'pg', '0.12.2'
 gem 'sorcery'
-gem 'sass-rails',   '~> 3.2.3'
-gem 'uglifier', '>= 1.0.3'
-gem 'zurb-foundation', '~> 2.2'
+
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
+  gem 'zurb-foundation', '~> 2.2'
 end
 
-gem 'coffee-rails', '~> 3.2.1'
 gem 'jquery-rails'
 
 group :production do
@@ -64,7 +64,6 @@ end
  gem "twitter-bootstrap-rails"
  gem 'push-core'
  gem 'push-gcm'
-
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"
