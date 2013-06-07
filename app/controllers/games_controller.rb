@@ -1,4 +1,4 @@
-class GamesController < ApplicationController
+ class GamesController < ApplicationController
   
   
   # GET /games

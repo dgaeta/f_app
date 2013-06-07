@@ -54,8 +54,8 @@ class Game < ActiveRecord::Base
 
      unless destination.empty?
         data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-        GCM.send_notification( destination, data, :collapse_key => "game_start", 
-      	:time_to_live => 3600, :delay_while_idle => false )
+        #GCM.send_notification( destination, data, :collapse_key => "game_start", 
+      	#:time_to_live => 3600, :delay_while_idle => false )
       end  
     end
 
