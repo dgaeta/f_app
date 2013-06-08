@@ -186,7 +186,6 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
     t.string   "gcm_registration_id"
-    t.string   "in_games",                        :limit => nil
     t.boolean  "device_registered",                              :default => false
     t.integer  "num_of_games",                                   :default => 0
     t.integer  "comments_made",                                  :default => 0
