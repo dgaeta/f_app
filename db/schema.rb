@@ -194,7 +194,6 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.integer  "signup_month"
     t.integer  "signup_day"
     t.integer  "signup_year"
-    t.integer  "gamess"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
