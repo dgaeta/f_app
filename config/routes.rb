@@ -9,6 +9,7 @@ FApp::Application.routes.draw do
   match '/terms',    to: 'landings#terms'
   match '/privacy',  to: 'landings#privacy'
   match '/blog',     to: 'landings#blog'
+  
 
  
 
@@ -102,6 +103,7 @@ FApp::Application.routes.draw do
   get "user_deletion" => "users#user_deletion", :as => "user_deletion" 
   get "checkPushRegistration" => "users#checkPushRegistration", :as => "checkPushRegistration" 
   get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
+  get "createUser" => "users#createUser", :as => "createUser"
   ###
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "change_password", :to => "users#change_password", :via => "put"  
@@ -112,6 +114,7 @@ FApp::Application.routes.draw do
   match "upload_profile_picture", :to => "users#upload_profile_picture", :via => "post"
   match "user_deletion", :to => "users#user_deletion", :via => "post"
   match "checkPushRegistration", :to => "users#checkPushRegistration", :via => "post"
+  match "createUser", :to => "users#createUser", :via => "post"
 
   resources :password_resets
   get "reset_password" => "password_resets#create", :as => "reset_password"

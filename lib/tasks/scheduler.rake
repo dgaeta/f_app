@@ -76,8 +76,8 @@ task :auto_end_games => :environment do
     finished_games.each do |id|
       game = Game.where(:id => id).first
       playerIDs = GameMember.where(:game_id => game.id)
-      winnerGameMemberIDs = Game.winnerIDs(playerIDs, game.goal_days) 
-      Game.decideAndNotifyResults(playerIDs, winnerGameMemberIDs , game.goal_days)  ###updates user attributes
+      numberOfWinners = Game.countWinnerIDs(playerIDs, game.goal_days) 
+      Game.decideAndNotifyResults(playerIDs, numberOfWinners , game.goal_days)  ###updates user attributes
       Game.gameHasEndedPush(game.id)
       game.game_active = 0
       game.game_initialized = 0 
@@ -152,53 +152,21 @@ task :send_notification_to_inactive_game_members => :environment do
 end
 
 
+task :fitsby_daily_report => :environment do
+  puts "Sending fitsby report"
 
+  dateNow = Time.now.to_date
+  yesterday = (dateNow.day - 1)
+  usersSignedUpYesterday = User.where(:signup_month => dateNow.month, :signup_day => yesterday, 
+   :signup_year => dateNow.year)
 
- task :end_games_now => :environment do 
-    @allGames = Game.all 
-
-    @counter = 0 
-    @numberOfGames = @allGames.count
-    @timeNow = Time.now.to_i - 21420
-
-    while @counter < @numberOfGames do 
-      @selectedGame = @allGames[@counter]
-      @gameEndDate = @selectedGame.game_end_date 
-      if (@timeNow > @gameEndDate)
-        @selectedGame.game_active = 0
-        @selectedGame.save
-        @counter += 1 
-        puts "game #{@selectedGame.id} status changed to 0"
-      else 
-        @counter += 1 
-      end
-    end
-  end 
-
-
-  task :make_games_private_now => :environment do
-    puts "making games private..."
-    @allGames = Game.where(:is_private => "FALSE")
-
-    unless @allGames.empty?
-      @counter = 0 
-      @numberOfGames = @allGames.count
-      @timeNow = Time.now.to_i - 21420
-      @timeNow = @timeNow.to_i
-
-      while @counter < @numberOfGames do 
-        @game = @allGames[@counter]
-        if @game.game_start_date < @timeNow
-          @game.is_private = "TRUE"
-          @game.save
-          @counter += 1 
-        else 
-          @counter += 1 
-        end 
-      end
-    end
+  if usersSignedUpYesterday.empty?
+    usersSignedUpYesterday = 0 
+  else
+    usersSignedUpYesterday =  usersSignedUpYesterday.length
   end
-
+  UserMailer.fitsby_daily_report(usersSignedUpYesterday, dateNow.month, yesterday, dateNow.year).deliver
+end
 
 
 

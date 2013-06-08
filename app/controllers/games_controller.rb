@@ -1,4 +1,4 @@
-class GamesController < ApplicationController
+ class GamesController < ApplicationController
   
   
   # GET /games
@@ -173,10 +173,16 @@ class GamesController < ApplicationController
       @game.stakes = @game.wager
       @game.is_private = params[:is_private]
       @game.goal_days = params[:goal_days]
+      @game.duration =  params[:duration]  ####delete in production
       @game.save
       @user.game_history += 1 
       @user.num_of_games += 1 
-      @user.in_game = @game.id
+      #if @user.in_games.nil?
+       # array = []
+       # @user.in_games = array.push(@game.id)
+      #else
+       # @user.in_games << @game.id
+      #end
       @user.save
 
       @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
@@ -208,14 +214,11 @@ class GamesController < ApplicationController
 
   def public_games
     @public_games = Game.where(:is_private => "false", :game_active => 1)
-
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
-
-    unless @all_of_users_games[0] == nil  
+    unless @all_of_users_games.empty?  
           h = Hash.new(0)
-
              @a = 0 
              @num1 = @public_games.count
         
@@ -407,12 +410,9 @@ def winners_and_losers
   end
 
   def countdown
-    @game = Game.where(:id => params[:game_id]).first
-    
-    
-
-
-     unless @game == nil
+  @game = Game.where(:id => params[:game_id]).first    
+  
+   unless @game == nil
       then
         if @game.game_initialized == 0 
            game_start_date = @game.game_start_date
@@ -444,7 +444,7 @@ def winners_and_losers
         @string = "Get started by creating or join a game!"
       end
   
-    if (@game == nil) or (days_remaining == nil)
+    if (@game == nil) || (days_remaining == nil)
       then 
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))

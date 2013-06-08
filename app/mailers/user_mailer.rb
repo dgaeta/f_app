@@ -24,25 +24,25 @@ class UserMailer < ActionMailer::Base
 
 
   def notify_loser_of_free_game(game_id, loser_email, loser_first_name, loser_user_id, loser_checkins )   ##make view
-    game_id = game_id
-    loser_email = loser_email
-    loser_first_name = loser_first_name
-    loser_user_id = loser_user_id
-    loser_checkins = loser_checkins
+    @game_id = game_id
+    @loser_email = loser_email
+    @loser_first_name = loser_first_name
+    @loser_user_id = loser_user_id
+    @loser_checkins = loser_checkins
     @url  = "http://fitsby.com"
-    mail(:to => loser_email, :subject => "Oh no #{loser_first_name}! You just lost a game of Fitsby")
+    mail(:to => loser_email, :subject => "Oh no #{@loser_first_name}! You just lost a game of Fitsby")
   end
 
   def notify_loser_of_paid_game(money_lost, game_id, loser_email, loser_first_name, loser_user_id, 
         loser_checkins)
-    money_lost = money_lost
-    game_id = game_id
-    loser_email = loser_email
-    loser_first_name = loser_first_name
-    loser_user_id = loser_user_id
-    loser_checkins = loser_checkins
+    @money_lost = money_lost
+    @game_id = game_id
+    @loser_email = loser_email
+    @loser_first_name = loser_first_name
+    @loser_user_id = loser_user_id
+    @loser_checkins = loser_checkins
     @url  = "http://fitsby.com"
-    mail(:to => loser_email, :subject => "Oh no #{loser_first_name}! You just lost a game of Fitsby")
+    mail(:to => loser_email, :subject => "Oh no #{@loser_first_name}! You just lost a game of Fitsby")
   end
 
 
@@ -152,11 +152,19 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
   end
 
   def reset_password_email(user)
-  @user = user
-  @url  = "http://0.0.0.0:3000/password_resets/#{@user.reset_password_token}/edit"
-  mail(:to => user.email,
-       :subject => "Your password has been reset")
-end
+    @user = user
+    @url  = "http://0.0.0.0:3000/password_resets/#{@user.reset_password_token}/edit"
+    mail(:to => user.email,
+         :subject => "Your password has been reset")
+  end
+
+  def fitsby_daily_report(number_of_users, month, day, year)
+    @number_of_users = number_of_users
+    @month = month
+    @day = day 
+    @year = year
+    mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
+  end
 
 end
 

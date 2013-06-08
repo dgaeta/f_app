@@ -1,4 +1,5 @@
 class Game < ActiveRecord::Base
+  require "stripe"
   
   belongs_to :user
   has_many :game_members, :dependent => :destroy
@@ -26,6 +27,7 @@ class Game < ActiveRecord::Base
       unless (user.enable_notifications == 'False' || user.device_registered == "FALSE")
          device = user.gcm_registration_id
          destination << device
+         puts "sent to user <% user.id %>"
       end
       count += 1 
      end
@@ -34,26 +36,27 @@ class Game < ActiveRecord::Base
          data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
          GCM.send_notification( destination, data, :collapse_key => "game_start", 
       	 :time_to_live => 3600, :delay_while_idle => false )
-         puts destination
     	end
   	end
 
   def self.gameHasEndedPush(game_id)
      user_ids = getUserIDSofGame(game_id)
-     registration_ids = []
-     user_ids.each do |x|
-     	unless x.enable_notifications == 'False'
-     	 	device = user.device_registration
+     destination = []
+     user_ids.each do |id|
+      user = User.where(:id => id).first
+     	unless (user.enable_notifications == 'False' || user.device_registered == "FALSE")
+     	 	 device = user.gcm_registration_id
          destination << device
+         puts "sent to user <% user.id %>"
       	end
+
       end
 
-     unless @registration_ids.empty?
+     unless destination.empty?
         data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-        GCM.send_notification( destination, data, :collapse_key => "game_start", 
-      	:time_to_live => 3600, :delay_while_idle => false )
-       end
-     puts @registration_ids  
+        #GCM.send_notification( destination, data, :collapse_key => "game_start", 
+      	#:time_to_live => 3600, :delay_while_idle => false )
+      end  
     end
 
   	def self.getUserIDSofGame(game_id)
@@ -84,8 +87,8 @@ class Game < ActiveRecord::Base
 
    all_init_and_active_Games.each do |game|    ##check which of the previous games have reached the end date 
      end_date_integer = game.game_end_date 
-     today_integer = Time.now.to_i - 21600
-     diff = today_integer - end_date_integer     
+     today_integer = (Time.now.to_i - 21600)
+     diff = (today_integer - end_date_integer)     
      if diff >= 0 
        then
        finished_games << game.id 
@@ -97,7 +100,7 @@ class Game < ActiveRecord::Base
     return finished_games  
   end
 
-  def self.winnerIDs(playerIDs, goal_days)
+  def self.countWinnerIDs(playerIDs, goal_days)
     winnerGameMemberIDs = []
     playerIDs.each do |gameMember|
       if gameMember.successful_checks >= goal_days
@@ -107,11 +110,12 @@ class Game < ActiveRecord::Base
     if winnerGameMemberIDs.length == 0 
       return 0 
     else 
-      return winnerGameMemberIDs
+      return winnerGameMemberIDs.length
     end
   end
 
   def self.decideAndNotifyResults(playerIDs, number_of_winners, goal_days)
+    @number_of_winners = number_of_winners
     ###updates user attributes in game.notifyWinner and self.notifyLoser
     count = 0 
     while count < playerIDs.length
@@ -125,10 +129,10 @@ class Game < ActiveRecord::Base
         stat.games_won += 1 
         stat.games_played += 1 
         stat.save
-        Game.notifyWinner(gameMember.game_id, gameMember.user_id, number_of_winners,
+        Game.notifyWinner(gameMember.game_id, gameMember.user_id, @number_of_winners,
          game.wager, game.players, gameMember.successful_checks)
       else 
-        number_of_losers = (game.players - number_of_winners)
+        number_of_losers = (game.players - @number_of_winners)
         Game.notifyLoser(gameMember.game_id, gameMember.user_id, number_of_losers, gameMember.successful_checks)
       end
       count += 1 
@@ -139,7 +143,7 @@ class Game < ActiveRecord::Base
     user = User.where(:id => user_id).first
     user.in_game = 0
     user.save
-    stat = Stat.where(:winners_id => user.id)
+    stat = Stat.where(:winners_id => user.id).first
     stat.games_won += 1
     stat.save
     if wager == 0 
@@ -147,9 +151,9 @@ class Game < ActiveRecord::Base
         successful_checks).deliver
     else
       fitsby_percentage = 0.08
-      number_of_losers = number_of_players - number_of_winners
+      number_of_losers = (num_of_players - number_of_winners)
       player_cut = ((number_of_losers * wager) * ( 1- fitsby_percentage))/ number_of_winners
-      stat.money_won = player_cut
+      stat.money_earned += player_cut
       stat.save
       fitsby_money_won = ((number_of_losers * wager) * fitsby_percentage) + (0.50 * number_of_losers)
       total_money_processed = ((number_of_losers * wager) + (number_of_losers * 0.50))
@@ -161,7 +165,8 @@ class Game < ActiveRecord::Base
 
 
   def self.notifyLoser(game_id, user_id, number_of_losers, loser_checkins)
-    game = Game.where(:id => game_id).first
+    Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
+    game = Game.where(:id =>  game_id).first
     user = User.where(:id => user_id).first
     user.in_game = 0 
     user.save
@@ -202,5 +207,30 @@ class Game < ActiveRecord::Base
     end   
   end
 
+  def self.auto_start_games
+    all_Active_Games = Game.where(:game_active => 1, :game_initialized => 0)
+    started_games = []
+
+    unless all_Active_Games.length == 0
+      all_Active_Games.each do |game|
+        if game.players >= 2 
+          game.winning_structure = 1 if game.players < 3
+          Comment.gameStartComment(game.id)
+          Game.gameHasStartedPush(game) #### updates user events here 
+          GameMember.activatePlayers(game.id)
+          game.game_start_date = (Time.now.to_i - 21600)
+          game.game_end_date = (((Time.now.to_i) -21600) + (game.duration * (24*60*60)))
+          game.game_initialized = 1 
+          game.was_recently_initiated = 1
+          started_games << game.id
+          game.save
+        else 
+          Game.addDayToStartAndEnd(game.id)
+          Comment.gamePostponedComment(game.id)
+        end
+      end
+    end
+    puts "started games #{started_games}"
+  end
 
 end

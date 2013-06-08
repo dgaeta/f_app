@@ -12,22 +12,24 @@
   <nav>
     <ul>      
 
-        <p>
-          &nbsp;&nbsp; 
+
+        &nbsp;&nbsp; 
           <!--<a href="fitsby.com/about" data-reveal-id="AboutModal" 
           onclick="_gaq.push(['_trackEvent', 'href', 'About', 'About modal']);">About</a>--> <!--Google Analytics tracking event click on About-->
           
       
-          <a href="fitsby.com/about" target="_blank">About</a>
+          <%= link_to "About", about_path %>
           &nbsp;&nbsp;  
-          <a href="fitsby.com/contact" target="_blank">Contact</a>
+          <%= link_to "Contact", contact_path %>
           <!--<a href="fitsby.com/contact">Contact</a>      
           <a href="#" data-reveal-id="ContactModal"
           onclick="_gaq.push(['_trackEvent', 'href', 'Contact', 'Contact modal']);">Contact</a>--> <!--Google Analytics tracking event click on Contact -->
           &nbsp;&nbsp;
          
-          <a href="fitsby.com/privacy" target="_blank">Privacy</a>
+          <%= link_to "Privacy", privacy_path %>
           &nbsp;&nbsp; 
+        <p>
+          
           <!--<a href="http://fitsby.posterous.com"
           onsubmit="that=this;_gaq.push(['_trackEvent','href','Blog','Posterous Blog']);setTimeout(function() { that.submit() }, 200);return false;" >Blog</a>-->
           <a href="http://fitsby.posterous.com" target="_blank">Blog</a>

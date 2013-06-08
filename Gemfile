@@ -32,11 +32,17 @@ end
 
  #gem 'rabl'
  #gem 'yajl-ruby'
- gem 'pry-rails', :group => :development
+group :development do 
+  gem 'quiet_assets', :group => :development
+  gem 'pry-rails', :group => :development
+end
+
+ 
  gem "time_diff", "~> 0.2.2"
  gem 'thin'
  gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
  gem "delayed_job"
+ 
 
 
 
@@ -56,7 +62,6 @@ end
  gem "therubyracer"
  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
  gem "twitter-bootstrap-rails"
- gem "psych", "~> 1.3.4"
  gem 'push-core'
  gem 'push-gcm'
 
