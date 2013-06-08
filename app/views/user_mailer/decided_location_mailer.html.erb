@@ -5,22 +5,15 @@
   </head>
   <body>
     <h4 style="color: red">FOR FITSBY EMPLOYEES ONLY</h4>
-    <p>Pay the winners of this game:</p>
-    <p>
-      You owe <strong><%= @winner1.email %></strong>: <span style="color:red">$<%= @winner1_money_won %></span>.<br/>
-      You owe <strong><%= @winner2.email %></strong>: <span style="color:red">$<%= @winner2_money_won %></span>.<br/>
-      You owe <strong><%= @winner3.email %></strong>: <span style="color:red">$<%= @winner3_money_won %></span>.
-    </p>
+    <p>This asshole user just attempted another workout at an unverified gym on our blacklist. On Android, it should have denied him. Here's more information on the user and the gym:</p>
 
-    <br/>
-    
-    Use <a href="https://www.paypal.com/webapps/mpp/send-money-online">PayPal Send Money Online</a>.
-
-    <p>
-      Fitsby made this much money: <span style="color: green">$<%= @fitsby_money_won %></span>
-      <br/><br/>
-      Remember to check this email as a green checkmark so we know that we paid these people! Thanks guy.
-    </p>
+    <strong>Description:</strong> <%= @string %><br/>
+    <strong>User ID:</strong> <%= @user.id %><br/>
+    <strong>User email:</strong> <%= @user_email %><br/>
+    <strong>Gym name:</strong> <%= @gym_name %><br/>
+    <strong>Geo lat:</strong> <%= @geo_lat %><br/>
+    <strong>Geo long:</strong> <%= @geo_long %><br/>
+    <strong>Number of requests this user has made for this gym:</strong> <%= @number_of_requests %><br/>
     
   </body>
 </html>
