@@ -1,5 +1,5 @@
 class Notifier < ActionMailer::Base
-  sendgrid_category    :use_subject_lines
+  #sendgrid_category    :use_subject_lines
   sendgrid_enable      :ganalytics, :opentrack
   
   default from: "Fitsby Team <team@fitsby.com>"
