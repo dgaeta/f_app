@@ -128,7 +128,7 @@ include BCrypt
       @token = @token.to_i
       @user.token = @token
       @user.save
-      UserMailer.change_pw_request(@first_name, @email, @token)
+      Notifier.change_pw_request(@first_name, @email, @token)
     else 
        false_json = { :status => "fail."} 
        render(json: JSON.pretty_generate(false_json))
