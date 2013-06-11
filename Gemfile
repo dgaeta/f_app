@@ -66,6 +66,7 @@ end
  gem 'push-gcm'
  gem 'sendgrid'
  gem 'figaro'
+ gem 'ruby-fitbit'
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"
