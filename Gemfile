@@ -67,6 +67,7 @@ end
  gem 'sendgrid'
  gem 'figaro'
  gem 'ruby-fitbit'
+ gem "urbanairship"
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

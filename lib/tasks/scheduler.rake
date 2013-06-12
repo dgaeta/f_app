@@ -85,6 +85,7 @@ task :auto_end_games => :environment do
       game.is_private = "TRUE"
       game.save
     end
+    UserMailer.finishedGamesNotice(finished_games).deliver
   end
 end
 

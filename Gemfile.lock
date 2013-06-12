@@ -240,6 +240,8 @@ GEM
     unf (0.1.1)
       unf_ext
     unf_ext (0.0.6)
+    urbanairship (2.3.1)
+      json
     webrobots (0.1.1)
     zurb-foundation (2.2.1.2)
       jquery-rails (>= 1.0)
@@ -279,4 +281,5 @@ DEPENDENCIES
   time_diff (~> 0.2.2)
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
+  urbanairship
   zurb-foundation (~> 2.2)
