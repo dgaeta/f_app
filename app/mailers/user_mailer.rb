@@ -166,6 +166,11 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
   end
 
+  def activatedGamesNotice(started_games)
+    @started_games = started_games
+    mail(:to => "team@fitsby.com", :subject => "These games were were activated last night.")
+  end
+
 end
 
 

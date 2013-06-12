@@ -1,15 +1,5 @@
 FOR FITSBY EMPLOYEES ONLY
 
-This user just worked out at an unverified gym and requested that we verify it:
+These games were activated:
 
-
-Description: <%= @string %>
-Decided Location ID: <%= @decidedlocations_id %>
-User id :<%= @user.id %>
-User email :<%= @user_email %>
-Gym name :<%= @gym_name %>
-Number of Requests for this Gym :<%= @number_of_requests_for_gym %> 
-Number of requests this user has made for this gym<%= @number_of_requests_by_user %>
-
-
-Go into PGAdmin and change the column called "decision" in the table called "decidedlocations" (where 1 means "blacklisted" and is not a real gym, and 0 means "whitelisted" and means that the gym is good to go.
+<%= @started_games %>

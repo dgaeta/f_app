@@ -17,4 +17,11 @@ class GameMember < ActiveRecord::Base
   		end	
   	end
 
+    def self.getGameMembers(user_id)
+       players = GameMember.where(:user_id => @user.id, :is_game_over => "FALSE")
+
+       players = players.map { |p|  :game_id => p.game_id, :user_id => p.user_id, :active => p.active}
+       return players
+    end
+
 end
