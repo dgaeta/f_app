@@ -5,11 +5,17 @@
   </head>
   <body>
     <h2 style="color: red">FOR FITSBY EMPLOYEES ONLY</h2><br/>
-    <h3>These games were activated:</h3>
+    <h3>This user just worked out at a gym that has already been requested for verification:</h3>
     <p>
-      <%= @started_games %>
-    </p>
+      <strong>Description</strong>: <%= @string %><br/>
+      <strong>Decided Location ID</strong>: <%= @decidedlocations_id %><br/>
+      <strong>User ID</strong>: <%= @user.id %><br/>
+      <strong>User Email</strong>: <%= @user_email %><br/>
+      <strong>Gym Name (downcased)</strong>: <%= @gym_name %><br/>
+      <strong>Number of requests this user has made for this gym</strong>: <%= @number_of_requests_for_gym %><br/>
+      <strong>Number of requests this user has made by this user</strong>: <%= @number_of_requests_by_user %><br/>
+    </p><br/>
     
-
+    <span>Go into PGAdmin and change the column called "decision" in the table called "decidedlocations" (where 1 means "blacklisted" and is not a real gym, and 0 means "whitelisted" and means that the gym is good to go.</span>
   </body>
 </html>
