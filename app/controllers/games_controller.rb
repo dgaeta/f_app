@@ -143,7 +143,7 @@
     @user = User.where(:id => params[:user_id]).first
     @wager = params[:wager]
 
-    unless @user.num_of_games > 1
+    unless @user.num_of_games > 99
       unless @wager == 0 
         # get the credit card details submitted by Android
         credit_card_number = params[:credit_card_number]
