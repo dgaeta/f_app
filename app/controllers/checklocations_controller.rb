@@ -109,7 +109,7 @@ class ChecklocationsController < ApplicationController
     @string = "checking location, check in allowed."
      true_json =  { :status => "okay", :string => @string }
           render(json: JSON.pretty_generate(true_json))
-        UserMailer.check_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string , @number_of_requests).deliver
+        Notifier.check_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string , @number_of_requests).deliver
 
      elsif @decidedlocations.decision.nil?
       @decidedlocations.number_of_requests += 1
@@ -127,7 +127,7 @@ class ChecklocationsController < ApplicationController
       @string = "still working on location, check in allowed."
       true_json = { :status => "okay", :string => @string} 
       render(json: JSON.pretty_generate(true_json))
-      UserMailer.additional_request_for_undecided_location(@user, @gym_name, @user_email, @string, @number_of_requests_for_gym, 
+      Notifier.additional_request_for_undecided_location(@user, @gym_name, @user_email, @string, @number_of_requests_for_gym, 
         @decidedlocations_id, @number_of_requests_by_user ).deliver     
     
     elsif @decidedlocations.decision == 1 
@@ -148,7 +148,7 @@ class ChecklocationsController < ApplicationController
       @string = "location black listed. Sorry."
       false_json = { :status => "fail.", :string => @string} 
       render(json: JSON.pretty_generate(false_json))
-      UserMailer.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver
+      Notifier.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver
        
     elsif @decidedlocations.decision == 0 
       @geo_lat = @decidedlocations.geo_lat
@@ -168,7 +168,7 @@ class ChecklocationsController < ApplicationController
       @string = "location good to go."
       true_json = { :status => "okay", :string => @string} 
       render(json: JSON.pretty_generate(true_json))
-      UserMailer.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver 
+      Notifier.decided_location_mailer(@user, @geo_lat, @geo_long, @gym_name, @user_email, @string, @decision, @number_of_requests ).deliver 
 
    
     end

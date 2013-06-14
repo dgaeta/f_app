@@ -147,7 +147,7 @@ class Game < ActiveRecord::Base
     stat.games_won += 1
     stat.save
     if wager == 0 
-      UserMailer.congratulate_winner_of_free_game(user.email, user.first_name, 
+      Notifier.congratulate_winner_of_free_game(user.email, user.first_name, 
         successful_checks).deliver
     else
       fitsby_percentage = 0.08
@@ -157,8 +157,8 @@ class Game < ActiveRecord::Base
       stat.save
       fitsby_money_won = ((number_of_losers * wager) * fitsby_percentage) + (0.50 * number_of_losers)
       total_money_processed = ((number_of_losers * wager) + (number_of_losers * 0.50))
-      UserMailer.congratulate_winner_of_game(user.email, user.first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
-      UserMailer.email_ourselves_to_pay_winner_of_game(game_id, user.first_name, user.email, user.id, 
+      Notifier.congratulate_winner_of_game(user.email, user.first_name, game_id, player_cut).deliver ###TODO TODO TODO TODO TODO fix this mailer 
+      Notifier.email_ourselves_to_pay_winner_of_game(game_id, user.first_name, user.email, user.id, 
       player_cut, fitsby_money_won, total_money_processed).deliver
     end
   end
@@ -179,13 +179,13 @@ class Game < ActiveRecord::Base
       loser_email = user.email 
       loser_first_name = user.first_name
       loser_user_id = user.id 
-      UserMailer.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver  
+      Notifier.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver  
     else
       money_lost = game.wager
       loser_email = user.email 
       loser_first_name = user.first_name
       loser_user_id = user.id 
-      UserMailer.notify_loser_of_paid_game(money_lost, game.id, loser_email, loser_first_name, loser_user_id, 
+      Notifier.notify_loser_of_paid_game(money_lost, game.id, loser_email, loser_first_name, loser_user_id, 
         loser_checkins).deliver ###TODO TODO TODO TODO TODO fix this mailer 
 
       Stripe::Charge.create(

@@ -27,6 +27,7 @@ task :auto_start_games => :environment do
         game.was_recently_initiated = 1
         started_games << game.id
         game.save
+        UserMailer.activatedGamesNotice(started_games).deliver
       else 
         Game.addDayToStartAndEnd(game.id)
         Comment.gamePostponedComment(game.id)
@@ -84,6 +85,7 @@ task :auto_end_games => :environment do
       game.is_private = "TRUE"
       game.save
     end
+    UserMailer.finishedGamesNotice(finished_games).deliver
   end
 end
 

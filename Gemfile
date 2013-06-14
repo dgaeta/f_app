@@ -64,6 +64,10 @@ end
  gem "twitter-bootstrap-rails"
  gem 'push-core'
  gem 'push-gcm'
+ gem 'sendgrid'
+ gem 'figaro'
+ gem 'ruby-fitbit'
+ gem "urbanairship"
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

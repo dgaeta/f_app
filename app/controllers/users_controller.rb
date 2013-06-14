@@ -70,7 +70,7 @@ require 'json'
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
           :email => @user.email }
-        UserMailer.welcome_email(@user).deliver
+        Notifier.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
@@ -261,7 +261,7 @@ require 'json'
     sess.request_year = date.year
 
     if sess.save
-      UserMailer.user_deletion(@user_id).deliver
+      Notifier.user_deletion(@user_id).deliver
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
     else
@@ -301,7 +301,7 @@ require 'json'
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
           :email => @user.email }
-        UserMailer.welcome_email(@user).deliver
+        Notifier.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else

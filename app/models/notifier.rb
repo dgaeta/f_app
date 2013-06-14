@@ -1,7 +1,10 @@
-class UserMailer < ActionMailer::Base
+class Notifier < ActionMailer::Base
+  #sendgrid_category    :use_subject_lines
+  #sendgrid_enable      :ganalytics, :opentrack
+  
   default from: "Fitsby Team <team@fitsby.com>"
 
-   def welcome_email(user) ##make nice view
+  def welcome_email(user) ##make nice view
     @user = user
     @url  = "http://fitsby.com"
     mail(:to => user.email, :subject => "Welcome to Fitsby, #{@user.first_name}!")
@@ -165,17 +168,4 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     @year = year
     mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
   end
-
-  def activatedGamesNotice(started_games)
-    @started_games = started_games
-    mail(:to => "team@fitsby.com", :subject => "These games were were Activated last night.")
-  end
-
-  def finishedGamesNotice(finished_games)
-    @finished_games = finished_games
-     mail(:to => "team@fitsby.com", :subject => "These games were were DEactivated last night.")
-  end
-
 end
-
-
