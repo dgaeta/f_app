@@ -6,7 +6,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   
-<%= stylesheet_link_tag "application", :media => "all" %>
+<%= stylesheet_link_tag "notifier.css.scss", :media => "all" %>
 
 </head>
  
@@ -21,7 +21,7 @@
         <div class="content">
           <table bgcolor="#1e8cc5">
           <tr>
-            <td><img src="../assets/email_logo.png" alt="Fitsby Logo"></td>
+            <td><%= image_tag "email_logo.png" %></td>
             <td align="right"><h6 class="collapse"><!--Hero--></h6></td>
           </tr>
         </table>
@@ -72,8 +72,6 @@
         <tr>
           <td align="center">
             <p>
-              <a href= "www.fitsby.com/terms"><unsubscribe>Terms</unsubscribe> |
-              <a href="www.fitsby.com/privacy"><unsubscribe>Privacy</unsubscribe> |
               <%= link_to 'Terms', terms_path %> | <%= link_to 'Privacy', privacy_path %> | 
               <a href="#"><unsubscribe>Unsubscribe</unsubscribe></a>
             </p>
