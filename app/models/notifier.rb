@@ -22,7 +22,7 @@ class Notifier < ActionMailer::Base
     @winner_email = winner_email
     @winner_first_name = winner_first_name
     @url  = "http://fitsby.com"
-    mail(:to => @winner_email, :subject => "Congrats #{@winner_first_name}, you earned $#{@player_cut}!")
+    mail(:to => @winner_email, :subject => "Congrats #{@winner_first_name}, from Fitsby")
   end
 
 
