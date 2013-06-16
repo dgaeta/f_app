@@ -162,6 +162,10 @@ class GameMembersController < ApplicationController
     all_of_users_gameMembers.each do |member|
       member.successful_checks += 1 
       member.save
+      comment = Comment.new
+      comment.from_game_id = member.game_id
+      comment.from_user_id = member.user_id
+      comment.message = "#{@user.name} completed a #{30 + (diff/60)} minute workout"
     end   
     true_json =  { :status => "okay"}
     render(json: JSON.pretty_generate(true_json))   
