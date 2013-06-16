@@ -8,7 +8,7 @@ FApp::Application.initialize!
 
 
 ActionMailer::Base.smtp_settings = {
-  :user_name => "danielfits",
+  :user_name => "fitsby",
   :password => "illini12",
   :domain => "fitsby.com",
   :address => "smtp.sendgrid.net",
