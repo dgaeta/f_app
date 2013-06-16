@@ -126,8 +126,8 @@ FApp::Application.routes.draw do
   get "password_resets/update"
   ###
   match "reset_password", :to => "password_resets#create", :via => "get"
-  match "reset_password", :to => "password_resets#create", :via => "get"
   match "update_email", :to => "password_resets#update_email", :via => "post"
+  match '/reset_password',     to: 'password_resets#create'
 
 
   resources :decidedlocations
