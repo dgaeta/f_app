@@ -5,17 +5,14 @@ class GameMember < ActiveRecord::Base
 
 
   def self.activatePlayers(game_id)
-  		game_members = GameMember.where(:game_id => game_id)
-  		count = 0 
+  	game_members = GameMember.where(:game_id => game_id)
 
-  		while count < game_members.length do
-  			@player = game_members[count]
-        @player.active = 1
-  			@player.activated_at = (Time.now.to_i - 21600)
-  			@player.save
-  			count += 1  
-  		end	
+  	game_members.each do |player|
+      player.active = 1
+  		player.activated_at = (Time.now.to_i - 21600)
+  		player.save
   	end
+  end
 
     #def self.getGameMembers(user_id)
        #players = GameMember.where(:user_id => @user.id, :is_game_over => "FALSE")
