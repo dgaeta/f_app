@@ -21,7 +21,7 @@
         <div class="content">
           <table bgcolor="#1e8cc5">
           <tr>
-            <td><%= image_tag "email_logo.png", :alt=>"Fitsby Logo" %></td>
+            <td><img src="/assets/email_logo.png" alt="Fitsby Logo"></td>
             <td align="right"><h6 class="collapse"><!--Hero--></h6></td>
           </tr>
         </table>
@@ -72,7 +72,9 @@
         <tr>
           <td align="center">
             <p>
-              <% link_to "Terms", terms_path %> | <% link_to "Privacy", privacy_path %> | 
+              <a href= "www.fitsby.com/terms"><unsubscribe>Terms</unsubscribe> |
+              <a href="www.fitsby.com/privacy"><unsubscribe>Privacy</unsubscribe> |
+              <!--<% link_to "Terms", terms_path %> | <% link_to "Privacy", privacy_path %> | -->
               <a href="#"><unsubscribe>Unsubscribe</unsubscribe></a>
             </p>
           </td>
