@@ -168,4 +168,40 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     @year = year
     mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
   end
+
+
+
+
+# FOLLOW UP EMAILS THAT ARE SENT FROM KEVIN TO GET USER FEEDBACK 
+  def followup_10minutes_onecheckin(user)
+    @user = user
+    @url  = "http://fitsby.com"
+    mail(:to => user.email, :subject => "Can I do anything for you?", :from => "Kevin <kevin@fitsby.com>")
+  end
+
+   def followup_10minutes_gamestarted(user)
+    @user = user
+    @url  = "http://fitsby.com"
+    mail(:to => user.email, :subject => "I'm here if you need any help with Fitsby!", :from => "Kevin <kevin@fitsby.com>")
+  end
+
+   def followup_10minutes_nocheckins(user)
+    @user = user
+    @url  = "http://fitsby.com"
+    mail(:to => user.email, :subject => "Can I do anything for you?", :from => "Kevin <kevin@fitsby.com>")
+  end
+
+   def followup_7days_notplayingafterwin(user)
+    @user = user
+    @url  = "http://fitsby.com"
+    mail(:to => user.email, :subject => "Fitsby co-founder reaching out!", :from => "Kevin <kevin@fitsby.com>")
+  end
+
+   def followup_2days_nogameaftersignup(user)
+    @user = user
+    @url  = "http://fitsby.com"
+    mail(:to => user.email, :subject => "Need help getting started?", :from => "Kevin <kevin@fitsby.com>")
+  end
+
+
 end
