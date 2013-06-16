@@ -27,7 +27,7 @@ task :auto_start_games => :environment do
         game.was_recently_initiated = 1
         started_games << game.id
         game.save
-        UserMailer.activatedGamesNotice(started_games).deliver
+        Notifier.activatedGamesNotice(started_games).deliver
       else 
         Game.addDayToStartAndEnd(game.id)
         Comment.gamePostponedComment(game.id)
@@ -85,7 +85,7 @@ task :auto_end_games => :environment do
       game.is_private = "TRUE"
       game.save
     end
-    UserMailer.finishedGamesNotice(finished_games).deliver
+    Notifier.finishedGamesNotice(finished_games).deliver
   end
 end
 
@@ -167,7 +167,7 @@ task :fitsby_daily_report => :environment do
   else
     usersSignedUpYesterday =  usersSignedUpYesterday.length
   end
-  UserMailer.fitsby_daily_report(usersSignedUpYesterday, dateNow.month, yesterday, dateNow.year).deliver
+  Notifier.fitsby_daily_report(usersSignedUpYesterday, dateNow.month, yesterday, dateNow.year).deliver
 end
 
 
