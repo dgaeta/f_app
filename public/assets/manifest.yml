@@ -23,6 +23,8 @@ danny.jpg: danny-c1de98b86342f22c9298ff504070e6f5.jpg
 danny/index.jpg: danny-c1de98b86342f22c9298ff504070e6f5.jpg
 dumbbell_icon.png: dumbbell_icon-4b39fd02112906c374acef63df552d5e.png
 dumbbell_icon/index.png: dumbbell_icon-4b39fd02112906c374acef63df552d5e.png
+email_logo.png: email_logo-f3df2b5e060cae2c0b813fae609ccc7c.png
+email_logo/index.png: email_logo-f3df2b5e060cae2c0b813fae609ccc7c.png
 facebook_icon.jpg: facebook_icon-ae16634abddde4465ba114fb70f293d3.jpg
 facebook_icon/index.jpg: facebook_icon-ae16634abddde4465ba114fb70f293d3.jpg
 favicon.ico: favicon-b214cec4f8ea49df87b238fb91747e38.ico
@@ -85,8 +87,8 @@ zack.jpg: zack-4508b449f8afeda895b58e25a91db969.jpg
 zack/index.jpg: zack-4508b449f8afeda895b58e25a91db969.jpg
 application.js: application-67e92956409397c535fd00cf4a863028.js
 application/index.js: application-67e92956409397c535fd00cf4a863028.js
-application.css: application-ff4d74234c2f3b6af0baf80caa1dc533.css
-application/index.css: application-ff4d74234c2f3b6af0baf80caa1dc533.css
+application.css: application-8ef5bc42a0fb9d3a489f915a34ed5d7c.css
+application/index.css: application-8ef5bc42a0fb9d3a489f915a34ed5d7c.css
 fontawesome-webfont.eot: fontawesome-webfont-b49e662c23140944a17d6301d2259446.eot
 fontawesome-webfont/index.eot: fontawesome-webfont-b49e662c23140944a17d6301d2259446.eot
 fontawesome-webfont.svg: fontawesome-webfont-863eb1732db4aa1a1b4ee4db0ec0dfe4.svg
