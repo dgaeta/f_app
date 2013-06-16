@@ -18,7 +18,7 @@ class Notifier < ActionMailer::Base
     mail(:to => @winner_email, :subject => "Congrats #{@winner_first_name}, you earned $#{@player_cut}!")
   end
 
-  def congratulate_winner_of_free_game(winner_email, winner_first_name) ##make views
+  def congratulate_winner_of_free_game(winner_email, winner_first_name, successful_checks) ##make views
     @winner_email = winner_email
     @winner_first_name = winner_first_name
     @url  = "http://fitsby.com"
