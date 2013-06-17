@@ -35,6 +35,7 @@ end
 group :development do 
   gem 'quiet_assets', :group => :development
   gem 'pry-rails', :group => :development
+  gem "nifty-generators", :group => :development
 end
 
  
@@ -68,6 +69,7 @@ end
  gem 'figaro'
  gem 'ruby-fitbit'
  gem "urbanairship"
+ gem 'fitgem'
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

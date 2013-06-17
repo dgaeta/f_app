@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607204128) do
+ActiveRecord::Schema.define(:version => 20130616230606) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.integer  "added_to_google",    :default => 0
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "friendships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.string   "create"
+    t.string   "destroy"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "game_members", :force => true do |t|
@@ -94,6 +103,45 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "oauth_access_grants", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.integer  "expires_in",        :null => false
+    t.string   "redirect_uri",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
+
+  create_table "oauth_access_tokens", :force => true do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        :null => false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
+  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
+  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "oauth_applications", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "uid",          :null => false
+    t.string   "secret",       :null => false
+    t.string   "redirect_uri", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
 
   create_table "push_configurations", :force => true do |t|
     t.string   "type",                           :null => false
@@ -186,6 +234,7 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
     t.string   "gcm_registration_id"
+    t.string   "in_games",                        :limit => nil
     t.boolean  "device_registered",                              :default => false
     t.integer  "num_of_games",                                   :default => 0
     t.integer  "comments_made",                                  :default => 0
@@ -193,6 +242,7 @@ ActiveRecord::Schema.define(:version => 20130607204128) do
     t.integer  "signup_month"
     t.integer  "signup_day"
     t.integer  "signup_year"
+    t.integer  "gamess"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"

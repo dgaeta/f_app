@@ -253,19 +253,21 @@ require 'json'
 
    def user_deletion
     @user = User.where(:id => params[:user_id]).first
-    sess = Session.new
-    sess.user_id = @user.id
-    date = Time.now.to_date
-    sess.request_month = date.month
-    sess.request_day = date.day
-    sess.request_year = date.year
 
-    if sess.save
+    unless @user.requested_deletion
+      sess = Session.new
+      sess.user_id = @user.id
+      date = Time.now.to_date
+      sess.request_month = date.month
+      sess.request_day = date.day
+      sess.request_year = date.year
+      sess.save
       Notifier.user_deletion(@user_id).deliver
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
     else
-      false_json = { :status => "fail."} 
+      error_string = "Request has been sent"
+      false_json = { :status => "fail.", :error => error_string} 
       render(json: JSON.pretty_generate(false_json))
     end
   end
@@ -311,6 +313,7 @@ require 'json'
       end
     end
   end
+
 
 end
 

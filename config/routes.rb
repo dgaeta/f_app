@@ -1,5 +1,8 @@
 FApp::Application.routes.draw do
  
+  resources :friendships
+
+
  #Landing page routes
 
   root :to => "landings#index"
