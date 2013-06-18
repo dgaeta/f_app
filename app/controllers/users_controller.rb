@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
+#skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
+before_filter :require_login, :only => :index
 require 'json'
 #require 'gibbon'
 
@@ -48,6 +49,11 @@ require 'json'
     @user = User.new(params[:user])
     @user.save
     @user.email = @user.email.downcase
+    @user.email = @user.email.downcase
+    today = Time.now.to_date
+    @user.signup_day = today.day.to_i
+    @user.signup_month = today.month.to_i
+    @user.signup_year = today.year.to_i
     @user.save
 
     stat = Stat.new(:winners_id => @user.id )
@@ -60,11 +66,7 @@ require 'json'
         gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
         'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
 
-        @user.email = @user.email.downcase
-        today = Time.now.to_date
-        @user.signup_day = today.day.to_i
-        @user.signup_month = today.month.to_i
-        @user.signup_year = today.year.to_i
+       
         @user.save
 
         auto_login(@user)
@@ -315,6 +317,22 @@ require 'json'
   end
 
 
+  def checkUserDeviceRegistration
+    user = User.where(:id => params[:user_id]).first
+
+    if user
+      unless user.device_registered
+        user.gcm_registration_id = params[:android_id]
+        user.save
+      end
+        true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+    else
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+  
 end
 
 

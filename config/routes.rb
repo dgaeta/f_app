@@ -1,6 +1,6 @@
 FApp::Application.routes.draw do
  
-  resources :friendships
+ 
 
 
  #Landing page routes
@@ -140,7 +140,10 @@ FApp::Application.routes.draw do
   ###
   match "validate_gym", :to => "checklocations#validate_gym", :via => "post"  
 
-
-  
+ resources :friendships
+ get "friendship/create" => "friendships#create", :as => "friendship/create"
+ get "friendship/destroy" => "friendships#destroy", :as => "friendship/destroy"
+ match "friendship/create", :to => "friendships#create", :via => "post" 
+ match "friendship/destroy", :to => "friendships#destroy", :via => "delete" 
 
 end

@@ -76,7 +76,12 @@ FApp::Application.configure do
   :authentication       => 'plain',
   :enable_starttls_auto => true  }
 
- 
+ FApp::Application.config.middleware.use ExceptionNotifier,
+  :email => {
+    :email_prefix => "[Whatever] ",
+    :sender_address => %{"notifier" <team@fitsby.com>},
+    :exception_recipients => %w{daniel@fitsby.com}
+  }
 
 
 

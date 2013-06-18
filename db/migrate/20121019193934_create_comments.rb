@@ -12,6 +12,7 @@ class CreateComments < ActiveRecord::Migration
       t.text :email 
       t.boolean :bold, :default => "False"
       t.boolean :checkin, :default => "False"
+      t.boolean :self_made
 
       t.timestamps
     end

@@ -1,25 +1,20 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>User:</b>
-  <%= @friendship.user_id %>
-</p>
-
-<p>
-  <b>Friend:</b>
-  <%= @friendship.friend_id %>
-</p>
-
-<p>
-  <b>Create:</b>
-  <%= @friendship.create %>
-</p>
-
-<p>
-  <b>Destroy:</b>
-  <%= @friendship.destroy %>
-</p>
 
 
-<%= link_to 'Edit', edit_friendship_path(@friendship) %> |
-<%= link_to 'Back', friendships_path %>
+<h2>Friends</h2>
+<ul>
+  <% for friendship in @user.friendships %>
+    <li>
+      <%=h friendship.friend.username %>
+      (<%= link_to "remove", friendship, :method => :delete %>)
+    </li>
+  <% end %>
+</ul>
+
+<p><%= link_to "Find Friends", users_path %></p>
+
+<h2>Friended by Users</h2>
+<ul>
+  <% for user in @user.inverse_friends %>
+    <li><%=h user.username %></li>
+  <% end %>
+</ul>

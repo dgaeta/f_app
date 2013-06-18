@@ -70,6 +70,9 @@ end
  gem 'ruby-fitbit'
  gem "urbanairship"
  gem 'fitgem'
+ gem 'safe_attributes'
+ gem 'exception_notification'
+ gem 'letter_opener', group: :development
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

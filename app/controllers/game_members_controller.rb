@@ -164,8 +164,11 @@ class GameMembersController < ApplicationController
       member.save
       comment = Comment.new
       comment.from_game_id = member.game_id
-      comment.from_user_id = member.user_id
-      comment.message = "#{@user.name} completed a #{30 + (diff/60)} minute workout"
+      comment.from_user_id = @user.id
+      comment.first_name = @user.first_name
+      comment.last_name = @user.last_name
+      comment.message = "#{@user.first_name} completed a #{30 + (diff/60)} minute workout"
+      comment.save
     end   
     true_json =  { :status => "okay"}
     render(json: JSON.pretty_generate(true_json))   

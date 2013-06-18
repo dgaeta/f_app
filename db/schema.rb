@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20130616230606) do
     t.boolean  "checkin",      :default => false
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
+    t.boolean  "self_made"
   end
 
   create_table "decidedlocations", :force => true do |t|
@@ -53,8 +54,9 @@ ActiveRecord::Schema.define(:version => 20130616230606) do
     t.integer  "friend_id"
     t.string   "create"
     t.string   "destroy"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.string   "status"
   end
 
   create_table "game_members", :force => true do |t|

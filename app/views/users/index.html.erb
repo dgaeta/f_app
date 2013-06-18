@@ -1,26 +1,15 @@
-<!-- <h1>Listing users</h1>
+<h2>User List</h2>
 
-<table>
-  <tr>
-    <th>id</th>
-    <th>Email</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-  </tr>
-
-<% @users.each do |user| %>
-  <tr>
-    <td><%= user.id %></td>
-    <td><%= user.email %></td>
-    <td><%= user.first_name %></td>
-    <td><%= user.last_name %></td>
-    <td><%= link_to 'Show', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<div id="users">
+<% for user in @users %>
+  <div class="user">
+    <p>
+      <strong><%=h user.first_name %></strong>
+      <strong><%=h user.last_name %></strong>
+      <strong><%=h user.email %></strong>
+      <%= link_to "Add Friend", friendship_create_path(:friend_id => user)%>
+      <div class="clear"></div>
+    </p>
+  </div>
 <% end %>
-</table>
-
-<br />
-
-<%= link_to 'New User', new_user_path %>
+</div>

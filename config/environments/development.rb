@@ -39,6 +39,7 @@ FApp::Application.configure do
 
   
 config.action_mailer.perform_deliveries = true #try to force sending in development 
+config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -50,6 +51,17 @@ config.action_mailer.perform_deliveries = true #try to force sending in developm
   :authentication       => 'plain',
   :enable_starttls_auto => true  }
 
+  FApp::Application.config.middleware.use ExceptionNotifier,
+  :email => {
+    :email_prefix => "[Whatever] ",
+    :sender_address => %{"notifier" <team@fitsby.com>},
+    :exception_recipients => %w{daniel@fitsby.com}
+  }
+
+
 
 
 end
+
+
+

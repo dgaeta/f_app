@@ -215,7 +215,7 @@ class Game < ActiveRecord::Base
       all_Active_Games.each do |game|
         if game.players >= 2 
           game.winning_structure = 1 if game.players < 3
-          Comment.gameStartComment(game.id)
+          #Comment.gameStartComment(game.id)
           Game.gameHasStartedPush(game) #### updates user events here 
           GameMember.activatePlayers(game.id)
           game.game_start_date = (Time.now.to_i - 21600)
@@ -226,7 +226,7 @@ class Game < ActiveRecord::Base
           game.save
         else 
           Game.addDayToStartAndEnd(game.id)
-          Comment.gamePostponedComment(game.id)
+          #Comment.gamePostponedComment(game.id)
         end
       end
     end

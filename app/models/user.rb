@@ -1,13 +1,16 @@
 class User < ActiveRecord::Base
+  authenticates_with_sorcery!
   
   has_many :friendships
-  has_many :friends, :through => :friendships 
+  has_many :friends, :through => :friendships
+  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
+  has_many :inverse_friends, :through => :inverse_friendships, :source => :user
   has_many :games, :class_name => "Game", :foreign_key => "creator_id", :dependent => :destroy 
   has_many :game_members,  :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "from_user_id", :dependent => :destroy
   has_many :stats, :class_name => "Stat", :foreign_key => "winners_id",:dependent => :destroy 
   
-  authenticates_with_sorcery!
+  
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id
 
   #validates :password_confirmation, :presence => :true

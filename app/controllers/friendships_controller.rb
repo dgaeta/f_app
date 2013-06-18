@@ -40,16 +40,14 @@ class FriendshipsController < ApplicationController
   # POST /friendships
   # POST /friendships.json
   def create
-    @user = User.where(:user_id => params[:user_id]).first
-    @friendship = @user.friendships.build(:friend_id => params[:friend_id])
-
-      if @friendship.save
-        true_json =  { :status => "okay"  }
-        render(json: JSON.pretty_generate(true_json))
-      else
-        false_json = { :status => "fail."} 
-        render(json: JSON.pretty_generate(false_json))
-      end
+    @friendship = current_user.friendships.build(:friend_id => params[:friend_id])
+    @friendship.status = "SENT"
+    if @friendship.save
+      flash[:notice] = "Added friend."
+      redirect_to root_url
+    else
+      flash[:error] = "Unable to add friend."
+      redirect_to root_url
     end
   end
 
@@ -72,12 +70,27 @@ class FriendshipsController < ApplicationController
   # DELETE /friendships/1
   # DELETE /friendships/1.json
   def destroy
-    @friendship = Friendship.find(params[:id])
+    @friendship = current_user.friendships.find(params[:id])
     @friendship.destroy
-
-    respond_to do |format|
-      format.html { redirect_to friendships_url }
-      format.json { head :no_content }
-    end
+    flash[:notice] = "Removed friendship."
+    redirect_to current_user
   end
+
+  def acceptFriend
+    @userRecipient = User.where(:id => params[:user_id]).first
+    @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id])
+    @reponseFriendship.status = "ACCEPTED"
+    @responseFriendship.save 
+
+    @userWhoSentRequest = User.where(:id => params[:friend_id]).first
+    @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id)
+    @sentFriendship.status = "ACCEPTED"
+    @sentFriendship.save
+
+    true_json =  { :status => "okay"  }
+    render(json: JSON.pretty_generate(true_json))
+    
+  end
+
+
 end
