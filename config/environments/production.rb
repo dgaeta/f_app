@@ -76,5 +76,8 @@ FApp::Application.configure do
   :authentication       => 'plain',
   :enable_starttls_auto => true  }
 
+  domain = ENV['HOST_URL'] || 'localhost:3000'
+  config.action_mailer.default_url_options = { :host => domain }
+  config.action_mailer.asset_host = "http://#{domain}"
 
 end
