@@ -15,7 +15,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
-  gem 'zurb-foundation', '~> 2.2'
+  gem 'zurb-foundation', '~> 4.0.0'
 end
 
 gem 'jquery-rails'
@@ -62,17 +62,17 @@ end
  gem "jquery-rails"
  gem "therubyracer"
  gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
- gem "twitter-bootstrap-rails"
  gem 'push-core'
  gem 'push-gcm'
  gem 'sendgrid'
- gem 'figaro'
- gem 'ruby-fitbit'
  gem "urbanairship"
- gem 'fitgem'
  gem 'safe_attributes'
  gem 'exception_notification'
  gem 'letter_opener', group: :development
+ gem 'carrierwave'
+ gem 'fog'
+ gem "rmagick"
+
 
  #gem 'paperclip'
  #gem "nokogiri", "~> 1.5.6"

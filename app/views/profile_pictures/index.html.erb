@@ -1,0 +1,23 @@
+<h1>Listing profile_pictures</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @profile_pictures.each do |profile_picture| %>
+  <tr>
+    <td><%= profile_picture.user_id %></td>
+    <td><%= link_to 'Show', profile_picture %></td>
+    <td><%= link_to 'Edit', edit_profile_picture_path(profile_picture) %></td>
+    <td><%= link_to 'Destroy', profile_picture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Profile picture', new_profile_picture_path %>

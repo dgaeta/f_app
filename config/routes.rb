@@ -3,6 +3,10 @@ FApp::Application.routes.draw do
  
 
 
+  resources :profile_pictures
+  get "profile_pictures_destroy" => "profile_pictures#destroy", :as => "profile_pictures_destroy"
+  match "profile_pictures_destroy", :to => "profile_pictures#destroy", :via => "delete" 
+
  #Landing page routes
 
   root :to => "landings#index"
@@ -130,7 +134,7 @@ FApp::Application.routes.draw do
   ###
   match "reset_password", :to => "password_resets#create", :via => "get"
   match "update_email", :to => "password_resets#update_email", :via => "post"
-  match '/reset_password',     to: 'password_resets#create'
+  match 'reset_password',     to: 'password_resets#create'
 
 
   resources :decidedlocations

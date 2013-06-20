@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130616230606) do
+ActiveRecord::Schema.define(:version => 20130618011821) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(:version => 20130616230606) do
     t.integer  "friend_id"
     t.string   "create"
     t.string   "destroy"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.string   "status"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "status"
   end
 
   create_table "game_members", :force => true do |t|
@@ -144,6 +144,13 @@ ActiveRecord::Schema.define(:version => 20130616230606) do
   end
 
   add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
+
+  create_table "profile_pictures", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "image"
+  end
 
   create_table "push_configurations", :force => true do |t|
     t.string   "type",                           :null => false

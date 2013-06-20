@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+
+<div id="images">
+  <% for profile_picture in current_user.profile_pictures %>
+    <div class="profile_picture">
+      <%= image_tag profile_picture.image_url(:thumb).to_s if profile_picture.image? %>
+      <div class="actions">
+        <%= link_to "edit", edit_profile_picture_path(profile_picture) %> |
+        <%= link_to "remove", profile_picture, :confirm => 'Are you sure?', :method => :delete %>
+      </div>
+    </div>
+  <% end %>
+  <div class="clear"></div>
+</div>
+
+<%= link_to 'Edit', edit_profile_picture_path(@profile_picture) %> |
+<%= link_to 'Back', profile_pictures_path %>
+
+
+

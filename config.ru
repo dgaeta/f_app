@@ -6,6 +6,6 @@ run FApp::Application
 FApp::Application.config.middleware.use ExceptionNotifier,
   :email => {
     :email_prefix => "[Error] ",
-    :sender_address => %{"notifier" <team@fitsby.com>},
+    :sender_address => %{<team@fitsby.com>},
     :exception_recipients => %w{daniel@fitsby.com}
   }

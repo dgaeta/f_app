@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :game_members,  :dependent => :destroy
   has_many :comments, :class_name => "Comment", :foreign_key => "from_user_id", :dependent => :destroy
   has_many :stats, :class_name => "Stat", :foreign_key => "winners_id",:dependent => :destroy 
+  has_many :profile_pictures
   
   
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id
@@ -18,5 +19,6 @@ class User < ActiveRecord::Base
   validates :email, :presence => :true, :uniqueness => true, :length => { :minimum => 6}, :format => {:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i}
   validates_presence_of :first_name
   validates_presence_of :last_name
+ 
 
 end

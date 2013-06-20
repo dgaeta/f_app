@@ -1,6 +1,8 @@
 <h2>My Profile</h2>
-<p>You are: <%=h @user.first_name %></p>
-
+<p><%=h @user.first_name %></p>
+<p>
+	<%= image_tag @user.profile_pictures if @user.profile_pictures != nil %>
+</p>
 
 <h3>Friends</h3>
 <ul>
@@ -20,3 +22,4 @@
     <li><%=h user.first_name %></li>
   <% end %>
 </ul>
+
