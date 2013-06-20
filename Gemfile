@@ -66,7 +66,6 @@ end
  gem 'push-gcm'
  gem 'sendgrid'
  gem "urbanairship"
- gem 'safe_attributes'
  gem 'exception_notification'
  gem 'letter_opener', group: :development
  gem 'carrierwave'
