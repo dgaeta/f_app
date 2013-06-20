@@ -192,8 +192,6 @@ GEM
     rmagick (2.13.2)
     ruby-hmac (0.4.0)
     rubyzip (0.9.9)
-    safe_attributes (1.0.10)
-      activerecord (>= 3.0.0)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -266,7 +264,6 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.11)
   rmagick
-  safe_attributes
   sass-rails (~> 3.2.3)
   sendgrid
   sorcery
