@@ -186,7 +186,6 @@ def game_comments
     end
   end
 
-  private
 
   def load_commentable
     resource, id = request.path.split('/')[1, 2]
