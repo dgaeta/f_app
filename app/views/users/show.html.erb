@@ -1,7 +1,9 @@
 <h2>My Profile</h2>
 <p><%=h @user.first_name %></p>
 <p>
-	<%= image_tag @user.profile_pictures[0].filepicker_url, w: 160, h: 160, fit: 'clip' if @user.profile_pictures != nil %>
+  <% unless @user.profile_pictures.empty? %>
+	<%= image_tag @user.profile_pictures[0].filepicker_url, w: 160, h: 160, fit: 'clip' %>
+  <% end %>
 </p>
 <%= link_to 'New Profile picture', new_profile_picture_path %>
 
