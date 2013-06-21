@@ -69,8 +69,9 @@ end
  gem 'exception_notification'
  gem 'letter_opener', group: :development
  gem 'carrierwave'
- gem 'fog'
+ gem "fog", "~> 1.3.1"
  gem "rmagick"
+ gem 'filepicker-rails'
 
 
  #gem 'paperclip'

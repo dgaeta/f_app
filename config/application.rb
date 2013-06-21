@@ -67,6 +67,8 @@ module FApp
 
     config.autoload_paths << "#{Rails.root}/lib"
 
+    config.filepicker_rails.api_key = "A9r0iBKHmTCGep5WmIQE6z"
+
     
   end
 end

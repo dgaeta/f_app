@@ -16,6 +16,9 @@
   # GET /games/1.json
   def show
     @game = Game.find(params[:id])
+    @commentable = @game
+    @comments = @commentable.comments
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb

@@ -19,6 +19,9 @@ require 'json'
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+    @commentable = @user
+    @comments = @commentable.comments
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb
@@ -46,7 +49,7 @@ require 'json'
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(params[:user])
+    @user = current_user
     @user.save
     @user.email = @user.email.downcase
     @user.email = @user.email.downcase

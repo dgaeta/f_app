@@ -13,7 +13,10 @@ class StatsController < ApplicationController
   # GET /stats/1
   # GET /stats/1.json
   def show
-    @stat = Stat.find(params[:id])
+   @stat = Stat.find(params[:id])
+   @commentable = @stat
+   @comments = @commentable.comments
+   @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb

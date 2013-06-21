@@ -2,11 +2,15 @@
   <%= f.hidden_field :user_id %>
   
   <p>
-    <%= f.file_field :image %>
-  </p>
-  <p>
-    <%= f.label :remote_image_url, "or image URL" %><br />
-    <%= f.text_field :remote_image_url %>
+     <%= f.label :filepicker_url, "Upload Your Avatar:" %>
+    <%= f.filepicker_field :filepicker_url %> <!-- User#filepicker_url is a regular string column -->
   </p>
   <p><%= f.submit %></p>
 <% end %>
+
+
+
+
+
+
+

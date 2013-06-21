@@ -17,6 +17,9 @@ class GameMembersController < ApplicationController
   # GET /game_members/1.json
   def show
     @game_member = GameMember.find(params[:id])
+    @commentable = @game_member
+    @comments = @commentable.comments
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb

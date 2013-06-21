@@ -12,7 +12,7 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   # Choose what kind of storage to use for this uploader:
   storage :fog
-  # storage :fog
+  # storage :file
   include CarrierWave::MimeTypes
   process :set_content_type
 
@@ -21,6 +21,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
+
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url

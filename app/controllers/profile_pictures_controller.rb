@@ -14,6 +14,9 @@ class ProfilePicturesController < ApplicationController
   # GET /profile_pictures/1.json
   def show
     @profile_picture = ProfilePicture.find(params[:id])
+    @commentable = @profile_picture
+    @comments = @commentable.comments
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb

@@ -1,10 +1,10 @@
 class CommentsController < ApplicationController
- 
+ before_filter :load_commentable
 
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.all
+    @comments = @commentable.comments
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   # GET /comments/new.json
   def new
-    @comment = Comment.new
+    @comment = @commentable.comments.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,25 +43,26 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    @comment = Comment.new(params[:comment])
-    @comment.save
+    #@comment = Comment.new(params[:comment])
+    # @comment.save
 
-    @game_id = @comment.from_game_id
-    @user_id = @comment.from_user_id
+    # @game_id = @comment.from_game_id
+    # @user_id = @comment.from_user_id
 
-    user = User.where(:id => @user_id).first
-    users_game_member_info = GameMember.where(:user_id => @user_id, :game_id => @game_id).first
+    # user = User.where(:id => @user_id).first
+    # users_game_member_info = GameMember.where(:user_id => @user_id, :game_id => @game_id).first
 
-    @comment.first_name = user.first_name
-    @comment.last_name = user.last_name
-    @comment.from_game_id = @game_id
-    @comment.from_user_id = @user_id 
-    @comment.save
+    # @comment.first_name = user.first_name
+    # @comment.last_name = user.last_name
+    # @comment.from_game_id = @game_id
+    # @comment.from_user_id = @user_id 
+    # @comment.save
+    @comment = @commentable.comments.new(params[:comment])
 
     respond_to do |format|
       if @comment.save
         true_json =  { :status => "okay"}
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
+        format.html { redirect_to @commentable, notice: 'Comment was successfully created.' }
         format.json { render json: JSON.pretty_generate(true_json) }
       else
         false_json = { :status => "fail."} 
@@ -183,6 +184,13 @@ def game_comments
     comments.each do |comment|
       comment.destroy
     end
+  end
+
+  private
+
+  def load_commentable
+    resource, id = request.path.split('/')[1, 2]
+    @commentable = resource.singularize.classify.constantize.find(id)
   end
 
 end

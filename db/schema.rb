@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618011821) do
+ActiveRecord::Schema.define(:version => 20130621074057) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -31,12 +31,16 @@ ActiveRecord::Schema.define(:version => 20130618011821) do
     t.integer  "from_user_id"
     t.integer  "from_game_id"
     t.text     "email"
-    t.boolean  "bold",         :default => false
-    t.boolean  "checkin",      :default => false
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.boolean  "bold",             :default => false
+    t.boolean  "checkin",          :default => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.boolean  "self_made"
+    t.integer  "commentable_id"
+    t.text     "commentable_type"
   end
+
+  add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"
 
   create_table "decidedlocations", :force => true do |t|
     t.float    "geo_lat"
@@ -106,6 +110,18 @@ ActiveRecord::Schema.define(:version => 20130618011821) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "notifications", :force => true do |t|
+    t.text     "content"
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.integer  "notifiable_id"
+    t.string   "notifiable_type"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "notifications", ["notifiable_id", "notifiable_type"], :name => "index_notifications_on_notifiable_id_and_notifiable_type"
+
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
     t.integer  "application_id",    :null => false
@@ -147,9 +163,10 @@ ActiveRecord::Schema.define(:version => 20130618011821) do
 
   create_table "profile_pictures", :force => true do |t|
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.string   "image"
+    t.string   "filepicker_url"
   end
 
   create_table "push_configurations", :force => true do |t|
@@ -226,14 +243,14 @@ ActiveRecord::Schema.define(:version => 20130618011821) do
     t.text     "last_name"
     t.string   "crypted_password"
     t.string   "salt"
-    t.text     "customer_id",                                    :default => "0"
-    t.integer  "token",                                          :default => 0
-    t.integer  "num_of_texts_sent",                              :default => 0
-    t.integer  "check_in_geo_lat",                               :default => 0
-    t.integer  "check_in_geo_long",                              :default => 0
-    t.integer  "enable_notifications",                           :default => 1
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
+    t.text     "customer_id",                     :default => "0"
+    t.integer  "token",                           :default => 0
+    t.integer  "num_of_texts_sent",               :default => 0
+    t.integer  "check_in_geo_lat",                :default => 0
+    t.integer  "check_in_geo_long",               :default => 0
+    t.integer  "enable_notifications",            :default => 1
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
@@ -243,11 +260,11 @@ ActiveRecord::Schema.define(:version => 20130618011821) do
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
     t.string   "gcm_registration_id"
-    t.string   "in_games",                        :limit => nil
-    t.boolean  "device_registered",                              :default => false
-    t.integer  "num_of_games",                                   :default => 0
-    t.integer  "comments_made",                                  :default => 0
-    t.integer  "game_history",                                   :default => 0
+    t.string   "in_games"
+    t.boolean  "device_registered",               :default => false
+    t.integer  "num_of_games",                    :default => 0
+    t.integer  "comments_made",                   :default => 0
+    t.integer  "game_history",                    :default => 0
     t.integer  "signup_month"
     t.integer  "signup_day"
     t.integer  "signup_year"
