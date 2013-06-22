@@ -11,14 +11,6 @@ class Game < ActiveRecord::Base
 
 
 
-	GCM.host = 'https://android.googleapis.com/gcm/send'
-    # https://android.googleapis.com/gcm/send is default
-
-    GCM.format = :json
-    # :json is default and only available at the moment
-
-    GCM.key = "AIzaSyABFztuCfhqCsS_zLzmRv_q-dpDQ80K_gY"
-    # this is the apiKey obtained from here https://code.google.com/apis/console/
 
   	def self.gameHasStartedPush(game_id)
      user_ids = getUserIDSofGame(game_id)
@@ -35,10 +27,14 @@ class Game < ActiveRecord::Base
      end
 
      unless destination.empty?
-         data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-         GCM.send_notification( destination, data, :collapse_key => "game_start", 
-      	 :time_to_live => 3600, :delay_while_idle => false )
-    	end
+      notification = {
+        :schedule_for => [1],
+        :apids => destination,
+        :android => {:alert => "Your Fitsby Game #{game_id} has started!", :collapse_key => "game_start"}
+      }
+         
+      Urbanairship.push(notification)   
+      end
   	end
 
   def self.gameHasEndedPush(game_id)
@@ -55,10 +51,14 @@ class Game < ActiveRecord::Base
       end
 
      unless destination.empty?
-        data = {:key => "Your Fitsby Game #{game_id} has started!", :key2 => ["array", "value"]}
-        #GCM.send_notification( destination, data, :collapse_key => "game_start", 
-      	#:time_to_live => 3600, :delay_while_idle => false )
-      end  
+      notification = {
+        :schedule_for => [1],
+        :apids => destination,
+        :android => {:alert => "Your Fitsby Game #{game_id} has ended!", :collapse_key => "game_start"}
+      }
+         
+      Urbanairship.push(notification)   
+      end 
     end
 
   	def self.getUserIDSofGame(game_id)

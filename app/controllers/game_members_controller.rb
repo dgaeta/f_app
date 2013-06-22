@@ -277,7 +277,14 @@ class GameMembersController < ApplicationController
         @game_member.save 
         @user = User.where(:id => @game_member.user_id).first
         unless ((@user.device_registered == "FALSE") || (@user.enable_notifications == "FALSE"))
-          registration_id = @user.gcm_registration_id
+          destination = @user.gcm_registration_id
+            notification = {
+            :schedule_for => [1],
+            :apids => destination,
+            :android => {:alert => "Your Fitsby Game #{game_id} has started!", :collapse_key => "game_start"}
+            }  
+            Urbanairship.push(notification)   
+          end
         end               
       end 
     end 
