@@ -1,3 +1,4 @@
 class Notifications < ActiveRecord::Base
-  attr_accessible :content, :notifiable_id, :notifiable_type, :opened, :receiver_id, :sender_id
+  attr_accessible :content, :opened, :receiver_id, :sender_id
+  belongs_to :notifiable, polymorphic: true
 end

@@ -7,6 +7,7 @@ class Game < ActiveRecord::Base
   attr_accessible :creator_id, :duration, :is_private, :wager, :players, :stakes, :game_start_date, :game_end_date, :creator_first_name, 
   :game_initialized, :winning_structure
   has_many :comments, as: :commentable
+  has_many :notifications, as: :notifiable
 
 
 

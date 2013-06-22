@@ -3,6 +3,7 @@ class GameMember < ActiveRecord::Base
   belongs_to :user
   attr_accessible :checkins, :checkouts, :game_id, :successful_checks, :user_id
   has_many :comments, as: :commentable
+  has_many :notifications, as: :notifiable
 
 
   def self.activatePlayers(game_id)
