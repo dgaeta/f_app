@@ -48,6 +48,16 @@ test:
   username: f_app
   password:
 
+staging:
+  host: localhost
+  adapter: postgresql
+  port: 5432
+  encoding: unicode
+  database: postgres
+  pool: 5
+  username: dannygaeta
+  password: mula2010
+
 production:
   adapter:  postgresql
   encoding: unicode
