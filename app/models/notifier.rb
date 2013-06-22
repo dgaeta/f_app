@@ -4,6 +4,11 @@ class Notifier < ActionMailer::Base
   
   default from: "Fitsby Team <team@fitsby.com>"
 
+  
+
+  def encode_with coder
+  end
+
   def welcome_email(user) ##make nice view
     @user = user
     @url  = "http://fitsby.com"

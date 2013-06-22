@@ -8,6 +8,8 @@
       <strong><%=h user.last_name %></strong>
       <strong><%=h user.email %></strong>
       <%= link_to "Add Friend", friendship_create_path(:friend_id => user)%>
+      <%= link_to 'Show', user%></td>
+      <%= link_to 'Edit', edit_user_path(user) %></td>
       <div class="clear"></div>
     </p>
   </div>

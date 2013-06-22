@@ -11,7 +11,7 @@
 <% @profile_pictures.each do |profile_picture| %>
   <tr>
     <td><%= profile_picture.user_id %></td>
-    <td><%= link_to 'Show', profile_picture %></td>
+    <td><%= link_to 'Show', profile_picture, w: 160, h: 160, fit: 'clip' %></td>
     <td><%= link_to 'Edit', edit_profile_picture_path(profile_picture) %></td>
     <td><%= link_to 'Destroy', profile_picture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
