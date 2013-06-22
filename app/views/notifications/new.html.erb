@@ -1,0 +1,29 @@
+<h1>New Comment</h1>
+
+<%= form_for [@notifiable, @notification] do |f| %>
+  <% if @notification.errors.any? %>
+    <div class="error_messages">
+      <h2>Please correct the following errors.</h2>
+      <ul>
+      <% @notification.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_area :content, rows: 8 %>
+  </div>
+  <div class="field">
+    <%= f.label :sender_id %>
+    <%= f.number_field :sender_id %>
+  </div>
+  <div class="field">
+    <%= f.label :receiver_id %>
+    <%= f.number_field :receiver_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

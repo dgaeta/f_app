@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :comments, as: :commentable
   has_many :stats, :class_name => "Stat", :foreign_key => "winners_id",:dependent => :destroy 
   has_many :profile_pictures
-  
+  has_many :notifications, as: :notifiable
   
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id
 

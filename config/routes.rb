@@ -1,10 +1,9 @@
 FApp::Application.routes.draw do
  
- 
-
 
   resources :profile_pictures do 
     resources :comments
+    resources :notifications
   end
   get "profile_pictures_destroy" => "profile_pictures#destroy", :as => "profile_pictures_destroy"
   match "profile_pictures_destroy", :to => "profile_pictures#destroy", :via => "delete" 
@@ -62,6 +61,7 @@ FApp::Application.routes.draw do
 
   resources :games do 
     resources :comments
+    resources :notifications
   end
   get "join_game" => "games#join_game", :as => "join_game"
   get "create_game" => "games#create_game", :as => "create_game"
@@ -105,6 +105,7 @@ FApp::Application.routes.draw do
 
   resources :users do 
     resources :comments
+    resources :notifications
   end
   get "signup" => "users#new", :as => "signup"
   get "new" => "users#new", :as => "new"
