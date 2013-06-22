@@ -72,6 +72,7 @@ end
  gem "fog", "~> 1.3.1"
  gem "rmagick"
  gem 'filepicker-rails'
+ gem 'delayed_job_active_record'
 
 
  #gem 'paperclip'
