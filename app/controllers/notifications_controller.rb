@@ -2,7 +2,7 @@ class NotificationsController < ApplicationController
   before_filter :load_notifiable
 
   def index
-  	@notifications = @notifiable.notifications
+  	@notification = @notifiable.notifications
   end
 
   def new

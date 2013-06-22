@@ -9,6 +9,6 @@ class CreateNotifications < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :notifications, [:notifiable_id, :notifiable_type]
+    add_index :comments, [:commentable_id, :commentable_type]
   end
 end
