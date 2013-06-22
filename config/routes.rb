@@ -22,7 +22,9 @@ FApp::Application.routes.draw do
  
 
 
-  resources :stats
+  resources :stats do 
+    resources :comments
+  end
   get "user_stats" => "stats#user_stats", :as => "user_stats"
   ###
   match "user_stats", :to => "stats#user_stats", :via => "get"
