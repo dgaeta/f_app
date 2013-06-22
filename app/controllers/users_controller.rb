@@ -70,7 +70,7 @@ require 'json'
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
           :email => @user.email }
-        Notifier.delay.welcome_email(@user).deliver
+        Notifier.delay.welcome_email(@user)
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
