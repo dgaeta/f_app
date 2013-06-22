@@ -57,25 +57,17 @@ require 'json'
     @user.signup_day = today.day.to_i
     @user.signup_month = today.month.to_i
     @user.signup_year = today.year.to_i
-    @user.save
+
 
     stat = Stat.new(:winners_id => @user.id )
     stat.save
 
     respond_to do |format|
       if @user.save
-        gb = Gibbon.new
-        #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]    
-        gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
-        'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
-
-       
-        @user.save
-
         auto_login(@user)
         true_json =  { :status => "okay" ,  :id => @user.id,  :first_name => @user.first_name, :last_name => @user.last_name, 
           :email => @user.email }
-        Notifier.delay.welcome_email(@user)
+        Notifier.welcome_email(@user).deliver
         format.json { render json: JSON.pretty_generate(true_json) }
         format.html { redirect_to root_url, notice: 'User was successfully created.' }  
       else
@@ -284,7 +276,6 @@ require 'json'
     @user.last_name = params[:last_name]
     @user.email = params[:email]
     @user.password = params[:password]
-    @user.save
     @user.email = @user.email.downcase
     @user.save
 
@@ -293,11 +284,6 @@ require 'json'
 
     respond_to do |format|
       if @user.save
-        gb = Gibbon.new
-        #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]    
-        gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
-        'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
-
         @user.email = @user.email.downcase
         today = Time.now.to_date
         @user.signup_day = today.day.to_i
