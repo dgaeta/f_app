@@ -1,4 +1,7 @@
 FApp::Application.routes.draw do
+
+  ###EXCEPTIONS HANDLING
+  match '(errors)/:status', to: 'errors#show', constraints: {status: /\d{3}/} # via: :all
  
 
   resources :profile_pictures do 

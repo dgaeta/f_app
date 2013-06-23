@@ -69,6 +69,6 @@ module FApp
 
     config.filepicker_rails.api_key = "A9r0iBKHmTCGep5WmIQE6z"
 
-    
+    config.exceptions_app = self.routes    
   end
 end

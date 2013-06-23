@@ -79,5 +79,6 @@ FApp::Application.configure do
   domain = ENV['HOST_URL'] || 'localhost:3000'
   config.action_mailer.default_url_options = { :host => domain }
   config.action_mailer.asset_host = "http://#{domain}"
+  config.exceptions_app = self.routes   
 
 end

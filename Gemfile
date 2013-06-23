@@ -39,6 +39,7 @@ group :development do
   gem 'quiet_assets', :group => :development
   gem 'pry-rails', :group => :development
   gem "nifty-generators", :group => :development
+  gem 'better_errors'
 end
 
  
