@@ -182,7 +182,7 @@ class Game < ActiveRecord::Base
       loser_email = user.email 
       loser_first_name = user.first_name
       loser_user_id = user.id 
-      Notifier.delay.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins)
+      Notifier.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver
     else
       money_lost = game.wager
       loser_email = user.email 
