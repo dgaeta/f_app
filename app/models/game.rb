@@ -170,9 +170,10 @@ class Game < ActiveRecord::Base
     Stripe.api_key = "sk_0G8Utv86sXeIUY4EO6fif1hAypeDE"
     game = Game.where(:id =>  game_id).first
     user = User.where(:id => user_id).first
-    user.in_game = 0 
-    user.save
-    stat = Stat.where(:winners_id => user.id).first
+    game_member = user.game_members.where(:game_id => game_id).first
+    game_member.active = 0 
+    game_member.save
+    stat = Stat.where(:winners_id => user_id).first
     stat.losses += 1 
     stat.games_played += 1 
     stat.save
@@ -181,7 +182,7 @@ class Game < ActiveRecord::Base
       loser_email = user.email 
       loser_first_name = user.first_name
       loser_user_id = user.id 
-      Notifier.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver  
+      Notifier.delay.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver  
     else
       money_lost = game.wager
       loser_email = user.email 
