@@ -52,7 +52,6 @@ class Game < ActiveRecord::Base
 
      unless destination.empty?
       notification = {
-        :schedule_for => [1],
         :apids => destination,
         :android => {:alert => "Your Fitsby Game #{game_id} has ended!", :collapse_key => "game_start"}
       }
