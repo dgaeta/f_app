@@ -198,6 +198,7 @@ require 'json'
     @user = User.where(:id => params[:user_id]).first
     registration_id = params[:registration_id] 
 
+    if registration_id != nil
 =begin  if params[:device_type] == "iPhone"
       @user.device_type = "iPhone"
       @user.iphone_device_token = registration_id
