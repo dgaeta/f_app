@@ -12,14 +12,14 @@ FApp::Application.routes.draw do
   match "profile_pictures_destroy", :to => "profile_pictures#destroy", :via => "delete" 
 
  #Landing page routes
-
+  resources :landings
   root :to => "landings#index"
-  match '/about',    to: 'landings#about'
-  match '/contact',  to: 'landings#contact'
-  match '/faq',      to: 'landings#faq'
-  match '/terms',    to: 'landings#terms'
-  match '/privacy',  to: 'landings#privacy'
-  match '/blog',     to: 'landings#blog'
+  match 'about',    to: 'landings#about'
+  match 'contact',  to: 'landings#contact'
+  match 'faq',      to: 'landings#faq'
+  match 'terms',    to: 'landings#terms'
+  match 'privacy',  to: 'landings#privacy'
+  match 'blog',     to: 'landings#blog'
   
 
  
@@ -95,7 +95,7 @@ FApp::Application.routes.draw do
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
 
-  resources :landings
+  
 
   resources :sessions
   get "logout" => "sessions#destroy", :as => "logout"

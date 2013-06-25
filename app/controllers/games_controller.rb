@@ -458,7 +458,7 @@ def winners_and_losers
   end
 
   def get_private_game_info
-    @found_game = Game.find(params[:game_id])
+    @found_game = Game.where(params[:game_id]).first
     
     unless @found_game.nil?
       @user_entered_creator_name = params[:first_name_of_creator]
@@ -491,11 +491,12 @@ def winners_and_losers
         puts "found game"
       else 
         @results = "You are already in this game"
-        false_json = { :status => "fail.", :error => @error_string} 
+        false_json = { :status => "fail.", :error => @eresults} 
         render(json: JSON.pretty_generate(false_json))
         puts "game member already exists"
       end
     else
+      @error_string = "Whoops can't find that game"
       false_json = { :status => "fail.", :error => @error_string} 
       render(json: JSON.pretty_generate(false_json))
       puts "could not find that game"

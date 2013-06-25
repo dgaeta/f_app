@@ -17,7 +17,7 @@ require 'json'
 
   # GET /users/1
   # GET /users/1.json
-  def show
+  def show 
     @user = User.find(params[:id])
     @commentable = @user
     @comments = @commentable.comments
@@ -167,13 +167,6 @@ require 'json'
     @user.email = params[:new_email]
     @user.save  
     
-    gb = Gibbon.new
-    #list_id = gb.lists({:list_name => "Fitsby Users"})["data"].first["id"]  
-    gb.list_unsubscribe(:id => "3c9272b951", :email_address => old_email, :delete_member => true, 
-      :send_goodbye => false, :send_notify => false)
-    gb.list_subscribe(:id => "3c9272b951", :email_address => @user.email, :merge_vars => {'fname' => @user.first_name, 
-      'lname' => @user.last_name }, :email_type => "html",  :double_optin => false, :send_welcome => false)
-    #gb.listUpdateMember(:id => list_id, :email_address => old_email,:merge_vars => [:email_address => user.email])
     # UPDATE USER'S EMAIL ON STRIPE TOO:
     Stripe.api_key = @stripe_api_key
     unless @user.customer_id.nil?
@@ -202,16 +195,26 @@ require 'json'
   end 
 
   def push_registration 
-    registration_id = params[:registration_id] 
     @user = User.where(:id => params[:user_id]).first
+    registration_id = params[:registration_id] 
 
-    unless @user.device_registered == "TRUE" 
+=begin  if params[:device_type] == "iPhone"
+      @user.device_type = "iPhone"
+      @user.iphone_device_token = registration_id
+      @user.save
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    elsif params[:device_type] == "Android"
+=end  @user.device_type = "Android"
       @user.gcm_registration_id =  registration_id
       @user.save 
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    else
+     false_json = { :status => "fail."} 
+     render(json: JSON.pretty_generate(false_json))
     end 
-     true_json =  { :status => "okay"  }
-     render(json: JSON.pretty_generate(true_json))
-  end 
+  end
 
   def push_disable
     @user = User.where(:id => params[:user_id]).first

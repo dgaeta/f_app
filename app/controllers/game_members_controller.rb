@@ -281,7 +281,7 @@ class GameMembersController < ApplicationController
           notification = {
             :schedule_for => [1],
             :apids => destination,
-            :android => {:alert => "Your Fitsby Game #{game_id} has started!", :collapse_key => "game_start"}
+            :android => {:alert => "Your Fitsby Game #{g_id} has started!", :collapse_key => "game_start"}
           }  
           Urbanairship.push(notification)   
         end               

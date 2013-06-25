@@ -81,4 +81,9 @@ FApp::Application.configure do
   config.action_mailer.asset_host = "http://#{domain}"
   config.exceptions_app = self.routes   
 
+  config.middleware.use ExceptionNotifier,
+  sender_address: 'team@fitsby.com',
+  exception_recipients: 'daniel@fitsby.com',
+  ignore_exceptions: ExceptionNotifier.default_ignore_exceptions # + [RuntimeError]
+
 end
