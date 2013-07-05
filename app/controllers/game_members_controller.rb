@@ -283,7 +283,7 @@ class GameMembersController < ApplicationController
             :apids => destination,
             :android => {:alert => "Your Fitsby Game #{g_id} has started!", :collapse_key => "game_start"}
           }  
-          Urbanairship.push(notification)   
+          #Urbanairship.push(notification)   
         end               
       end 
     end 

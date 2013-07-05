@@ -33,7 +33,7 @@ class Game < ActiveRecord::Base
         :android => {:alert => "Your Fitsby Game #{game_id} has started!", :collapse_key => "game_start"}
       }
          
-      Urbanairship.push(notification)   
+      #sUrbanairship.push(notification)   
       end
   	end
 
@@ -56,7 +56,7 @@ class Game < ActiveRecord::Base
         :android => {:alert => "Your Fitsby Game #{game_id} has ended!", :collapse_key => "game_start"}
       }
          
-      Urbanairship.push(notification)   
+      #Urbanairship.push(notification)   
       end 
     end
 
