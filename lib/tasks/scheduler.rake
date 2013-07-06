@@ -27,7 +27,7 @@ task :auto_start_games => :environment do
         game.was_recently_initiated = 1
         started_games << game.id
         game.save
-        Notifier.activatedGamesNotice(started_games).deliver
+        Notifier.activated_games_notice(started_games).deliver
       else 
         Game.addDayToStartAndEnd(game.id)
         #Comment.gamePostponedComment(game.id)
