@@ -158,6 +158,26 @@ def game_comments
      render(json: JSON.pretty_generate(false_json) )
     end
   end
+
+  def mutlimedia_message
+    @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message], :from_game_id => params[:game_id]
+      :image_name => params[:image_name], :type => params[:type])
+    t = Time.now
+    @comment.stamp = t
+    @comment.save
+
+    user = User.where(:id => comment.from_user_id).first
+    @comment.first_name = user.first_name
+    @comment.last_name = user.last_name
+
+    if @comment.save
+     true_json =  { :status => "okay"}
+     render(json: JSON.pretty_generate(true_json))
+    else
+     false_json = { :status => "fail."} 
+     render(json: JSON.pretty_generate(false_json) )
+    end
+  end
  
 
   def deleteSingleComment(comment_id)
