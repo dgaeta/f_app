@@ -159,7 +159,9 @@ def game_comments
     end
   end
 
-  def mutlimedia_message
+=begin
+    
+end  def mutlimedia_message
     @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message], :from_game_id => params[:game_id]
       :image_name => params[:image_name], :type => params[:type])
     t = Time.now
@@ -179,7 +181,7 @@ def game_comments
     end
   end
  
-
+=end
   def deleteSingleComment(comment_id)
     @comment = Comment.find(comment_id)
     @comment.destroy 
