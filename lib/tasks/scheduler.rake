@@ -16,7 +16,7 @@ task :auto_start_games => :environment do
 
   unless all_Active_Games.length == 0
     all_Active_Games.each do |game|
-      if game.players >= 2 
+      if game.players != 1 
         game.winning_structure = 1 if game.players < 3
         #Comment.gameStartComment(game.id)
         Game.gameHasStartedPush(game) #### updates user events here 
