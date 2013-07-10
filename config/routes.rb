@@ -16,7 +16,7 @@ FApp::Application.routes.draw do
   root :to => "landings#index"
   match 'about',    to: 'landings#about'
   match 'contact',  to: 'landings#contact'
-  match 'faq',      to: 'landings#faq'
+  match 'FAQ',      to: 'landings#frequently_asked_questions'
   match 'terms',    to: 'landings#terms'
   match 'privacy',  to: 'landings#privacy'
   match 'blog',     to: 'landings#blog'

@@ -3,9 +3,9 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= full_title(yield(:title)) %></title>
-    <%= stylesheet_link_tag    "application", media: "all" %>
-    <%= javascript_include_tag "application" %>
-    <%= filepicker_js_include_tag %>
+    <!--<%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %> 
+    <%= filepicker_js_include_tag %> -->
     <%= csrf_meta_tags %>
     <%= render 'layouts/shim' %>    
     <%- flash.each do |name, msg| -%>
@@ -20,8 +20,8 @@
   </body>
   
 
-  <footer>
+  <!--<footer>
   <%= render 'layouts/footer' %>  
-  </footer>
+  </footer> -->
 
 </html>
