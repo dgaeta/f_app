@@ -274,7 +274,7 @@
         :stakes => game.stakes,
        :goal_days => game.goal_days, 
        :email => User.where(:id => game.creator_id).pluck(:email).first}
-      
+      end
         b_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(b_json))
         
