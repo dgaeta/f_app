@@ -220,7 +220,7 @@
     @user = User.find(params[:user_id])
     @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
-    unless @all_of_users_games.empty?  
+=begin    unless @all_of_users_games.empty?  
           h = Hash.new(0)
              @a = 0 
              @num1 = @public_games.count
@@ -264,8 +264,9 @@
 
 
       else
+
          @public_games = Game.where("is_private = false")
-         @public_games = @public_games.map do |game|
+=end         @public_games = @public_games.map do |game|
         {:id => game.id,
         :duration => game.duration,
         :wager => game.wager,
@@ -277,7 +278,7 @@
         b_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(b_json))
         
-    end
+#    end
   end
 
 def winners_and_losers
