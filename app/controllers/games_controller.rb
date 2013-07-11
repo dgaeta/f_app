@@ -265,8 +265,8 @@
 
       else
 
-         @public_games = Game.where("is_private = false")
-=end  @public_games = @public_games.map do |game|
+=end         @public_games = Game.where("is_private = false", :game_active => 1)
+  @public_games = @public_games.map do |game|
         {:id => game.id,
         :duration => game.duration,
         :wager => game.wager,
