@@ -28,6 +28,14 @@ group :staging do
   gem 'meta_request'
 end
 
+
+gem "rspec-rails", :group => [:test, :development]
+group :test do
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem "guard-rspec"
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -80,6 +88,8 @@ end
  gem "rmagick"
  gem 'filepicker-rails'
  gem 'delayed_job_active_record'
+ gem 'ruby-prof', group: :test
+ gem 'test-unit', group: :test
 
 
  #gem 'paperclip'
