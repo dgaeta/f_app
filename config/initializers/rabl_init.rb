@@ -1,5 +1,5 @@
-require 'rabl'
-Rabl.configure do |config|
+#require 'rabl'
+#Rabl.configure do |config|
   # Commented as these are defaults
   # config.cache_all_output = false
   # config.cache_sources = Rails.env != 'development' # Defaults to false
@@ -21,4 +21,4 @@ Rabl.configure do |config|
   # config.view_paths = []
   # config.raise_on_missing_attribute = true # Defaults to false
   # config.replace_nil_values_with_empty_strings = true # Defaults to false
-end
+#end
