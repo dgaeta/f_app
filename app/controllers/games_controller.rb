@@ -1,4 +1,4 @@
- class GamesController < ApplicationController
+class GamesController < ApplicationController
   
   
   # GET /games
@@ -459,7 +459,7 @@ def winners_and_losers
   end
 
   def get_private_game_info
-    @found_game = Game.where(params[:game_id]).first
+    @found_game = Game.where(:id => params[:game_id]).first
     
     unless @found_game.nil?
       @user_entered_creator_name = params[:first_name_of_creator]
