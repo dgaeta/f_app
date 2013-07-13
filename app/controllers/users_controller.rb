@@ -82,7 +82,7 @@ require 'json'
   end
 
   def signin_facebook
-    uid = params[:user_id]
+    uid = params[:uid]
     user = User.where(:provider => "facebook", :uid => uid).first
 
     if user 
