@@ -81,6 +81,27 @@ require 'json'
     end
   end
 
+  def signin_facebook
+    uid = params[:user_id]
+    user = User.where(:provider => "facebook", :uid => uid).first
+
+    if user 
+      true_json =  { :status => "exists", :user_id => user.id}
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      user = User.new(params[:user])
+      user.provider = "facebook"
+      user.uid = uid 
+      if user.save 
+        true_json =  { :status => "created", :user_id => user.id}
+        render(json: JSON.pretty_generate(true_json))
+      else 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      end
+    end
+  end
+  
 
   # PUT /users/1
   # PUT /users/1.json
