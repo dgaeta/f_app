@@ -168,7 +168,7 @@ def game_comments
     @comment.stamp = t
     @comment.save
 
-    user = User.where(:id => comment.from_user_id).first
+    user = User.where(:id => @comment.from_user_id).first
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
 
