@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130622205455) do
+ActiveRecord::Schema.define(:version => 20130715184052) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(:version => 20130622205455) do
     t.boolean  "self_made"
     t.integer  "commentable_id"
     t.text     "commentable_type"
+    t.string   "image_name"
+    t.string   "type"
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"
@@ -283,6 +285,9 @@ ActiveRecord::Schema.define(:version => 20130622205455) do
     t.integer  "signup_day"
     t.integer  "signup_year"
     t.integer  "gamess"
+    t.string   "iphone_device_token"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
