@@ -99,7 +99,7 @@ require 'json'
       else 
         @user = User.new(params[:user])
         @user.save
-        @user.email = @user.email.downcase8
+        @user.email = @user.email.downcase
         today = Time.now.to_date
         @user.signup_day = today.day.to_i
         @user.signup_month = today.month.to_i
