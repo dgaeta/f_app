@@ -57,10 +57,11 @@ FApp::Application.routes.draw do
   get "gamecomments" => "comments#gamecomments", :as => "gamecomments"
   get "game_comments" => "comments#game_comments", :as => "game_comments"
   get "post_comment" => "comments#post_comment", :as => "post_comment"
+  get "multimedia_message" => "comments#multimedia_message", :as => "multimedia_message"
   ###
   match "game_comments", :to => "comments#game_comments", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
-
+  match "multimedia_message", :to => "comments#multimedia_message", :via => "post"
 
 
 
