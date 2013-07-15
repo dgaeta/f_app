@@ -184,7 +184,7 @@ def game_comments
 
   def deleteSingleComment(comment_id)
     @comment = Comment.find(comment_id)
-    @comment.destroy 
+    @comment.destroy
   end
 
   def deleteSingleCommentAPI

@@ -84,7 +84,7 @@ FApp::Application.routes.draw do
   get "get_first_name" => "games#get_first_name", :as => "get_first_name"
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
-  
+  git
   ###
   match "games#create_game" => "create_game#post"
   match "games#login_android" => "login_android#post"
