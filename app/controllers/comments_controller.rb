@@ -116,6 +116,8 @@ def game_comments
       :email => comment.email,
       :bold => comment.bold,
       :checkin => comment.checkin,
+      :comment_type => comment.comment_type,
+      :image_name => comment.image_name,
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
