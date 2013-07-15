@@ -163,7 +163,7 @@ def game_comments
     
  def multimedia_message
     @comment = Comment.new(:from_user_id => params[:user_id],  :message => params[:message], :from_game_id => params[:game_id],
-      :image_name => params[:image_name], :type => params[:type])
+      :image_name => params[:image_name], :comment_type => params[:comment_type])
     t = Time.now
     @comment.stamp = t
     @comment.save
