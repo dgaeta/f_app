@@ -98,6 +98,8 @@ require 'json'
         render(json: JSON.pretty_generate(true_json))
       else 
         @user = User.new(params[:user])
+        @user.passord = "apifacebook"
+        @user.password_confirmation = "apifacebook"
         @user.save
         @user.email = @user.email.downcase
         today = Time.now.to_date
