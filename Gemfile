@@ -90,6 +90,8 @@ end
  gem 'delayed_job_active_record'
  gem 'ruby-prof', group: :test
  gem 'test-unit', group: :test
+ gem 'aws-sdk'
+
  #gem 'rabl'
 # Also add either `oj` or `yajl-ruby` as the JSON parser
  #gem 'oj'
