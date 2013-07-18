@@ -106,6 +106,8 @@ class CommentsController < ApplicationController
 
 def game_comments 
    all_comments = Comment.where(:from_game_id => params[:game_id]).order("created_at DESC")
+   s3 = AWS::S3.new
+   bucket = s3.buckets['com.fitsby.com']
 
    all_comments = all_comments.map do |comment|
      {:_id => comment.id,
@@ -117,7 +119,7 @@ def game_comments
       :bold => comment.bold,
       :checkin => comment.checkin,
       :comment_type => comment.comment_type,
-      :image_name => comment.image_name,
+      :image_name => bucket.objects[comment.image_name].url_for(:read, :expires => 10*60),
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
