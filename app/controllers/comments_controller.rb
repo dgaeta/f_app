@@ -107,7 +107,7 @@ class CommentsController < ApplicationController
 def game_comments 
    all_comments = Comment.where(:from_game_id => params[:game_id]).order("created_at DESC")
    s3 = AWS::S3.new
-   bucket = s3.buckets['com.fitsby.com']
+   bucket = s3.buckets['images.fitsby.com']
 
    all_comments = all_comments.map do |comment|
      {:_id => comment.id,
