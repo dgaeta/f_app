@@ -119,7 +119,7 @@ def game_comments
       :bold => comment.bold,
       :checkin => comment.checkin,
       :comment_type => comment.comment_type,
-      :image_name => bucket.objects[comment.image_name].url_for(:read, :expires => 10*60),
+      :image_name => (bucket.objects[comment.image_name].url_for(:read, :expires => 10*60)),
       :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
     end
 
