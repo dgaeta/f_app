@@ -1,0 +1,23 @@
+<h1>Listing aws_pictures</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @aws_pictures.each do |aws_picture| %>
+  <tr>
+    <td><%= aws_picture.name %></td>
+    <td><%= link_to 'Show', aws_picture %></td>
+    <td><%= link_to 'Edit', edit_aws_picture_path(aws_picture) %></td>
+    <td><%= link_to 'Destroy', aws_picture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Aws picture', new_aws_picture_path %>
