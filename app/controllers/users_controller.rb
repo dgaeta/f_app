@@ -89,12 +89,12 @@ require 'json'
       true_json =  { :status => "exists", :user_id => user.id}
       render(json: JSON.pretty_generate(true_json))
     else 
-      user = User.where(:email => params[:email]).first
-      if user 
-        user.provider = "facebook"
-        user.uid = uid 
-        user.save
-        true_json =  { :status => "added facebook uid", :user_id => user.id}
+      @user = User.where(:email => params[:email]).first
+      if @user 
+        @user.provider = "facebook"
+        @user.uid = uid 
+        @user.save
+        true_json =  { :status => "added facebook uid", :user_id => @user.id}
         render(json: JSON.pretty_generate(true_json))
       else 
         @user = User.new(params[:user])
@@ -107,7 +107,7 @@ require 'json'
         @user.signup_month = today.month.to_i
         @user.signup_year = today.year.to_i
         if @user.save 
-          true_json =  { :status => "created", :user_id => user.id}
+          true_json =  { :status => "created", :user_id => @user.id}
           render(json: JSON.pretty_generate(true_json))
         else 
           false_json = { :status => "fail."} 
