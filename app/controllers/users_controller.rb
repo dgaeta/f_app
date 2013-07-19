@@ -106,6 +106,9 @@ require 'json'
         @user.signup_day = today.day.to_i
         @user.signup_month = today.month.to_i
         @user.signup_year = today.year.to_i
+        @stat = Stat.new 
+        @stat.winners_id = @user.id
+        @stat.save
         if @user.save 
           true_json =  { :status => "created", :user_id => @user.id}
           render(json: JSON.pretty_generate(true_json))
