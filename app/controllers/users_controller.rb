@@ -367,6 +367,21 @@ require 'json'
       render(json: JSON.pretty_generate(false_json))
     end
   end
+
+   def does_custumer_id_exist
+    @user = User.where(:id => params[:user_id]).first
+
+    if @user.nil?
+      invalid_json = { :status => "invalid user_id"} 
+      render(json: JSON.pretty_generate(invalid_json))
+    elsif @user.customer_id == 0
+      false_json = { :status => "does not exist"} 
+      render(json: JSON.pretty_generate(false_json))
+    else 
+      true_json = { :status => "does exist"} 
+      render(json: JSON.pretty_generate(true_json))
+    end
+  end
   
 end
 

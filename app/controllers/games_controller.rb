@@ -581,19 +581,52 @@ def winners_and_losers
     end
   end
 
-  def does_custumer_id_exist
-    @user = User.where(:id => params[:user_id]).first
-
-    if @user.nil?
-      invalid_json = { :status => "invalid user_id"} 
-      render(json: JSON.pretty_generate(invalid_json))
-    elsif @user.customer_id == 0
-      false_json = { :status => "does not exist"} 
-      render(json: JSON.pretty_generate(false_json))
-    else 
-      true_json = { :status => "does exist"} 
-      render(json: JSON.pretty_generate(true_json))
+=begin def countdown2
+  @game = Game.where(:id => params[:game_id]).first    
+  
+   unless @game == nil
+      then
+        if @game.game_initialized == 0 
+           game_start_date = @game.game_start_date
+           days_remaining = (game_start_date - (Time.now.to_i - 21600))
+           days_remaining = days_remaining / 24 
+           days_remaining = days_remaining / 60 
+           days_remaining = days_remaining / 60
+           days_remaining = days_remaining + 1
+           days_remaining = days_remaining.round
+           status_json = { :status => -1, :days_until_strat } 
+           render(json: JSON.pretty_generate(false_json))
+       else 
+           game_end_date = @game.game_end_date
+           time_now = (Time.now - 21600)
+           time_now = time_now.to_i
+           days_remaining = (game_end_date - time_now)
+           days_remaining = days_remaining / 24 
+           days_remaining = days_remaining / 60 
+           days_remaining = days_remaining / 60
+           days_remaining = days_remaining + 1
+           days_remaining = days_remaining.round
+          if days_remaining < 0 
+            then 
+           @string = "Game Ended"
+            else 
+              @string = "Days left until game ends: #{days_remaining}"
+          end
+        end
+      else 
+        @string = "Get started by creating or join a game!"
+      end
+  
+    if (@game == nil) || (days_remaining == nil)
+      then 
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
+      else
+        true_json =  { :status => "okay" , :string => @string }
+        render(json: JSON.pretty_generate(true_json))
     end
-  end
+ end
+=end
+
 
 end

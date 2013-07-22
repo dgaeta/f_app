@@ -120,14 +120,14 @@ class GameMembersController < ApplicationController
       render(json: JSON.pretty_generate(false_json))
       return
     end  
-    last_checkin_time = all_of_users_gameMembers[0].checkins
-    last_checkin_yday = Time.at(last_checkin_time).to_date.yday
-    if (last_checkin_yday == Time.now.to_date.yday)
-      error_string = "Only 1 check-in per day is allowed"
-      false_json = { :status => "fail.", :error => error_string} 
-      render(json: JSON.pretty_generate(false_json))
-      return
-    end 
+    #last_checkin_time = all_of_users_gameMembers[0].checkins
+    #last_checkin_yday = Time.at(last_checkin_time).to_date.yday
+    #if (last_checkin_yday == Time.now.to_date.yday)
+     # error_string = "Only 1 check-in per day is allowed"
+      #false_json = { :status => "fail.", :error => error_string} 
+      #render(json: JSON.pretty_generate(false_json))
+      #return
+    #end 
     checked_in_for_games = []
     all_of_users_gameMembers.each do |player|
       player.checkins = (Time.now.to_i - 21420)
