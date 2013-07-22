@@ -138,7 +138,7 @@ FApp::Application.routes.draw do
   match "checkPushRegistration", :to => "users#checkPushRegistration", :via => "post"
   match "createUser", :to => "users#createUser", :via => "post"
   match "signin_facebook", :to => "users#signin_facebook", :via => "post"
-  match "does_customer_id_exist", :to => "users#does_customer_id_exist", :via => "post"
+  match "does_customer_id_exist", :to => "users#does_customer_id_exist", :via => "get"
 
   resources :password_resets
   get "reset_password" => "password_resets#create", :as => "reset_password"
