@@ -368,7 +368,7 @@ require 'json'
     end
   end
 
-   def does_custumer_id_exist
+   def does_customer_id_exist
     @user = User.where(:id => params[:user_id]).first
 
     if @user.nil?
