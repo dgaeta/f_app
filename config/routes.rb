@@ -86,6 +86,7 @@ FApp::Application.routes.draw do
   get "get_first_name" => "games#get_first_name", :as => "get_first_name"
   get "percentage_of_game" => "games#percentage_of_game", :as => "percentage_of_game"
   get "add_gyms_to_google" => "games#add_games_to_google", :as => "add_games_to_google"
+  get "countdown2" => "games#countdown2", :as => "countdown2"
   ###
   match "games#create_game" => "create_game#post"
   match "games#login_android" => "login_android#post"
@@ -96,6 +97,7 @@ FApp::Application.routes.draw do
   match "single_game_info", :to => "games#single_game_info", :via => "get"
   match "get_first_name", :to => "games#get_first_name", :via => "get"
   match "percentage_of_game", :to => "games#percentage_of_game", :via => "get"
+  match "countdown2", :to => "games#countdown2", :via => "get"
 
   
 
