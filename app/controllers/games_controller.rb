@@ -278,7 +278,7 @@ class GamesController < ApplicationController
         b_json =  { :status => "okay" , :public_games => @public_games }
         render(json: JSON.pretty_generate(b_json))
         
-#    end
+   end
   end
 
 def winners_and_losers
