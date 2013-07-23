@@ -356,7 +356,7 @@ def winners_and_losers
 
     @game = Game.where(:id => params[:game_id]).first
 
-    if user.save 
+    if user 
       then 
       unless !GameMember.where(:user_id => user.id, :game_id => @game.id).empty?
         unless @game.wager == 0 
@@ -372,6 +372,11 @@ def winners_and_losers
             :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
             :email => user_email ) 
             user.update_attributes(:customer_id => customer.id)
+
+            if user.customer == 0 
+              bad_cc_json = { :status => "invalid credit card"} 
+              render(json: JSON.pretty_generate(bad_cc_json))
+            end 
 
             # Now, make a stripe column for database table 'users'
             # save the customer ID in your database so you can use it later
