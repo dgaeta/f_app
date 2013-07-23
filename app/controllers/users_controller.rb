@@ -374,12 +374,15 @@ require 'json'
     if @user.nil?
       invalid_json = { :status => "invalid user_id"} 
       render(json: JSON.pretty_generate(invalid_json))
-    elsif @user.customer_id == 0
+    elsif @user.customer_id.length < 2
       false_json = { :status => "does not exist"} 
       render(json: JSON.pretty_generate(false_json))
-    else 
+    elsif  @user.customer_id.length > 2
       true_json = { :status => "does exist"} 
       render(json: JSON.pretty_generate(true_json))
+    else
+      error_json = { :status => an error occured}
+      render(json: JSON.pretty_generate(error_json))
     end
   end
   
