@@ -373,9 +373,10 @@ def winners_and_losers
             :email => user_email ) 
             user.update_attributes(:customer_id => customer.id)
 
-            if user.customer == 0 
+            if user.customer_id == 0 
               bad_cc_json = { :status => "invalid credit card"} 
               render(json: JSON.pretty_generate(bad_cc_json))
+              return
             end 
 
             # Now, make a stripe column for database table 'users'
