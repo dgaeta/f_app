@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
   has_many :profile_pictures
   has_many :notifications, as: :notifiable
   
-  attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id, :in_game
+  attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id, :in_game, 
+    :first_payment_date
 
   #validates :password_confirmation, :presence => :true
   validates :password, :presence => :true, :length => { :minimum => 6 }, :on => :create, :confirmation => :true
