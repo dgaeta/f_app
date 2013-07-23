@@ -499,12 +499,12 @@ def winners_and_losers
           :goal_days => goal_days, :email => creator_email}
         render(json: JSON.pretty_generate(true_json))
         puts "found game"
-      else 
-        @results = "You are already in this game"
-        false_json = { :status => "fail.", :error => @eresults} 
-        render(json: JSON.pretty_generate(false_json))
-        puts "game member already exists"
-      end
+      #else 
+       # @results = "You are already in this game"
+       # false_json = { :status => "fail.", :error => @eresults} 
+       # render(json: JSON.pretty_generate(false_json))
+       # puts "game member already exists"
+      #end
     else
       @error_string = "Whoops can't find that game"
       false_json = { :status => "fail.", :error => @error_string} 
