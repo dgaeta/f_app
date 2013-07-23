@@ -182,13 +182,15 @@ class GameMembersController < ApplicationController
   def leaderboard 
     leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
     goal_days = Game.where(:id => params[:game_id]).pluck(:goal_days)
-       
+
+    count = 0    
     leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks, 
-      :email => member.user.email}
+      :email => member.user.email, 
+      :rank => count +1}
     end
 
     if leaderboard_stats == nil 
