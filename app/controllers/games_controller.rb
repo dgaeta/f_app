@@ -146,7 +146,7 @@ class GamesController < ApplicationController
 
     unless @user.num_of_games > 99
       unless @wager == 0  
-        #unless @user.customer_id !=0
+        unless @user.customer_id.length < 2
           # get the credit card details submitted by Android
           credit_card_number = params[:credit_card_number]
           credit_card_exp_month = params[:credit_card_exp_month]
@@ -161,7 +161,7 @@ class GamesController < ApplicationController
 
               # Now, make a stripe column for database table 'users'
               # save the customer ID in your database so you can use it later
-          #end
+          end
       end
       
 
@@ -218,7 +218,7 @@ class GamesController < ApplicationController
   def public_games
     @public_games = Game.where(:is_private => "false", :game_active => 1)
     @user = User.find(params[:user_id])
-    #@all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
+    @all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
     unless @all_of_users_games.empty?  
           h = Hash.new(0)
@@ -360,21 +360,23 @@ def winners_and_losers
       then 
       unless !GameMember.where(:user_id => user.id, :game_id => @game.id).empty?
         unless @game.wager == 0 
-        # get the credit card details submitted by Android
-        credit_card_number = params[:credit_card_number]
-        credit_card_exp_month = params[:credit_card_exp_month]
-        credit_card_exp_year = params[:credit_card_exp_year]
-        credit_card_cvc = params[:credit_card_cvc]
-    
-        # create a Customer
-        customer = Stripe::Customer.create(
-        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-        :email => user_email ) 
-        user.update_attributes(:customer_id => customer.id)
+          unless user.customer_id.length < 2
+            # get the credit card details submitted by Android
+            credit_card_number = params[:credit_card_number]
+            credit_card_exp_month = params[:credit_card_exp_month]
+            credit_card_exp_year = params[:credit_card_exp_year]
+            credit_card_cvc = params[:credit_card_cvc]
+        
+            # create a Customer
+            customer = Stripe::Customer.create(
+            :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+            :email => user_email ) 
+            user.update_attributes(:customer_id => customer.id)
 
-        # Now, make a stripe column for database table 'users'
-        # save the customer ID in your database so you can use it later
-      end
+            # Now, make a stripe column for database table 'users'
+            # save the customer ID in your database so you can use it later
+          end
+        end
 
         game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
         game_member.save
