@@ -220,7 +220,7 @@ class GamesController < ApplicationController
     @user = User.find(params[:user_id])
     #@all_of_users_games = GameMember.where(:user_id => @user.id).pluck(:game_id)
   
-=begin    unless @all_of_users_games.empty?  
+    unless @all_of_users_games.empty?  
           h = Hash.new(0)
              @a = 0 
              @num1 = @public_games.count
@@ -265,7 +265,7 @@ class GamesController < ApplicationController
 
       else
 
-=end         @public_games = Game.where("is_private = false", :game_active => 1)
+       @public_games = Game.where("is_private = false", :game_active => 1)
   @public_games = @public_games.map do |game|
         {:id => game.id,
         :duration => game.duration,
