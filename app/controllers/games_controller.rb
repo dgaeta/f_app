@@ -476,10 +476,10 @@ def winners_and_losers
       #@actual_game_creator_name = @found_game.creator_first_name
       #@actual_game_creator_name_downcased = @actual_game_creator_name.downcase
       #@user = User.find(params[:user_id])
-      @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
+      #@game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
     
       ##### Compare actual game creator name and the name the user entered
-      unless @game_member != nil
+      #unless @game_member != nil
         @results = "Found Game"
         game_id = @found_game.id
         creator_first_name = @found_game.creator_first_name
