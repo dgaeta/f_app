@@ -381,7 +381,7 @@ require 'json'
       true_json = { :status => "does exist"} 
       render(json: JSON.pretty_generate(true_json))
     else
-      error_json = { :status => an error occured}
+      error_json = { :status => "an error occured"}
       render(json: JSON.pretty_generate(error_json))
     end
   end
