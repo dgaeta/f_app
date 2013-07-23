@@ -190,7 +190,7 @@ class GameMembersController < ApplicationController
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks, 
       :email => member.user.email, 
-      :rank => (count+= )}
+      :rank => (count+=1 )}
     end
 
     if leaderboard_stats == nil 
