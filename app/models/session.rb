@@ -10,7 +10,7 @@ class Session < ActiveRecord::Base
       unless stat.empty?
       	 stat[0].delete
       end
-      players =  GameMember.where(:user_id => @user_id)
+      players =  GameMember.where(:user_id => @user.id)
       unless players.empty?
       	 players.each { |p| p.delete }
       end

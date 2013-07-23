@@ -360,7 +360,7 @@ def winners_and_losers
       then 
       unless !GameMember.where(:user_id => user.id, :game_id => @game.id).empty?
         unless @game.wager == 0 
-          unless user.customer_id.length < 2
+          unless user.customer_id.length > 2
             # get the credit card details submitted by Android
             credit_card_number = params[:credit_card_number]
             credit_card_exp_month = params[:credit_card_exp_month]

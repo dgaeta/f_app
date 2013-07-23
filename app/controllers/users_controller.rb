@@ -335,6 +335,7 @@ require 'json'
         @user.signup_day = today.day.to_i
         @user.signup_month = today.month.to_i
         @user.signup_year = today.year.to_i
+        @user.in_game = 0 
         @user.save
 
         auto_login(@user)
