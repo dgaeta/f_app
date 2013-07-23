@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715203758) do
+ActiveRecord::Schema.define(:version => 20130723140643) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -288,6 +288,7 @@ ActiveRecord::Schema.define(:version => 20130715203758) do
     t.string   "iphone_device_token"
     t.string   "provider"
     t.string   "uid"
+    t.integer  "in_game"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"

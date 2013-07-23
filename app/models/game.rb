@@ -142,7 +142,7 @@ class Game < ActiveRecord::Base
 
   def self.notifyWinner(game_id, user_id, number_of_winners, wager, num_of_players, successful_checks)
     user = User.where(:id => user_id).first
-    user.in_game = 0
+    user.in_game = 0   ## 0 means false
     user.save
     stat = Stat.where(:winners_id => user.id).first
     stat.games_won += 1
