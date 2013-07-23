@@ -171,6 +171,7 @@ class GamesController < ApplicationController
       @game = Game.new(params[:game])
       @game.creator_id = @user.id
       @game.players = 1
+      @game.wager = params[:wager] #####double compensate for not getting wager
       @first_name = @user.first_name.downcase
       @game.creator_first_name = @user.first_name
       @game.stakes = @game.wager
@@ -470,11 +471,11 @@ def winners_and_losers
     @found_game = Game.where(:id => params[:game_id]).first
     
     unless @found_game.nil?
-      @user_entered_creator_name = params[:first_name_of_creator]
-      @user_entered_creator_name_downcased = @user_entered_creator_name.downcase
-      @actual_game_creator_name = @found_game.creator_first_name
-      @actual_game_creator_name_downcased = @actual_game_creator_name.downcase
-      @user = User.find(params[:user_id])
+      #@user_entered_creator_name = params[:first_name_of_creator]
+      #@user_entered_creator_name_downcased = @user_entered_creator_name.downcase
+      #@actual_game_creator_name = @found_game.creator_first_name
+      #@actual_game_creator_name_downcased = @actual_game_creator_name.downcase
+      #@user = User.find(params[:user_id])
       @game_member = GameMember.where(:game_id => params[:game_id], :user_id => @user.id).first
     
       ##### Compare actual game creator name and the name the user entered
