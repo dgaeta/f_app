@@ -112,7 +112,7 @@ def game_comments
 
    all_comments = all_comments.map do |comment|
      {:_id => comment.id,
-      :user_id => comment.from_user_id,
+      :user_id => User.find(comment.from_user_id).pluck(:contains_profile_picture),
       :contains_profile_picture => comment.contains_profile_picture,
       :profile_picture_name =>  (bucket_for_prof_pics.objects[comment.from_user_id].url_for(:read, :expires => 10*60)),
       :first_name => comment.first_name,
