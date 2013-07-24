@@ -392,6 +392,7 @@ require 'json'
 
     #if @user 
       @user.s3_profile_pic_name  = params[:s3_profile_pic_name]
+      @user.contains_profile_picture = "TRUE"
       @user.save
       true_json = { :status => "successfully saved photo"} 
       render(json: JSON.pretty_generate(true_json))
