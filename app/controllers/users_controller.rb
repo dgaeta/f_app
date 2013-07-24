@@ -388,7 +388,7 @@ require 'json'
   end
 
   def upload_to_s3
-    @user = User.where(:id => params[:user_id]).first
+    @user = User.find(:id => params[:user_id]).first
 
     #if @user 
       @user.s3_profile_pic_name  = params[:s3_profile_pic_name]
@@ -403,9 +403,11 @@ require 'json'
 
   def get_user_profile_picture
     @user = User.where(:id => params[:user_id]).first 
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user 
-      true_json = { :status => "success" , :pic_name => @user.s3_profile_pic_name } 
+      true_json = { :status => "success" , :pic_url => (bucket_for_prof_pics.objects[comment.from_user_id].url_for(:read, :expires => 10*60)) } 
       render(json: JSON.pretty_generate(true_json))
     else 
       false_json = { :status => "user not found"} 
