@@ -407,7 +407,7 @@ require 'json'
     bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user 
-      true_json = { :status => "success" , :pic_url => (bucket_for_prof_pics.objects[comment.from_user_id].url_for(:read, :expires => 10*60)) } 
+      true_json = { :status => "success" , :pic_url => (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)) } 
       render(json: JSON.pretty_generate(true_json))
     else 
       false_json = { :status => "user not found"} 
