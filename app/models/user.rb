@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :notifications, as: :notifiable
   
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :customer_id, :in_game, 
-    :first_payment_date
+    :first_payment_date, :s3_profile_pic_name 
 
   #validates :password_confirmation, :presence => :true
   validates :password, :presence => :true, :length => { :minimum => 6 }, :on => :create, :confirmation => :true

@@ -11,6 +11,7 @@ FApp::Application.routes.draw do
   end
   get "profile_pictures_destroy" => "profile_pictures#destroy", :as => "profile_pictures_destroy"
   match "profile_pictures_destroy", :to => "profile_pictures#destroy", :via => "delete" 
+ 
 
  #Landing page routes
   resources :landings
@@ -128,6 +129,8 @@ FApp::Application.routes.draw do
   get "get_and_save_stripe_info" => "users#get_and_save_stripe_info", :as => "get_and_save_stripe_info"
   get "createUser" => "users#createUser", :as => "createUser"
   get "does_customer_id_exist" => "users#does_customer_id_exist", :as => "does_customer_id_exist"
+  get "upload_profile_picture" => "users#upload_to_s3", :as => "upload_profile_picture"
+  get "get_user_profile_picture" => "users#get_user_profile_picture", :as => "get_user_profile_picture"
   ###
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "change_password", :to => "users#change_password", :via => "put"  
@@ -142,6 +145,8 @@ FApp::Application.routes.draw do
   match "signin_facebook", :to => "users#signin_facebook", :via => "post"
   match "does_customer_id_exist", :to => "users#does_customer_id_exist", :via => "get"
   match "signup", :to => "users#create", :via => "post"
+  match "upload_profile_picture", :to => "users#upload_to_s3", :via => "post" 
+  match "get_user_profile_picture", :to => "users#get_user_profile_picture", :via => "get" 
 
   resources :password_resets
   get "reset_password" => "password_resets#create", :as => "reset_password"

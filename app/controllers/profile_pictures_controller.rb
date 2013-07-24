@@ -44,7 +44,7 @@ class ProfilePicturesController < ApplicationController
   # POST /profile_pictures.json
   def create
     @profile_picture = ProfilePicture.new(params[:profile_picture])
-    @profile_picture.user_id = current_user.id
+    @profile_picture.user_id =  current_user.id 
 
     respond_to do |format|
       if @profile_picture.save
@@ -84,4 +84,6 @@ class ProfilePicturesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
 end

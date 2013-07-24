@@ -386,6 +386,32 @@ require 'json'
       render(json: JSON.pretty_generate(error_json))
     end
   end
+
+  def upload_to_s3
+    @user = User.where(:id => params[:user_id]).first
+
+    if @user 
+      @user.s3_profile_pic_name  = params[:s3_name]
+      @user.save
+      true_json = { :status => "successfully saved photo"} 
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "user not found"} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
+  def get_user_profile_picture
+    @user = User.where(:id => params[:user_id]).first 
+
+    if @user 
+      true_json = { :status => "success" , :pic_name => @user.s3_profile_pic_name } 
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "user not found"} 
+      render(json: JSON.pretty_generate(false_json))
+    end  
+  end
   
 end
 

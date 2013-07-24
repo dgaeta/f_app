@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723232041) do
+ActiveRecord::Schema.define(:version => 20130724022934) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -31,15 +31,17 @@ ActiveRecord::Schema.define(:version => 20130723232041) do
     t.integer  "from_user_id"
     t.integer  "from_game_id"
     t.text     "email"
-    t.boolean  "bold",             :default => false
-    t.boolean  "checkin",          :default => false
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
+    t.boolean  "bold",                     :default => false
+    t.boolean  "checkin",                  :default => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
     t.boolean  "self_made"
     t.integer  "commentable_id"
     t.text     "commentable_type"
     t.string   "image_name"
     t.string   "comment_type"
+    t.string   "profile_picture_name",     :default => "none"
+    t.boolean  "contains_profile_picture", :default => false
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"
@@ -183,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20130723232041) do
     t.datetime "updated_at",     :null => false
     t.string   "image"
     t.string   "filepicker_url"
+    t.string   "s3_name"
   end
 
   create_table "push_configurations", :force => true do |t|
@@ -290,6 +293,7 @@ ActiveRecord::Schema.define(:version => 20130723232041) do
     t.string   "uid"
     t.integer  "in_game"
     t.integer  "first_payment_date"
+    t.string   "s3_profile_pic_name"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
