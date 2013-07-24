@@ -407,11 +407,11 @@ require 'json'
     s3 = AWS::S3.new
     bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
-    if @user 
-      true_json = { :status => "success" , :pic_url => (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)) } 
+    if @user.contains_profile_picture  
+      true_json = { :status => "exists" , :pic_url => (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)) } 
       render(json: JSON.pretty_generate(true_json))
     else 
-      false_json = { :status => "user not found"} 
+      false_json = { :status => "does not exist"} 
       render(json: JSON.pretty_generate(false_json))
     end  
   end
