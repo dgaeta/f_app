@@ -388,7 +388,7 @@ require 'json'
   end
 
   def upload_to_s3
-    @user = User.find(:id => params[:user_id]).first
+    @user = User.where(:id => params[:user_id]).first
 
     #if @user 
       @user.s3_profile_pic_name  = params[:s3_profile_pic_name]
