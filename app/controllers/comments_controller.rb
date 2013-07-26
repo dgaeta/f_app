@@ -114,7 +114,7 @@ def game_comments
      {:_id => comment.id,
       :user_id => comment.from_user_id,
       :contains_profile_picture => comment.contains_profile_picture,
-      :profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
+      #:profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
