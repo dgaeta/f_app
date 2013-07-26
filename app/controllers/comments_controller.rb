@@ -192,6 +192,25 @@ def game_comments
      render(json: JSON.pretty_generate(false_json) )
     end
   end
+
+  def like_a_comment
+    @comment = Comment.where(:id => params[:comment_id]).first 
+    @user = User.where(:id => params[:user_id]).first 
+
+    if @user.nil? || @comment.nil?
+      false_json = { :status => "user or comment not found"} 
+      render(json: JSON.pretty_generate(false_json) )
+    else
+      @comment.likes += 1
+      if @comment.liked_by.nil?
+        @comment.liked_by = @user.id.to_s
+      else
+        @comment.liked_by += (", " + @user.id.to_s)
+      end
+      true_json =  { :status => "okay"}
+      render(json: JSON.pretty_generate(true_json))
+    end
+  end
  
 
   def deleteSingleComment(comment_id)
