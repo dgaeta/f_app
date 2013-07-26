@@ -105,7 +105,7 @@ class CommentsController < ApplicationController
 
 
 def game_comments 
-   all_comments = Comment.where(:from_game_id => params[:game_id]).order("created_at DESC")
+   all_comments = Comment.includes(:user).where(:from_game_id => params[:game_id]).order("created_at DESC")
    s3 = AWS::S3.new
    bucket_for_comments = s3.buckets['images.fitsby.com']
    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
@@ -113,8 +113,8 @@ def game_comments
    all_comments = all_comments.map do |comment|
      {:_id => comment.id,
       :user_id => comment.from_user_id,
-      :contains_profile_picture => User.where(:id => comment.from_user_id).pluck(:contains_profile_picture),
-      :profile_picture_name =>  (bucket_for_prof_pics.objects[comment.from_user_id].url_for(:read, :expires => 10*60)),
+      :contains_profile_picture => comment.contains_profile_picture,
+      :profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
       :first_name => comment.first_name,
       :last_name => comment.last_name,
       :message => comment.message,
