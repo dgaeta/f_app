@@ -193,7 +193,7 @@ def game_comments
     end
   end
 
-  def like_a_comment
+  def like_comment
     @comment = Comment.where(:id => params[:comment_id]).first 
     @user = User.where(:id => params[:user_id]).first 
 
