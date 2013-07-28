@@ -121,7 +121,7 @@ def game_comments
         :last_name => comment.last_name,
         :message => comment.message,
         :email => comment.email,
-        :likers_user =>  comment.likers.include?(user_id.to_s), 
+        :liked_by_user =>  comment.likers.include?(user_id.to_s), 
         :number_of_likes => comment.likes,
         :bold => comment.bold,
         :checkin => comment.checkin,
@@ -139,7 +139,7 @@ def game_comments
         :last_name => comment.last_name,
         :message => comment.message,
         :email => comment.email,
-        #:likers_user =>  comment.likers_by.include?(user_id), 
+        #:liked_by_user =>  comment.likers_by.include?(user_id), 
         :number_of_likes => comment.likes,
         :bold => comment.bold,
         :checkin => comment.checkin,
@@ -227,6 +227,7 @@ def game_comments
       if @comment.likers.nil?
         @comment.likes += 1
         @comment.likers = @user.id.to_s + ","
+        @comment.save
         liked_json = { :status => "liked"} 
         render(json: JSON.pretty_generate(liked_json) )
       else
@@ -236,11 +237,13 @@ def game_comments
         if int_array.include?(@user.id)
           @comment.likes -= 1 
           @comment.drop(@user.id)
+          @comment.save
           unliked_json = { :status => "unliked"} 
           render(json: JSON.pretty_generate(unliked_json) )
         else 
           @comment.likes += 1
           @comment.likers = ("," + @user.id.to_s) 
+          @comment.save
           liked_json = { :status => "liked"} 
           render(json: JSON.pretty_generate(liked_json) )
         end
