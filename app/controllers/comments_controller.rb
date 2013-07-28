@@ -226,7 +226,7 @@ def game_comments
     else
       if !@comment.likers.include?(',')
         @comment.likes += 1
-        @comment.likers = @user.id.to_s + ","
+        @comment.likers = @user.id.to_s 
         @comment.save
         liked_json = { :status => "liked"} 
         render(json: JSON.pretty_generate(liked_json) )
