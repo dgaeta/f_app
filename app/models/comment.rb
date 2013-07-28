@@ -1,6 +1,6 @@
 class Comment < ActiveRecord::Base
  belongs_to :user
-  attr_accessible :id, :message, :stamp, :from_user_id, :first_name, :last_name, :from_game_id, :comment_type, :image_name, :profile_picture_name, :contains_profile_picture, :likes, :liked_by
+  attr_accessible :id, :message, :stamp, :from_user_id, :first_name, :last_name, :from_game_id, :comment_type, :image_name, :profile_picture_name, :contains_profile_picture, :likes, :likers
   belongs_to :commentable, polymorphic: true
   has_many :notifications, as: :notifiable
   #attr_accessor :game_member_id, :message, :stamp

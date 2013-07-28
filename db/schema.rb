@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130726025911) do
+ActiveRecord::Schema.define(:version => 20130728010412) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20130726025911) do
     t.string   "profile_picture_name",     :default => "none"
     t.boolean  "contains_profile_picture", :default => false
     t.integer  "likes",                    :default => 0
-    t.string   "liked_by"
+    t.string   "likers",                   :default => ""
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"

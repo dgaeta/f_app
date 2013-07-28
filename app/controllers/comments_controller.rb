@@ -109,21 +109,44 @@ def game_comments
    s3 = AWS::S3.new
    bucket_for_comments = s3.buckets['images.fitsby.com']
    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
+   user_id = params[:user_id]
 
-   all_comments = all_comments.map do |comment|
-     {:_id => comment.id,
-      :user_id => comment.from_user_id,
-      :contains_profile_picture => comment.contains_profile_picture,
-      #:profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
-      :first_name => comment.first_name,
-      :last_name => comment.last_name,
-      :message => comment.message,
-      :email => comment.email,
-      :bold => comment.bold,
-      :checkin => comment.checkin,
-      :comment_type => comment.comment_type,
-      :image_name => (bucket_for_comments.objects[comment.image_name].url_for(:read, :expires => 10*60)),
-      :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
+   if user_id
+     all_comments = all_comments.map do |comment|
+       {:_id => comment.id,
+        :user_id => comment.from_user_id,
+        :contains_profile_picture => comment.contains_profile_picture,
+        #:profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
+        :first_name => comment.first_name,
+        :last_name => comment.last_name,
+        :message => comment.message,
+        :email => comment.email,
+        :liked_by_user =>  comment.likers.include?(user_id.to_s), 
+        :number_of_likes => comment.likes,
+        :bold => comment.bold,
+        :checkin => comment.checkin,
+        :comment_type => comment.comment_type,
+        :image_name => (bucket_for_comments.objects[comment.image_name].url_for(:read, :expires => 10*60)),
+        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
+      end
+    else 
+      all_comments = all_comments.map do |comment|
+       {:_id => comment.id,
+        :user_id => comment.from_user_id,
+        :contains_profile_picture => comment.contains_profile_picture,
+        #:profile_picture_name =>  (bucket_for_prof_pics.objects[comment.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
+        :first_name => comment.first_name,
+        :last_name => comment.last_name,
+        :message => comment.message,
+        :email => comment.email,
+        #:liked_by_user =>  comment.likers_by.include?(user_id), 
+        :number_of_likes => comment.likes,
+        :bold => comment.bold,
+        :checkin => comment.checkin,
+        :comment_type => comment.comment_type,
+        :image_name => (bucket_for_comments.objects[comment.image_name].url_for(:read, :expires => 10*60)),
+        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
+      end
     end
 
 
