@@ -236,7 +236,7 @@ def game_comments
           
         if int_array.include?(@user.id)
           @comment.likes -= 1 
-          @comment.drop(@user.id)
+          @comment.likers = int_array.delete_if {|value| value == @user.id}
           @comment.save
           unliked_json = { :status => "unliked"} 
           render(json: JSON.pretty_generate(unliked_json) )
@@ -250,6 +250,8 @@ def game_comments
       end
     end
   end
+
+
 
   def deleteSingleComment(comment_id)
     @comment = Comment.find(comment_id)
