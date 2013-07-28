@@ -236,7 +236,7 @@ def game_comments
           
         if int_array.include?(@user.id)
           @comment.likes -= 1 
-         if @comment.likes > 1 
+         if @comment.likes >= 1 
           @comment.likers = int_array.delete_if {|value| value == @user.id}
           else 
           @comment.likers = ""
