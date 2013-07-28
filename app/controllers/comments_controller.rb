@@ -219,7 +219,7 @@ def game_comments
   def like_comment
     @comment = Comment.where(:id => params[:comment_id]).first 
     @user = User.where(:id => params[:user_id]).first 
-
+ 
     if @user.nil? || @comment.nil?
       false_json = { :status => "user or comment not found"} 
       render(json: JSON.pretty_generate(false_json) )
