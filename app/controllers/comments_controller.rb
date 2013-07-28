@@ -121,7 +121,7 @@ def game_comments
         :last_name => comment.last_name,
         :message => comment.message,
         :email => comment.email,
-        :liked_by_user =>  comment.likers.include?(user_id.to_s), 
+        :likers_user =>  comment.likers.include?(user_id.to_s), 
         :number_of_likes => comment.likes,
         :bold => comment.bold,
         :checkin => comment.checkin,
@@ -139,7 +139,7 @@ def game_comments
         :last_name => comment.last_name,
         :message => comment.message,
         :email => comment.email,
-        #:liked_by_user =>  comment.likers_by.include?(user_id), 
+        #:likers_user =>  comment.likers_by.include?(user_id), 
         :number_of_likes => comment.likes,
         :bold => comment.bold,
         :checkin => comment.checkin,
@@ -224,14 +224,14 @@ def game_comments
       false_json = { :status => "user or comment not found"} 
       render(json: JSON.pretty_generate(false_json) )
     else
-      if @comment.liked_by.nil?
+      if @comment.likers.nil?
         @comment.likes += 1
-        @comment.liked_by = @user.id.to_s + ","
+        @comment.likers = @user.id.to_s + ","
         liked_json = { :status => "liked"} 
         render(json: JSON.pretty_generate(liked_json) )
       else
-        liked_by_array = @comment.liked_by.split(',') 
-        int_array = liked_by_array.map {|value| value.to_i}
+        likers_array = @comment.likers.split(',') 
+        int_array = likers_array.map {|value| value.to_i}
           
         if int_array.include?(@user.id)
           @comment.likes -= 1 
@@ -240,9 +240,9 @@ def game_comments
           render(json: JSON.pretty_generate(unliked_json) )
         else 
           @comment.likes += 1
-          @comment.liked_by = ("," + @user.id.to_s) 
+          @comment.likers = ("," + @user.id.to_s) 
           liked_json = { :status => "liked"} 
-          render(json: JSON.pretty_generate(liked_json) )
+          render(json: JSON.pretty_generate(likers_json) )
         end
       end
     end
