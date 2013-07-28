@@ -242,7 +242,7 @@ def game_comments
           @comment.likes += 1
           @comment.likers = ("," + @user.id.to_s) 
           liked_json = { :status => "liked"} 
-          render(json: JSON.pretty_generate(likers_json) )
+          render(json: JSON.pretty_generate(liked_json) )
         end
       end
     end
