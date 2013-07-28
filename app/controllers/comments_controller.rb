@@ -246,7 +246,8 @@ def game_comments
           render(json: JSON.pretty_generate(unliked_json) )
         else 
           @comment.likes += 1
-          @comment.likers << "," + @user.id.to_s 
+          string = (@comment.likers.to_s + "," + @user.id.to_s) 
+          @comment.likers = string
           @comment.save
           liked_json = { :status => "liked"} 
           render(json: JSON.pretty_generate(liked_json) )
