@@ -224,7 +224,7 @@ def game_comments
       false_json = { :status => "user or comment not found"} 
       render(json: JSON.pretty_generate(false_json) )
     else
-      if @comment.likers.empty?
+      if !@comment.likers.include?(',')
         @comment.likes += 1
         @comment.likers = @user.id.to_s + ","
         @comment.save
