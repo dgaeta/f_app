@@ -430,9 +430,17 @@ def winners_and_losers
         user.num_of_games += 1 
         user.save
 
-
+        game_members_in_game = GameMember.where(:game_id => @game.id)
+        game_members_in_game.each do |gm|
+          unless gm.user_id == user.id 
+            @notification.message = user.first_name + " " + user.last_name + " joined the game"
+            @notification = Notification.new
+            @notification.sender_id = user.id
+            @notification.receiver_id = gm.user_id
+            @notification.save
+          end
+        end
        
-
         true_json =  { :status => "okay", :game_id => @game.id, :creator_first_name => @game.creator_first_name }
         render(json: JSON.pretty_generate(true_json))
       else

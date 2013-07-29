@@ -92,6 +92,7 @@ end
  gem 'test-unit', group: :test
  gem 'aws-sdk'
  gem "paperclip", "~> 3.0"
+ gem 'intercom-rails', '~> 0.2.21'
 
  #gem 'rabl'
 # Also add either `oj` or `yajl-ruby` as the JSON parser

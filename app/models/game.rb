@@ -147,6 +147,13 @@ class Game < ActiveRecord::Base
     stat = Stat.where(:winners_id => user.id).first
     stat.games_won += 1
     stat.save
+    @notification = Notification.new
+    @notification.message = "Hey, " + user.first_name + " you won your game!"
+    @notification.content = "Game won"
+    @notification.game_id = game.id      
+    @notification.notifiable_id = user.id
+    @notification.notifiable_type = 'User'
+    @notification.save  
     if wager == 0 
       Notifier.congratulate_winner_of_free_game(user.email, user.first_name, 
         successful_checks).deliver
@@ -176,6 +183,15 @@ class Game < ActiveRecord::Base
     stat.losses += 1 
     stat.games_played += 1 
     stat.save
+
+    @notification = Notification.new
+    @notification.message = "Sorry, " + user.first_name + " you lost your game"
+    @notification.content = "Game loss"
+    @notification.game_id = game.id      
+    @notification.notifiable_id = user.id
+    @notification.notifiable_type = 'User'
+    @notification.save  
+ 
     
     if game.wager == 0          
       loser_email = user.email 
@@ -238,6 +254,16 @@ class Game < ActiveRecord::Base
           game.was_recently_initiated = 1
           started_games << game.id
           game.save
+          game_members_in_game = GameMember.where(:game_id => game.id)
+          game_members_in_game.each do |gm|
+            @notification = Notification.new
+            @notification.content = "Game started"
+            @notification.message = "Your Game has started"
+            @notification.notifiable_id = gm.user_id
+            @notification.notifiable_type = 'User'
+            @notification.game_id = game.id
+            @notification.save
+          end
         else 
           Game.addDayToStartAndEnd(game.id)
           #Comment.gamePostponedComment(game.id)

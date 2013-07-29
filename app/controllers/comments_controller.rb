@@ -183,7 +183,16 @@ def game_comments
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
     @comment.email = user.email
-    
+    game_members_in_game = GameMember.where(:game_id => @comment.from_game_id)
+    game_members_in_game.each do |gm|
+      @notification = Notification.new
+      @notification.message = @user.first_name + " " + @user.last_name + " posted a comment"
+      @notification.notifiable_id = gm.user_id
+      @notification.notifiable_type = 'User'
+      @notification.sender_id = user.id
+      @notification.content = 'Comment post'
+      @notification.save
+    end
 
     if @comment.save
      true_json =  { :status => "okay"}
@@ -206,6 +215,18 @@ def game_comments
     user = User.where(:id => @comment.from_user_id).first
     @comment.first_name = user.first_name
     @comment.last_name = user.last_name
+    game_members_in_game = GameMember.where(:game_id => @comment.from_game_id)
+    game_members_in_game.each do |gm|
+      unless gm.user_id == user.id 
+        @notification = Notification.new
+        @notification.message = @user.first_name + " " + @user.last_name + " posted a photo"
+        @notification.sender_id = user.id
+        @notification.notifiable_id = gm.user_id
+        @notification.notifiable_type = 'User'
+        @notification.content = 'Multimedia post'
+        @notification.save
+      end
+    end
 
     if @comment.save
      true_json =  { :status => "okay"}
@@ -225,9 +246,20 @@ def game_comments
       render(json: JSON.pretty_generate(false_json) )
     else
       if @comment.likers.empty?
+        ######## First person to like a comment, create a notification 
         @comment.likes += 1
         @comment.likers = @user.id.to_s 
         @comment.save
+        unless @user.id == @comment.from_user_id
+          @notification = Notification.new
+          @notification.message = @user.first_name + " " + @user.last_name + " liked your posting"
+          @notification.sender_id = @user.id
+          @notification.notifiable_id = @comment.from_user_id
+          @notification.notifiable_type = 'User'
+          @notification.content = 'Liked comment'
+          @notification.comment_id = @comment.id
+          @notification.save
+        end
         liked_json = { :status => "liked"} 
         render(json: JSON.pretty_generate(liked_json) )
       else
@@ -242,7 +274,10 @@ def game_comments
           else 
           @comment.likers = ""
          end
+         #### unlikes a comment, delete the notification
           @comment.save
+          @notification = Notification.where(:comment_id => @comment.id, :sender_id => @user.id).first 
+          @notification.delete
           unliked_json = { :status => "unliked"} 
           render(json: JSON.pretty_generate(unliked_json) )
         else 
@@ -250,6 +285,16 @@ def game_comments
           string = (@comment.likers.to_s + "," + @user.id.to_s) 
           @comment.likers = string
           @comment.save
+          unless @user.id = @comment.from_user_id
+            @notification = Notification.new
+            @notification.sender_id = @user.id
+            @notification.message = @user.first_name + " " + @user.last_name + " liked your posting"
+            @notification.notifiable_id = @comment.from_user_id
+            @notification.notifiable_type = 'User'
+            @notification.content = 'Liked comment'
+            @notification.comment_id = @comment.id
+            @notification.save
+          end
           liked_json = { :status => "liked"} 
           render(json: JSON.pretty_generate(liked_json) )
         end
