@@ -20,28 +20,32 @@ class NotificationsController < ApplicationController
 
   def show_user_notifications
     @user = User.where(:id => params[:user_id]).first 
-    new_notifications_count = @user.notifications.where(:opened => false).count
+    new_notifications_count = @user.notifications.where(:was_opened => "FALSE").count
 
     if @user 
       notifications = @user.notifications
-      notifications = notifications.map do |notif|
-       {:_id => notif.id,
-        :content => notif.content,
-        :sender_id => notif.sender_id,
-        :contains_sender_profile_pic => User.find(notif.sender_id).pluck(s3_profile_pic_name).nil?,
-        :sender_profile_pic =>  (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
-        :message => notif.message,
-        :game_id => notif.game_id,
-        :comment_id => notif.comment_id,
-        :opened => notif.opened, 
-        :new_notifications_count => new_notifications_count}
+      unless notifications.count == 0 
+        notifications = notifications.map do |notif|
+         {:_id => notif.id,
+          :content => notif.content,
+          :sender_id => notif.sender_id,
+          :contains_sender_profile_pic => User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name).nil?,
+          :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60)),
+          :message => notif.message,
+          :game_id => notif.game_id,
+          :comment_id => notif.comment_id,
+          :was_opened => notif.was_opened, 
+          :new_notifications_count => new_notifications_count}
+        end 
+        notifications_json =  { :status => "okay", :notifications => notifications }
+        render(json: JSON.pretty_generate(notifications_json))
+      else 
+        error_json =  { :status => "no user found"}
+        render(json: JSON.pretty_generate(error_json))
       end 
-      notifications_json =  { :status => "okay", :notifications => notifications }
-      render(json: JSON.pretty_generate(notifications_json))
-    else 
-      error_json =  { :status => "no user found"}
-      render(json: JSON.pretty_generate(error_json))
     end 
+    none_json =  { :status => "no notifications"}
+    render(json: JSON.pretty_generate(none_json))
   end
 
 
