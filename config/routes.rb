@@ -177,4 +177,8 @@ FApp::Application.routes.draw do
  match "friendship/create", :to => "friendships#create", :via => "post" 
  match "friendship/destroy", :to => "friendships#destroy", :via => "delete" 
 
+ resources :notifications
+  get "show_user_notifications" => "notifications#show_user_notifications", :as => "show_user_notifications"
+  match "show_user_notifications", :to => "notifications#show_user_notifications", :via => "post" 
+
 end
