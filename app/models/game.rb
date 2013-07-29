@@ -196,6 +196,8 @@ class Game < ActiveRecord::Base
         :currency => "usd",
         :customer => user.customer_id)
 
+        game_member.was_charged = "TRUE"
+        game_member.save
 
         #rescue Stripe::CardError => e
          # flash[:error] = e.message
