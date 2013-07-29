@@ -46,8 +46,6 @@ class NotificationsController < ApplicationController
         render(json: JSON.pretty_generate(error_json))
       end 
     end 
-    none_json =  { :status => "no notifications"}
-    render(json: JSON.pretty_generate(none_json))
   end
 
 
