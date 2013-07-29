@@ -47,6 +47,20 @@ class NotificationsController < ApplicationController
     end 
   end
 
+  def open_notification
+    @notification = Notification.where(:id => params[:notification_id]).first 
+
+    if @notification
+      @notification.was_opened = "TRUE"
+      @notification.save
+      success_json =  { :status => "okay"}
+      render(json: JSON.pretty_generate(success_json))
+    else 
+      error_json =  { :status => "no notification found"}
+      render(json: JSON.pretty_generate(error_json))
+    end
+  end
+
 
 
 
