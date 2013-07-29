@@ -21,6 +21,8 @@ class NotificationsController < ApplicationController
   def show_user_notifications
     @user = User.where(:id => params[:user_id]).first 
     new_notifications_count = @user.notifications.where(:was_opened => "FALSE").count
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user 
       notifications = @user.notifications
