@@ -183,7 +183,7 @@ class Game < ActiveRecord::Base
       loser_user_id = user.id 
       Notifier.notify_loser_of_free_game(game.id, loser_email, loser_first_name, loser_user_id, loser_checkins).deliver
     else
-      unless game_member.charged
+      unless game_member.was_charged
         money_lost = game.wager
         loser_email = user.email 
         loser_first_name = user.first_name
@@ -197,13 +197,12 @@ class Game < ActiveRecord::Base
         :customer => user.customer_id)
 
 
-        rescue Stripe::CardError => e
-          flash[:error] = e.message
-          redirect_to charges_path
-          Notifier.stripe_create_customer_error(user.id, game.id, user.email, game.wager, user.customer_id, e.message).deliver
-          card_error_json = { :status => "error charging customer"} 
-          render(json: JSON.pretty_generate(card_error_json))
-        end
+        #rescue Stripe::CardError => e
+         # flash[:error] = e.message
+         # redirect_to charges_path
+         # Notifier.stripe_create_customer_error(user.id, game.id, user.email, game.wager, user.customer_id, e.message).deliver
+         # card_error_json = { :status => "error charging customer"} 
+         # render(json: JSON.pretty_generate(card_error_json))
       end
     end
   end

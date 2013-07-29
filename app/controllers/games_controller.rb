@@ -144,84 +144,79 @@ class GamesController < ApplicationController
     @user = User.where(:id => params[:user_id]).first
     @wager = params[:wager]
 
-    unless @user.num_of_games > 99
-      unless @wager == 0  
-        unless @user.customer_id.length < 2
-          # get the credit card details submitted by Android
-          credit_card_number = params[:credit_card_number]
-          credit_card_exp_month = params[:credit_card_exp_month]
-          credit_card_exp_year = params[:credit_card_exp_year]
-          credit_card_cvc = params[:credit_card_cvc]
-      
-          # create a Customer
-          customer = Stripe::Customer.create(
-          :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
-          :email => @user.email ) 
+    unless @wager == 0  
+      unless @user.customer_id.length < 2
+        # get the credit card details submitted by Android
+        credit_card_number = params[:credit_card_number]
+        credit_card_exp_month = params[:credit_card_exp_month]
+        credit_card_exp_year = params[:credit_card_exp_year]
+        credit_card_cvc = params[:credit_card_cvc]
+    
+        # create a Customer
+        customer = Stripe::Customer.create(
+        :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
+        :email => @user.email ) 
 
-          rescue Stripe::CardError => e
-            flash[:error] = e.message
-            redirect_to charges_path
-            game_id = 0 
-             Notifier.stripe_create_customer_error(@user.id, game_id, @user.email, e.message).deliver
-            card_error_json = { :status => "error creating customer"} 
-            render(json: JSON.pretty_generate(card_error_json))
-          end
-
-          @user.first_payment_date = Time.now.to_i 
-          @user.update_attributes(:customer_id => customer.id)
-          @user.save
-
-
-
-              # Now, make a stripe column for database table 'users'
-              # save the customer ID in your database so you can use it later
-          end
+        #error handling
+        #rescue Stripe::CardError => e
+         # flash[:error] = e.message
+         # redirect_to charges_path
+         # game_id = 0 
+         # Notifier.stripe_create_customer_error(@user.id, game_id, @user.email, e.message).deliver
+         # card_error_json = { :status => "error creating customer"} 
+         # render(json: JSON.pretty_generate(card_error_json))
       end
-      
+    end
 
-      @stat = Stat.where(:winners_id => @user.id).first 
-      @stat.games_played += 1 
-      @stat.save
-      @game = Game.new(params[:game])
-      @game.creator_id = @user.id
-      @game.players = 1
-      @game.wager = params[:wager] #####double compensate for not getting wager
-      @first_name = @user.first_name.downcase
-      @game.creator_first_name = @user.first_name
-      @game.stakes = @game.wager
-      @game.is_private = params[:is_private]
-      @game.goal_days = params[:goal_days]
-      @game.duration =  params[:duration]  ####delete in production
-      @game.save
-      @user.game_history += 1 
-      @user.num_of_games += 1 
-      #if @user.in_games.nil?
-       # array = []
-       # @user.in_games = array.push(@game.id)
-      #else
-       # @user.in_games << @game.id
-      #end
-      @user.save
+    @user.first_payment_date = Time.now.to_i 
+    @user.update_attributes(:customer_id => customer.id)
+    @user.save
 
-      @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
-      @gamemember.save
+    # Now, make a stripe column for database table 'users'
+    # save the customer ID in your database so you can use it later
+
+    @stat = Stat.where(:winners_id => @user.id).first 
+    @stat.games_played += 1 
+    @stat.save
+    @game = Game.new(params[:game])
+    @game.creator_id = @user.id
+    @game.players = 1
+    @game.wager = params[:wager] #####double compensate for not getting wager
+    @game.creator_first_name = @user.first_name
+    @game.stakes = @game.wager
+    @game.is_private = params[:is_private]
+    @game.goal_days = params[:goal_days]
+    @game.duration =  params[:duration]  ####delete in production
+    @game.save
+    @user.game_history += 1 
+    @user.num_of_games += 1 
+    #if @user.in_games.nil?
+     # array = []
+     # @user.in_games = array.push(@game.id)
+    #else
+     # @user.in_games << @game.id
+    #end
+    @user.save
+
+    @gamemember = GameMember.create(:user_id => @user.id, :game_id => @game.id )
+    @gamemember.save
       #@user = User.where(:id => @user.id)
-      c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
-      :message => @user.first_name + "" + " created the game.", :from_game_id => @game.id)
-      c.email = @user.email 
-      c.save
+    c = Comment.new(:from_user_id => @user.id, :first_name => @user.first_name, :last_name => @user.last_name, 
+    :message => @user.first_name + "" + " created the game.", :from_game_id => @game.id)
+    c.email = @user.email 
+    c.save
 
-      variable = (Time.now - 21600) + 24*60*60 #1 day after time now at midnight
-      variable = Time.at(variable).midnight
-      variable = variable.to_i
-      @game.game_start_date = variable
+    variable = (Time.now - 21600) + 24*60*60 #1 day after time now at midnight
+    variable = Time.at(variable).midnight
+    variable = variable.to_i
+    @game.game_start_date = variable
 
-      variable2 = ((Time.now - 21600)+ ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
-      variable2 = Time.at(variable2).midnight
-      variable2 = variable2.to_i
-      @game.game_end_date = variable2
-      @game.save
-          
+    variable2 = ((Time.now - 21600)+ ( (@game.duration + 1) *24*60*60)) #14 days after time now at mindnight
+    variable2 = Time.at(variable2).midnight
+    variable2 = variable2.to_i
+    @game.game_end_date = variable2
+    
+    if @game.save      
       true_json =  { :status => "okay", :game_id => @game.id}
       render(json: JSON.pretty_generate(true_json) )
     else 
@@ -387,28 +382,27 @@ def winners_and_losers
             :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
             :email => user_email ) 
 
-            rescue Stripe::CardError => e
-              flash[:error] = e.message
-              redirect_to charges_path
-              Notifier.stripe_create_customer_error(user.id, @game.id, user.email, e.message).deliver
-              card_error_json = { :status => "error creating customer"} 
-              render(json: JSON.pretty_generate(card_error_json))
-            end
-
-
-            user.update_attributes(:customer_id => customer.id)
-            user.first_payment_date = Time.now.to_i 
-            user.save
-
-            if user.customer_id == "0" 
-              bad_cc_json = { :status => "invalid credit card"} 
-              render(json: JSON.pretty_generate(bad_cc_json))
-              return
-            end 
-
-            # Now, make a stripe column for database table 'users'
-            # save the customer ID in your database so you can use it later
+           # rescue Stripe::CardError => e
+           #   flash[:error] = e.message
+           #   redirect_to charges_path
+           #   Notifier.stripe_create_customer_error(user.id, @game.id, user.email, e.message).deliver
+           #   card_error_json = { :status => "error creating customer"} 
+           #   render(json: JSON.pretty_generate(card_error_json))
           end
+
+
+          user.update_attributes(:customer_id => customer.id)
+          user.first_payment_date = Time.now.to_i 
+          user.save
+
+          if user.customer_id == "0" 
+            bad_cc_json = { :status => "invalid credit card"} 
+            render(json: JSON.pretty_generate(bad_cc_json))
+            return
+          end 
+
+          # Now, make a stripe column for database table 'users'
+          # save the customer ID in your database so you can use it later  
         end
 
         game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
@@ -444,8 +438,8 @@ def winners_and_losers
       else
         false_json = { :status => "fail."} 
         render(json: JSON.pretty_generate(false_json))
+      end
     end
-   end
   end
 
   def countdown

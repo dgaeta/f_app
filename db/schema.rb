@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130728010412) do
+ActiveRecord::Schema.define(:version => 20130729024436) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20130728010412) do
     t.boolean  "is_game_over",               :default => false
     t.integer  "last_checkout_date",         :default => 0
     t.integer  "active",                     :default => 0
+    t.boolean  "was_charged",                :default => false
   end
 
   create_table "games", :force => true do |t|
