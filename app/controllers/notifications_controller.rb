@@ -28,7 +28,7 @@ class NotificationsController < ApplicationController
        {:_id => notif.id,
         :content => notif.content,
         :sender_id => notif.sender_id,
-        :contains_sender_profile_pic => User.find(sender_id).pluck(s3_profile_pic_name).nil?,
+        :contains_sender_profile_pic => User.find(notif.sender_id).pluck(s3_profile_pic_name).nil?,
         :sender_profile_pic =>  (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
         :message => notif.message,
         :game_id => notif.game_id,
