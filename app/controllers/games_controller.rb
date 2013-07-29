@@ -157,6 +157,16 @@ class GamesController < ApplicationController
           customer = Stripe::Customer.create(
           :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
           :email => @user.email ) 
+
+          rescue Stripe::CardError => e
+            flash[:error] = e.message
+            redirect_to charges_path
+            game_id = 0 
+             Notifier.stripe_create_customer_error(@user.id, game_id, @user.email, e.message).deliver
+            card_error_json = { :status => "error creating customer"} 
+            render(json: JSON.pretty_generate(card_error_json))
+          end
+
           @user.first_payment_date = Time.now.to_i 
           @user.update_attributes(:customer_id => customer.id)
           @user.save
@@ -376,6 +386,16 @@ def winners_and_losers
             customer = Stripe::Customer.create(
             :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
             :email => user_email ) 
+
+            rescue Stripe::CardError => e
+              flash[:error] = e.message
+              redirect_to charges_path
+              Notifier.stripe_create_customer_error(user.id, @game.id, user.email, e.message).deliver
+              card_error_json = { :status => "error creating customer"} 
+              render(json: JSON.pretty_generate(card_error_json))
+            end
+
+
             user.update_attributes(:customer_id => customer.id)
             user.first_payment_date = Time.now.to_i 
             user.save

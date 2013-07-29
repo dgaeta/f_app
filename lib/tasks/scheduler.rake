@@ -76,12 +76,12 @@ task :auto_end_games => :environment do
   unless finished_games.length == 0
     finished_games.each do |id|
       game = Game.where(:id => id).first
+      game.game_active = 0
+      game.game_initialized = 0 
       playerIDs = GameMember.where(:game_id => game.id)
       numberOfWinners = Game.countWinnerIDs(playerIDs, game.goal_days) 
       Game.decideAndNotifyResults(playerIDs, numberOfWinners , game.goal_days)  ###updates user attributes
       Game.gameHasEndedPush(game.id)
-      game.game_active = 0
-      game.game_initialized = 0 
       game.is_private = "TRUE"
       game.save
     end

@@ -174,8 +174,21 @@ def additional_request_for_undecided_location(user, user_email, string, gym_name
     mail(:to => "team@fitsby.com", :subject => "Fitsby daily report")
   end
 
+  def stripe_create_customer_error(user_id, game_id, email, message)
+    @user_id = user_id
+    @game_id = game_id
+    @email = email
+    mail(:to => "team@fitsby.com", :subject => "Stripe create customer error")
+  end
 
-
+  def stripe_charge_customer_error(user_id, game_id, email, amount, customer_id, message)
+    @user_id = user_id
+    @game_id = game_id
+    @email = email
+    @amount = amount
+    @customer_id = customer_id
+    mail(:to => "team@fitsby.com", :subject => "Stripe charge customer error")
+  end
 
 # FOLLOW UP EMAILS THAT ARE SENT FROM KEVIN TO GET USER FEEDBACK 
   def followup_10minutes_onecheckin(user)
