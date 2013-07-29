@@ -285,7 +285,7 @@ def game_comments
           string = (@comment.likers.to_s + "," + @user.id.to_s) 
           @comment.likers = string
           @comment.save
-          unless @user.id = @comment.from_user_id
+          unless @user.id == @comment.from_user_id
             @notification = Notification.new
             @notification.sender_id = @user.id
             @notification.message = @user.first_name + " " + @user.last_name + " liked your posting"
