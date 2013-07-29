@@ -179,6 +179,6 @@ FApp::Application.routes.draw do
 
  resources :notifications
   get "show_user_notifications" => "notifications#show_user_notifications", :as => "show_user_notifications"
-  match "show_user_notifications", :to => "notifications#show_user_notifications", :via => "post" 
+  match "show_user_notifications", :to => "notifications#show_user_notifications", :via => "get" 
 
 end
