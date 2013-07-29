@@ -68,6 +68,8 @@ class NotificationsController < ApplicationController
 private 
   def load_notifiable
     klass = [Game, User, ProfilePicture].detect { |n| params["#{n.name.underscore}_id"]}
-    @notifiable = klass.find(params["#{klass.name.underscore}_id"])
-  end
+    unless klass.nil?
+      @notifiable = klass.find(params["#{klass.name.underscore}_id"])
+    end
+end
 end
