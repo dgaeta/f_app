@@ -36,10 +36,9 @@ class NotificationsController < ApplicationController
           :message => notif.message,
           :game_id => notif.game_id,
           :comment_id => notif.comment_id,
-          :was_opened => notif.was_opened, 
-          :new_notifications_count => new_notifications_count}
+          :was_opened => notif.was_opened}
         end 
-        notifications_json =  { :status => "okay", :notifications => notifications }
+        notifications_json =  { :status => "okay", :notifications => notifications, :new_notifications_count => new_notifications_count }
         render(json: JSON.pretty_generate(notifications_json))
       else 
         error_json =  { :status => "no user found"}
