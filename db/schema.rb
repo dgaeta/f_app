@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130729151528) do
+ActiveRecord::Schema.define(:version => 20130729195748) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -139,10 +139,10 @@ ActiveRecord::Schema.define(:version => 20130729151528) do
     t.string   "notifiable_type"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
-    t.boolean  "opened",          :default => false
     t.integer  "comment_id"
     t.integer  "game_id"
     t.string   "message"
+    t.boolean  "was_opened",      :default => false
   end
 
   add_index "notifications", ["notifiable_id", "notifiable_type"], :name => "index_notifications_on_notifiable_id_and_notifiable_type"
