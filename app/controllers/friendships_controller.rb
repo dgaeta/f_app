@@ -84,13 +84,13 @@ class FriendshipsController < ApplicationController
       @responseFriendship.save 
 
       @userWhoSentRequest = User.where(:id => params[:friend_id]).first
-      @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id)
+      @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id).first
       @sentFriendship.status = "ACCEPTED"
       @sentFriendship.save
       @notification = Notification.new
       @notification.content = "Friend request accepted"
-      @notification.message = @userRecipient.first_name + "is now your friend on Fitsby!"
-      @notification.notifiable_id = param[:friend_id]
+      @notification.message = @userRecipient.first_name + " is now your friend on Fitsby!"
+      @notification.notifiable_id = @userWhoSentRequest.id
       @notification.sender_id = @userRecipient.id 
       @notification.save
 
