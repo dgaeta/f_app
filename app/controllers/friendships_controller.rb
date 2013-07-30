@@ -106,7 +106,7 @@ class FriendshipsController < ApplicationController
       @notification = Notification.new
       @notification.content = "Friend request"
       @notification.message = @user.first_name + " wants to be your friend on Fitsby!"
-      @notification.notifiable_id = param[:friend_id]
+      @notification.notifiable_id = params[:friend_id]
       @notification.sender_id = @user.id 
       @notification.save
       request_sent_json =  { :status => "friend request sent"  }
