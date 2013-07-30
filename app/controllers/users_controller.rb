@@ -434,7 +434,7 @@ require 'json'
     @friend = User.where(:id => params[:friend_user_id]).first 
 
     if @user
-      friend = friend.map do |friend|
+      @friend = @friend.map do |friend|
         {:friend_id => friend.id,
         :first_name => friend.first_name,
         :last_name => friend.last_name,
