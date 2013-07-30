@@ -76,7 +76,7 @@ class FriendshipsController < ApplicationController
     redirect_to current_user
   end
 
-  def acceptFriend
+  def accept_friend
     @userRecipient = User.where(:id => params[:user_id]).first
     @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id])
     @reponseFriendship.status = "ACCEPTED"

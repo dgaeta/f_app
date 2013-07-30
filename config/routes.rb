@@ -176,10 +176,12 @@ FApp::Application.routes.draw do
  get "friendship/destroy" => "friendships#destroy", :as => "friendship/destroy"
  get "show_friends" => "friendships#show_friends", :as => "show_friends"
  get "create_friend_request" => "friendships#create_friend_request", :as => "create_friend_request"
+ get "accept_friend" => "friendships#accept_friend", :as => "accept_friend"
  match "friendship/create", :to => "friendships#create", :via => "post" 
  match "friendship/destroy", :to => "friendships#destroy", :via => "delete" 
  match "show_friends", :to => "friendships#show_friends", :via => "get" 
  match "create_friend_request", :to => "friendships#create_friend_request", :via => "post" 
+ match "accept_friend", :to => "friendships#accept_friend", :via => "post" 
 
  resources :notifications
   get "show_user_notifications" => "notifications#show_user_notifications", :as => "show_user_notifications"
