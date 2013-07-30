@@ -137,15 +137,17 @@ class FriendshipsController < ApplicationController
 
   def show_friends
     @user = User.where(:id => params[:user_id]).first 
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
   
     if @user 
       friends = @user.friendships.where(:status => "ACCEPTED")
       friends = friends.map do |friend|
         {:friend_id => friend.friend_id,
-        :first_name => User.find(friend.id).pluck,
-        :last_name => member.user.last_name,
-        :contains_sender_profile_pic => User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name).nil?,
-        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
+        :first_name => friend.friend_first_name,
+        :last_name => friend.first_last_name,
+        :contains_sender_profile_pic => User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name).nil?,
+        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
       end
       friends_json =  { :status => "okay", :friends => friends  }
       render(json: JSON.pretty_generate(friends_json))
