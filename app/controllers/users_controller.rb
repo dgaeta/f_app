@@ -454,7 +454,7 @@ require 'json'
       elsif Friendship.where(:user_id => @friend.id, :friend_id => @user.id).first 
         status = "Request pending your approval"
       else 
-        status "unadded friend"
+        status = "unadded friend"
       end
       success_json = { :status => "okay" , :friend_id => @friend.id,  :first_name => @friend.first_name, :last_name => @friend.last_name,
         :contains_sender_profile_pic => User.where(:id => @friend.id).pluck(:s3_profile_pic_name).nil?,
