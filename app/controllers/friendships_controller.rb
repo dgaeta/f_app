@@ -121,13 +121,16 @@ class FriendshipsController < ApplicationController
         @notification.save
         request_sent_json =  { :status => "friend request sent"  }
         render(json: JSON.pretty_generate(request_sent_json))
+        return 
       else
         failed_request_json =  { :status => "fail"  }
         render(json: JSON.pretty_generate(failed_sent_json))
+        return
       end
     end
       failed_request_json =  { :status => "friend request already sent"  }
       render(json: JSON.pretty_generate(failed_request_json))
+      return 
   end
 
   def show_friends
