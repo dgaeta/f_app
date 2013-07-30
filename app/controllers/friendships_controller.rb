@@ -98,9 +98,11 @@ class FriendshipsController < ApplicationController
 
       true_json =  { :status => "okay"  }
       render(json: JSON.pretty_generate(true_json))
+      return
     end
     failed_request_json =  { :status => "friendship already exists"  }
-    render(json: JSON.pretty_generate(failed_sent_json))
+    render(json: JSON.pretty_generate(failed_request_json))
+    return
   end
 
   def create_friend_request
