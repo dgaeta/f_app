@@ -22,4 +22,15 @@ class User < ActiveRecord::Base
   validates_presence_of :last_name
  
 
+
+   def self.terms(terms)
+    return if terms.blank?
+    composed_scope = scoped
+    terms.split(' ').map { |term| "%#{term}%" }.each do |term|
+      composed_scope = composed_scope.where('first_name ILIKE :term OR last_name ILIKE :term OR email ILIKE :term', { :term => term })
+    end
+
+    composed_scope
+  end
+  
 end

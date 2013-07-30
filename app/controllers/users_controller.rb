@@ -416,19 +416,29 @@ require 'json'
     end  
   end
 
-=begin  def search_for_user
+  def search_for_user
     @user = User.where(:id => params[:user_id]).first 
-    input_search = params[:search]
+    input_search = params[:terms]
 
-    if input_search
-      input_search = input_search.split
+    @results = User.terms(input_search)
 
-    else
-
-    end
-    
+    if @results 
+      #@friendship_status = 
+      @results = @results.map do |user|
+      {:id => user.id,
+      :first_name => user.first_name,
+      :last_name => user.last_name,
+      :contains_profile_picture => user.contains_profile_picture,
+      :s3_profile_pic_name => user.s3_profile_pic_name}
+      end
+      results_json = { :status => "found results" , :results => @results } 
+      render(json: JSON.pretty_generate(results_json))
+    else 
+       false_json = { :status => "no results found"} 
+      render(json: JSON.pretty_generate(false_json))
+    end   
   end
-=end
+
   def user_details
     @user = User.where(:id => params[:user_id]).first
     @friend = User.where(:id => params[:friend_user_id]).first 

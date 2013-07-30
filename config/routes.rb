@@ -134,6 +134,7 @@ FApp::Application.routes.draw do
   get "upload_profile_picture" => "users#upload_to_s3", :as => "upload_profile_picture"
   get "get_user_profile_picture" => "users#get_user_profile_picture", :as => "get_user_profile_picture"
   get "user_details" => "users#user_details", :as => "user_details"
+  get "search_for_user" => "users#search_for_user", :as => "search_for_user"
   ###
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "change_password", :to => "users#change_password", :via => "put"  
@@ -151,6 +152,7 @@ FApp::Application.routes.draw do
   match "upload_profile_picture", :to => "users#upload_to_s3", :via => "post" 
   match "get_user_profile_picture", :to => "users#get_user_profile_picture", :via => "get" 
   match "user_details", :to => "users#user_details", :via => "get" 
+  match "search_for_user", :to => "users#search_for_user", :via => "get"
 
 
   resources :password_resets
