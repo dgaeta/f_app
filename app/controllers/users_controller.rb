@@ -434,14 +434,7 @@ require 'json'
     @friend = User.where(:id => params[:friend_user_id]).first 
 
     if @user
-      @friend = @friend.map do |friend|
-        {:friend_id => friend.id,
-        :first_name => friend.first_name,
-        :last_name => friend.last_name,
-        :contains_sender_profile_pic => User.where(:id => friend.id).pluck(:s3_profile_pic_name).nil?,
-        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => friend.id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
-      end
-
+      
       if Friendship.where(:user_id => 1717, :friend_id => 146).first 
         status =  Friendship.where(:user_id => 1717, :friend_id => 146).pluck(:status)
       elsif Friendship.where(:user_id => 146, :friend_id => 1717).first 
@@ -449,7 +442,10 @@ require 'json'
       else 
         status "unadded friend"
       end
-      success_json = { :status => "okay" , :friend => friend, :friendship_status => status}
+      success_json = { :status => "okay" , :friend_id => @friend.id,  :first_name => @friend.first_name, :last_name => @friend.last_name,
+        :contains_sender_profile_pic => User.where(:id => @friend.id).pluck(:s3_profile_pic_name).nil?,
+        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => @friend.id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}, 
+        :friendship_status => status}
       render(json: JSON.pretty_generate(success_json))
       return
     else 
