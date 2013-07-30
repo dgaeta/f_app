@@ -432,6 +432,8 @@ require 'json'
   def user_details
     @user = User.where(:id => params[:user_id]).first
     @friend = User.where(:id => params[:friend_user_id]).first 
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user
       
