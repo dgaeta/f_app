@@ -422,7 +422,7 @@ require 'json'
 
     @results = User.terms(input_search)
 
-    if @results 
+    unless @results.empty? 
       #@friendship_status = 
       @results = @results.map do |user|
       {:id => user.id,
