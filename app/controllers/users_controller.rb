@@ -449,9 +449,9 @@ require 'json'
 
     if @user
       
-      if Friendship.where(:user_id => 1717, :friend_id => 146).first 
-        status =  Friendship.where(:user_id => 1717, :friend_id => 146).pluck(:status)
-      elsif Friendship.where(:user_id => 146, :friend_id => 1717).first 
+      if Friendship.where(:user_id => @user.id, :friend_id => @friend.id).first 
+        status =  Friendship.where(:user_id => @user.id, :friend_id => @friend.id).pluck(:status)
+      elsif Friendship.where(:user_id => @friend.id, :friend_id => @user.id).first 
         status = "Request pending your approval"
       else 
         status "unadded friend"
