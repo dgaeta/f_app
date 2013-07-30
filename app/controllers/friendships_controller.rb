@@ -86,6 +86,12 @@ class FriendshipsController < ApplicationController
     @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id)
     @sentFriendship.status = "ACCEPTED"
     @sentFriendship.save
+    @notification = Notification.new
+    @notification.content = "Friend request accepted"
+    @notification.message = @userRecipient.first_name + "is now your friend on Fitsby!"
+    @notification.notifiable_id = param[:friend_id]
+    @notification.sender_id = @userRecipient.id 
+    @notification.save
 
     true_json =  { :status => "okay"  }
     render(json: JSON.pretty_generate(true_json))
@@ -99,7 +105,7 @@ class FriendshipsController < ApplicationController
     if @friendship.save
       @notification = Notification.new
       @notification.content = "Friend request"
-      @notification.message = @user.first_name
+      @notification.message = @user.first_name + " wants to be your friend on Fitsby!"
       @notification.notifiable_id = param[:friend_id]
       @notification.sender_id = @user.id 
       @notification.save
