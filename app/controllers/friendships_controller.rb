@@ -80,7 +80,9 @@ class FriendshipsController < ApplicationController
     @userRecipient = User.where(:id => params[:user_id]).first
     friendship = Friendship.where(:user_id => @userRecipient.id, :friend_id => params[:friend_id]).first
     unless friendship
-      @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id], :status => "ACCEPTED")
+      @friend = User.where(:id => params[:friend_id]).first
+      @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id], :status => "ACCEPTED", 
+        :friend_first_name => @friend.first_name, :friend_last_name => @friend.last_name)
       @responseFriendship.save 
 
       @userWhoSentRequest = User.where(:id => params[:friend_id]).first
@@ -105,8 +107,10 @@ class FriendshipsController < ApplicationController
     @user = User.where(:id => params[:user_id]).first 
     friendship = Friendship.where(:user_id => @user.id, :friend_id => params[:friend_id]).first
     unless friendship
-      @friendship = @user.friendships.build(:friend_id => params[:friend_id])
-      @friendship.status = "SENT"
+      @friendship = @user.friendships.build(:friend_id => params[:friend_id], :status => "SENT")
+      @friend = User.where(:id => params[:friend_id]).first
+      @friendship.friend_first_name = @friend.first_name
+      @friendship.friend_last_name = @friend.last_name
       if @friendship.save
         @notification = Notification.new
         @notification.content = "Friend request"
@@ -131,6 +135,13 @@ class FriendshipsController < ApplicationController
   
     if @user 
       friends = @user.friendships.where(:status => "ACCEPTED")
+      friends = friends.map do |friend|
+        {:friend_id => friend.friend_id,
+        :first_name => User.find(friend.id).pluck,
+        :last_name => member.user.last_name,
+        :contains_sender_profile_pic => User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name).nil?,
+        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => notif.sender_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
+      end
       friends_json =  { :status => "okay", :friends => friends  }
       render(json: JSON.pretty_generate(friends_json))
     else 
