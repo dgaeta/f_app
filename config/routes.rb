@@ -133,6 +133,7 @@ FApp::Application.routes.draw do
   get "does_customer_id_exist" => "users#does_customer_id_exist", :as => "does_customer_id_exist"
   get "upload_profile_picture" => "users#upload_to_s3", :as => "upload_profile_picture"
   get "get_user_profile_picture" => "users#get_user_profile_picture", :as => "get_user_profile_picture"
+  get "user_details" => "users#user_details", :as => "user_details"
   ###
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "change_password", :to => "users#change_password", :via => "put"  
@@ -149,6 +150,8 @@ FApp::Application.routes.draw do
   match "signup", :to => "users#create", :via => "post"
   match "upload_profile_picture", :to => "users#upload_to_s3", :via => "post" 
   match "get_user_profile_picture", :to => "users#get_user_profile_picture", :via => "get" 
+  match "user_details", :to => "users#user_details", :via => "get" 
+
 
   resources :password_resets
   get "reset_password" => "password_resets#create", :as => "reset_password"
