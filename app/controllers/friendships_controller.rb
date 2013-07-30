@@ -92,5 +92,23 @@ class FriendshipsController < ApplicationController
     
   end
 
+  def create_friend_request
+    @user = User.where(:id => params[:user_id]).first 
+    @friendship = @user.friendships.build(:friend_id => params[:friend_id])
+    @friendship.status = "SENT"
+    if @friendship.save
+      @notification = Notification.new
+      @notification.content = "Friend request"
+      @notification.notifiable_id = param[:friend_id]
+      @notification.sender_id = @user.id 
+      @notification.save
+      request_sent_json =  { :status => "friend request sent"  }
+      render(json: JSON.pretty_generate(request_sent_json))
+    else
+      failed_request_json =  { :status => "fail"  }
+      render(json: JSON.pretty_generate(request_sent_json))
+    end
+  end
+
 
 end
