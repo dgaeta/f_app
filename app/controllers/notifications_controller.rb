@@ -25,7 +25,7 @@ class NotificationsController < ApplicationController
     bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user 
-      notifications = @user.notifications
+      notifications = @user.notifications.order("created_at DESC")
       unless notifications.count == 0 
         notifications = notifications.map do |notif|
          {:_id => notif.id,

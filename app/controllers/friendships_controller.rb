@@ -78,50 +78,59 @@ class FriendshipsController < ApplicationController
 
   def accept_friend
     @userRecipient = User.where(:id => params[:user_id]).first
-    @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id])
-    @reponseFriendship.status = "ACCEPTED"
-    @responseFriendship.save 
+    friendship = Friendship.where(:user_id => @userRecipient.id, :friend_id => params[:friend_id]).first
+    unless friendship
+      @responseFriendship = @userRecipient.friendships.build(:friend_id => params[:friend_id], :status => "ACCEPTED")
+      @responseFriendship.save 
 
-    @userWhoSentRequest = User.where(:id => params[:friend_id]).first
-    @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id)
-    @sentFriendship.status = "ACCEPTED"
-    @sentFriendship.save
-    @notification = Notification.new
-    @notification.content = "Friend request accepted"
-    @notification.message = @userRecipient.first_name + "is now your friend on Fitsby!"
-    @notification.notifiable_id = param[:friend_id]
-    @notification.sender_id = @userRecipient.id 
-    @notification.save
+      @userWhoSentRequest = User.where(:id => params[:friend_id]).first
+      @sentFriendship =  @userWhoSentRequest.friendships.where(:friend_id => @userRecipient.id)
+      @sentFriendship.status = "ACCEPTED"
+      @sentFriendship.save
+      @notification = Notification.new
+      @notification.content = "Friend request accepted"
+      @notification.message = @userRecipient.first_name + "is now your friend on Fitsby!"
+      @notification.notifiable_id = param[:friend_id]
+      @notification.sender_id = @userRecipient.id 
+      @notification.save
 
-    true_json =  { :status => "okay"  }
-    render(json: JSON.pretty_generate(true_json))
-    
+      true_json =  { :status => "okay"  }
+      render(json: JSON.pretty_generate(true_json))
+    end
+    failed_request_json =  { :status => "friendship already exists"  }
+    render(json: JSON.pretty_generate(failed_sent_json))
   end
 
   def create_friend_request
     @user = User.where(:id => params[:user_id]).first 
-    @friendship = @user.friendships.build(:friend_id => params[:friend_id])
-    @friendship.status = "SENT"
-    if @friendship.save
-      @notification = Notification.new
-      @notification.content = "Friend request"
-      @notification.message = @user.first_name + " wants to be your friend on Fitsby!"
-      @notification.notifiable_id = params[:friend_id]
-      @notification.sender_id = @user.id 
-      @notification.save
-      request_sent_json =  { :status => "friend request sent"  }
-      render(json: JSON.pretty_generate(request_sent_json))
-    else
-      failed_request_json =  { :status => "fail"  }
-      render(json: JSON.pretty_generate(request_sent_json))
+    friendship = Friendship.where(:user_id => @user.id, :friend_id => params[:friend_id]).first
+    unless friendship
+      @friendship = @user.friendships.build(:friend_id => params[:friend_id])
+      @friendship.status = "SENT"
+      if @friendship.save
+        @notification = Notification.new
+        @notification.content = "Friend request"
+        @notification.notifiable_type = "User"
+        @notification.message = @user.first_name + " wants to be your friend on Fitsby!"
+        @notification.notifiable_id = params[:friend_id]
+        @notification.sender_id = @user.id 
+        @notification.save
+        request_sent_json =  { :status => "friend request sent"  }
+        render(json: JSON.pretty_generate(request_sent_json))
+      else
+        failed_request_json =  { :status => "fail"  }
+        render(json: JSON.pretty_generate(failed_sent_json))
+      end
     end
+      failed_request_json =  { :status => "friend request already sent"  }
+      render(json: JSON.pretty_generate(failed_sent_json))
   end
 
   def show_friends
     @user = User.where(:id => params[:user_id]).first 
   
     if @user 
-      friends = @user.friendships.where(:status => "ACEEPTED")
+      friends = @user.friendships.where(:status => "ACCEPTED")
       friends_json =  { :status => "okay", :friends => friends  }
       render(json: JSON.pretty_generate(friends_json))
     else 
