@@ -419,6 +419,8 @@ require 'json'
   def search_for_user
     @user = User.where(:id => params[:user_id]).first 
     input_search = params[:terms]
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     @results = User.terms(input_search)
 
@@ -429,7 +431,7 @@ require 'json'
       :first_name => user.first_name,
       :last_name => user.last_name,
       :contains_profile_picture => user.contains_profile_picture,
-      :s3_profile_pic_name => user.s3_profile_pic_name}
+      :s3_profile_pic_name => (bucket_for_prof_pics.objects[User.where(:id => user).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
       end
       results_json = { :status => "found results" , :results => @results } 
       render(json: JSON.pretty_generate(results_json))
