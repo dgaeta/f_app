@@ -276,8 +276,10 @@ def game_comments
          end
          #### unlikes a comment, delete the notification
           @comment.save
-          @notification = Notification.where(:comment_id => @comment.id, :sender_id => @user.id).first 
-          @notification.delete
+          unless @user.id == @comment.from_user_id
+            @notification = Notification.where(:comment_id => @comment.id, :sender_id => @user.id).first 
+            @notification.delete
+          end
           unliked_json = { :status => "unliked"} 
           render(json: JSON.pretty_generate(unliked_json) )
         else 
