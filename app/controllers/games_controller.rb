@@ -166,11 +166,12 @@ class GamesController < ApplicationController
          # card_error_json = { :status => "error creating customer"} 
          # render(json: JSON.pretty_generate(card_error_json))
       end
+      @user.first_payment_date = Time.now.to_i 
+      @user.update_attributes(:customer_id => customer.id)
+      @user.save
     end
 
-    @user.first_payment_date = Time.now.to_i 
-    @user.update_attributes(:customer_id => customer.id)
-    @user.save
+    
 
     # Now, make a stripe column for database table 'users'
     # save the customer ID in your database so you can use it later
