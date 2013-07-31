@@ -448,9 +448,9 @@ require 'json'
     bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user
-      
       if Friendship.where(:user_id => @user.id, :friend_id => @friend.id).first 
         status =  Friendship.where(:user_id => @user.id, :friend_id => @friend.id).pluck(:status)
+        status = status[0]
       elsif Friendship.where(:user_id => @friend.id, :friend_id => @user.id).first 
         status = "Request pending your approval"
       else 
@@ -469,7 +469,7 @@ require 'json'
     end
   end
   
-  
+
 end
 
 
