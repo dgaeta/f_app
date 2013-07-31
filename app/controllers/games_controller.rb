@@ -165,10 +165,10 @@ class GamesController < ApplicationController
          # Notifier.stripe_create_customer_error(@user.id, game_id, @user.email, e.message).deliver
          # card_error_json = { :status => "error creating customer"} 
          # render(json: JSON.pretty_generate(card_error_json))
+         @user.first_payment_date = Time.now.to_i 
+         @user.update_attributes(:customer_id => customer.id)
+        @user.save
       end
-      @user.first_payment_date = Time.now.to_i 
-      @user.update_attributes(:customer_id => customer.id)
-      @user.save
     end
 
     
