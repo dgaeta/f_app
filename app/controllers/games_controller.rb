@@ -433,9 +433,9 @@ def winners_and_losers
 
         game_members_in_game = GameMember.where(:game_id => @game.id)
         game_members_in_game.each do |gm|
-          unless gm.user_id == user.id 
-            @notification.message = user.first_name + " " + user.last_name + " joined the game"
+          unless gm.user_id == user.id ''
             @notification = Notification.new
+            @notification.message = user.first_name + " " + user.last_name + " joined the game"
             @notification.sender_id = user.id
             @notification.receiver_id = gm.user_id
             @notification.save
