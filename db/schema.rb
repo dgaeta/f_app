@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130730032454) do
+ActiveRecord::Schema.define(:version => 20130807214912) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(:version => 20130730032454) do
     t.integer  "first_payment_date"
     t.string   "s3_profile_pic_name"
     t.boolean  "contains_profile_picture",        :default => false
+    t.string   "twitter_username"
   end
 
   add_index "users", ["last_logout_at", "last_activity_at"], :name => "index_users_on_last_logout_at_and_last_activity_at"
