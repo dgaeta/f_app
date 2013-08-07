@@ -387,6 +387,7 @@ def winners_and_losers
             user.first_payment_date = Time.now.to_i 
             user.save
 
+
            # rescue Stripe::CardError => e
            #   flash[:error] = e.message
            #   redirect_to charges_path
