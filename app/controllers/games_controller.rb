@@ -383,6 +383,10 @@ def winners_and_losers
             :card => [:number => credit_card_number, :exp_month => credit_card_exp_month, :exp_year => credit_card_exp_year, :cvc => credit_card_cvc],
             :email => user_email ) 
 
+            user.update_attributes(:customer_id => customer.id)
+            user.first_payment_date = Time.now.to_i 
+            user.save
+
            # rescue Stripe::CardError => e
            #   flash[:error] = e.message
            #   redirect_to charges_path
@@ -392,9 +396,7 @@ def winners_and_losers
           end
 
 
-          user.update_attributes(:customer_id => customer.id)
-          user.first_payment_date = Time.now.to_i 
-          user.save
+          
 
           if user.customer_id == "0" 
             bad_cc_json = { :status => "invalid credit card"} 
