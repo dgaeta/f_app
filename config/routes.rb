@@ -147,6 +147,7 @@ FApp::Application.routes.draw do
   match "checkPushRegistration", :to => "users#checkPushRegistration", :via => "post"
   match "createUser", :to => "users#createUser", :via => "post"
   match "signin_facebook", :to => "users#signin_facebook", :via => "post"
+  match "signin_twitter", :to => "users#signin_twitter", :via => "post"
   match "does_customer_id_exist", :to => "users#does_customer_id_exist", :via => "get"
   match "signup", :to => "users#create", :via => "post"
   match "upload_profile_picture", :to => "users#upload_to_s3", :via => "post" 
