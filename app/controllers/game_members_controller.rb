@@ -298,6 +298,7 @@ class GameMembersController < ApplicationController
     @user = User.find(params[:user_id])
     all_of_users_gameMembers = GameMember.where(:user_id => @user.id, :active => 1)
     seconds = params[:seconds]
+    seconds = seconds.to_i
     #dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], geo_lat, geo_long)
     #dist_in_meters = dist_in_miles * 1609.34
     #gym_name = params[:gym_name]
@@ -311,7 +312,7 @@ class GameMembersController < ApplicationController
 
     @stat = Stat.where(:winners_id => @user.id).first 
     @stat 
-    @stat.total_minutes_at_gym = (seconds.to_i /60)
+    @stat.total_minutes_at_gym = (seconds /60)
     @stat.save 
 =begin    timeNow = (Time.now.to_i - 21600)
     player = all_of_users_gameMembers[0]
