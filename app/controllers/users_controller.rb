@@ -159,7 +159,7 @@ require 'json'
       @stat.winners_id = @user.id
       @stat.save
       if @user.save 
-        true_json =  { :status => "created", :user_id => @user.id}
+        true_json =  { :status => "added twitter username", :user_id => @user.id}
         render(json: JSON.pretty_generate(true_json))
       else 
         false_json = { :status => "fail."} 
