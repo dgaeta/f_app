@@ -310,10 +310,9 @@ class GameMembersController < ApplicationController
     end 
 
     @stat = Stat.where(:winners_id => @user.id).first 
-    if @stat 
-      @stat.total_minutes_at_gym = (seconds / 60 )
-      @stat.save
-    end 
+    @stat 
+    @stat.total_minutes_at_gym = (seconds / 60 )
+    @stat.save 
 =begin    timeNow = (Time.now.to_i - 21600)
     player = all_of_users_gameMembers[0]
     checkinTime = player.checkins
@@ -339,7 +338,7 @@ class GameMembersController < ApplicationController
     true_json =  { :status => "okay"}
     render(json: JSON.pretty_generate(true_json))   
   end
-    
-  end
+
+
 
 end
