@@ -43,12 +43,14 @@ FApp::Application.routes.draw do
   get "number_of_players" => "game_members#number_of_players", :as => "number_of_players"
   get "games_user_is_in" => "game_members#games_user_is_in", :as => "games_user_is_in"
   get "push_position_change" => "game_members#push_position_change", :as => "push_position_change"
+  get "check_out_activity" => "game_members#check_out_activity", :as => "check_out_activity"
   ###
   match "check_out_request", :to => "game_members#check_out_request", :via => "post"
   match "check_in_request", :to => "game_members#check_in_request", :via => "post"
   match "number_of_players", :to => "game_members#number_of_players", :via => "get"
   match "games_user_is_in", :to => "game_members#games_user_is_in", :via => "get"
   match "push_position_change", :to => "game_members#push_position_change", :via => "post"
+  match "check_out_activity", :to => "game_members#check_out_activity", :via => "post"
 
 
   resources :comments
