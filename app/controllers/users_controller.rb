@@ -150,7 +150,7 @@ require 'json'
       @user.password = "apitwitter"
       @user.password_confirmation = "apitwitter"
       @user.save
-      @user.email = @user.email.downcase
+      @user.email = email.downcase
       today = Time.now.to_date
       @user.signup_day = today.day.to_i
       @user.signup_month = today.month.to_i
