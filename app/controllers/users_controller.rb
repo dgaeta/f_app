@@ -130,7 +130,7 @@ require 'json'
       render(json: JSON.pretty_generate(true_json))
     else 
       create_json = { :status => "does not exist"} 
-      render(json: JSON.pretty_generate(false_json))
+      render(json: JSON.pretty_generate(create_json))
     end
   end
 
