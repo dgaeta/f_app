@@ -126,36 +126,44 @@ require 'json'
     user = User.where(:provider => "twitter", :twitter_username => twitter_username).first
 
     if user 
-      true_json =  { :status => "exists", :user_id => user.id}
+      true_json =  { :status => "exists", :user_id => user.id, :email => user.email}
       render(json: JSON.pretty_generate(true_json))
     else 
-      @user = User.where(:email => params[:email]).first
-      if @user 
-        @user.provider = "twitter"
-        @user.twitter_username = twitter_username 
-        @user.save
-        true_json =  { :status => "added twitter username", :user_id => @user.id}
+      create_json = { :status => "does not exist"} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
+  def create_twitter_user
+    twitter_username = params[:twitter_username]
+    email = params[:email]
+    @user = User.where(:email => email).first
+
+    if @user 
+      @user.provider = "twitter"
+      @user.twitter_username = twitter_username 
+      @user.save
+      true_json =  { :status => "added twitter username", :user_id => @user.id}
+      render(json: JSON.pretty_generate(true_json))
+    else
+      @user = User.new(params[:user])
+      @user.password = "apitwitter"
+      @user.password_confirmation = "apitwitter"
+      @user.save
+      @user.email = @user.email.downcase
+      today = Time.now.to_date
+      @user.signup_day = today.day.to_i
+      @user.signup_month = today.month.to_i
+      @user.signup_year = today.year.to_i
+      @stat = Stat.new 
+      @stat.winners_id = @user.id
+      @stat.save
+      if @user.save 
+        true_json =  { :status => "created", :user_id => @user.id}
         render(json: JSON.pretty_generate(true_json))
       else 
-        @user = User.new(params[:user])
-        @user.password = "apitwitter"
-        @user.password_confirmation = "apitwitter"
-        @user.save
-        @user.email = @user.email.downcase
-        today = Time.now.to_date
-        @user.signup_day = today.day.to_i
-        @user.signup_month = today.month.to_i
-        @user.signup_year = today.year.to_i
-        @stat = Stat.new 
-        @stat.winners_id = @user.id
-        @stat.save
-        if @user.save 
-          true_json =  { :status => "created", :user_id => @user.id}
-          render(json: JSON.pretty_generate(true_json))
-        else 
-          false_json = { :status => "fail."} 
-          render(json: JSON.pretty_generate(false_json))
-        end
+        false_json = { :status => "fail."} 
+        render(json: JSON.pretty_generate(false_json))
       end
     end
   end
