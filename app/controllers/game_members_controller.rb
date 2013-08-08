@@ -293,4 +293,53 @@ class GameMembersController < ApplicationController
     render(json: JSON.pretty_generate(true_json))
   end
 
+
+  def check_out_activity 
+    @user = User.find(params[:user_id])
+    all_of_users_gameMembers = GameMember.where(:user_id => @user.id, :active => 1)
+    seconds = params[:seconds]
+    #dist_in_miles = Geocoder::Calculations.distance_between([@user.check_in_geo_lat, @user.check_in_geo_long], geo_lat, geo_long)
+    #dist_in_meters = dist_in_miles * 1609.34
+    #gym_name = params[:gym_name]
+   
+    if (all_of_users_gameMembers.empty?)
+      error_string = "Games have not Started"
+      false_json = { :status => "fail.", :error => error_string} 
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end 
+
+    @stat = Stat.where(:winners_id => @user.id).first 
+    if @stat 
+      @stat.total_minutes_at_gym = (seconds / 60 )
+      @stat.save
+    end 
+=begin    timeNow = (Time.now.to_i - 21600)
+    player = all_of_users_gameMembers[0]
+    checkinTime = player.checkins
+    diff = timeNow - checkinTime
+    if (diff < 0)
+      error_string = "Need 30 Min"
+      false_json = { :status => "fail.", :error => error_string}
+      render(json: JSON.pretty_generate(false_json))
+      return
+    end 
+=end    
+    all_of_users_gameMembers.each do |member|
+      member.successful_checks += 1 
+      member.save
+      #comment = Comment.new
+      #comment.from_game_id = member.game_id
+      #comment.from_user_id = @user.id
+      #comment.first_name = @user.first_name
+      #comment.last_name = @user.last_name
+      #comment.message = "#{@user.first_name} completed a #{30 + (diff/60)} minute workout"
+      #comment.save
+    end   
+    true_json =  { :status => "okay"}
+    render(json: JSON.pretty_generate(true_json))   
+  end
+    
+  end
+
 end
