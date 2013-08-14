@@ -182,12 +182,14 @@ class GameMembersController < ApplicationController
   def leaderboard 
     leaderboard_stats = GameMember.includes(:user).where(:game_id => params[:game_id]).order("successful_checks DESC")
     goal_days = Game.where(:id => params[:game_id]).pluck(:goal_days)
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     count = 0    
     leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
       :contains_profile_picture => member.user.contains_profile_picture,
-      :s3_profile_pic_name => member.user.s3_profile_pic_name,
+      :s3_profile_pic_name => (bucket_for_comments.objects[member.user.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks, 
