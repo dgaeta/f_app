@@ -189,7 +189,7 @@ class GameMembersController < ApplicationController
     leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
       :contains_profile_picture => member.user.contains_profile_picture,
-      :s3_profile_pic_name => (bucket_for_comments.objects[member.user.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
+      :s3_profile_pic_name => (bucket_for_prof_pics.objects[member.user.s3_profile_pic_name].url_for(:read, :expires => 10*60)),
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks, 
