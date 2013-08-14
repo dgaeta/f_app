@@ -186,6 +186,8 @@ class GameMembersController < ApplicationController
     count = 0    
     leaderboard_stats = leaderboard_stats.map do |member|
       {:user_id => member.user.id,
+      :contains_profile_picture => member.user.contains_profile_picture,
+      :s3_profile_pic_name => member.user.s3_profile_pic_name,
       :first_name => member.user.first_name,
       :last_name => member.user.last_name,
       :successful_checks => member.successful_checks, 
