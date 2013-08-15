@@ -499,6 +499,7 @@ require 'json'
       if @user.id == @friend.id
        self_json = { :status => "self"} 
        render(json: JSON.pretty_generate(self_json))
+       return
       elsif Friendship.where(:user_id => @user.id, :friend_id => @friend.id).first 
         status =  Friendship.where(:user_id => @user.id, :friend_id => @friend.id).pluck(:status)
         status = status[0]
