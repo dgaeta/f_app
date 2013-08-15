@@ -508,10 +508,8 @@ require 'json'
       else 
         status = "unadded friend"
       end
-      2nd_user =  User.where(:id => @friend.id)
       success_json = { :status => "okay" , :friend_id => @friend.id,  :first_name => @friend.first_name, :last_name => @friend.last_name,
-        :contains_sender_profile_pic => 2nd_user.contains_profile_picture,
-        :sender_profile_pic =>  (bucket_for_prof_pics.objects[2nd_user.s3_profile_pic_name].url_for(:read, :expires => 10*60)), 
+        :contains_sender_profile_pic => @friend.contains_profile_picture, :sender_profile_pic =>  (bucket_for_prof_pics.objects[@friend.s3_profile_pic_name].url_for(:read, :expires => 10*60)), 
         :friendship_status => status}
       render(json: JSON.pretty_generate(success_json))
       return
