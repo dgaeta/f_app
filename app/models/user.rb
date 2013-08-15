@@ -32,5 +32,12 @@ class User < ActiveRecord::Base
 
     composed_scope
   end
+
+  def self.get_full_name(n)
+    user = User.find(n)
+
+    full_name = user.first_name + " " + user.last_name
+    return full_name
+  end
   
 end
