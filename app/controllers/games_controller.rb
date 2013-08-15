@@ -548,6 +548,8 @@ def winners_and_losers
 
   def single_game_info 
     @search_results = Game.where(:id => params[:game_id], :game_active => 1 ).first
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     unless @search_results.nil? 
       then
@@ -565,8 +567,10 @@ def winners_and_losers
         end_date = Time.at(end_date)
         end_date = end_date.strftime("%-m/%-d/%-y")
         winning_structure = @search_results.winning_structure
-        creator_email = User.where(:id => @search_results.creator_id).first
-        creator_email = creator_email.email
+        creator_user = User.where(:id => @search_results.creator_id).first
+        creator_email = creator_user.email
+        creator_contains_pic = creator_user.contains_profile_picture
+        creator_s3_profile_pic_name = (bucket_for_prof_pics.objects[creator_user.s3_profile_pic_name].url_for(:read, :expires => 10*60))
         goal_days = @search_results.goal_days
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
