@@ -574,7 +574,8 @@ def winners_and_losers
         goal_days = @search_results.goal_days
         true_json =  { :status => "okay", :game_id => game_id, :creator_first_name => creator_first_name, :players => players, 
         :wager => wager, :stakes => stakes, :is_private => private_or_not, :duration => duration, :start_date => start_date, 
-        :end_date => end_date, :email => creator_email, :goal_days => goal_days}
+        :end_date => end_date, :email => creator_email, :goal_days => goal_days, 
+        :creator_has_profile_pic => creator_contains_pic, :creator_s3_profile_pic_name => creator_s3_profile_pic_link}
         render(json: JSON.pretty_generate(true_json))
         else
         false_json = { :status => "fail."} 
