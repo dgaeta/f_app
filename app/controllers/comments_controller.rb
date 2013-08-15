@@ -123,7 +123,7 @@ def game_comments
         :email => comment.email,
         :liked_by_user =>  comment.likers.include?(user_id.to_s), 
         :number_of_likes => comment.likes,
-        :likers => comment.likers.split(',').map {|n| n = User.get_full_name(n)}, 
+        :likers => comment.likers.split(',').map {|n| n = User.get_full_name(n).downcase}, 
         :bold => comment.bold,
         :checkin => comment.checkin,
         :comment_type => comment.comment_type,
