@@ -147,7 +147,7 @@ class FriendshipsController < ApplicationController
         :first_name => friend.friend_first_name,
         :last_name => friend.friend_last_name,
         :contains_sender_profile_pic => User.where(:id => friend.friend_id).pluck(:contains_profile_picture).first,
-        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
+        :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name).first].url_for(:read, :expires => 10*60))}
       end
       friends_json =  { :status => "okay", :friends => friends  }
       render(json: JSON.pretty_generate(friends_json))
