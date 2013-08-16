@@ -146,7 +146,7 @@ class FriendshipsController < ApplicationController
         {:friend_id => friend.friend_id,
         :first_name => friend.friend_first_name,
         :last_name => friend.friend_last_name,
-        :contains_sender_profile_pic => User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name).nil?,
+        :contains_sender_profile_pic => User.where(:id => friend.friend_id).pluck(:contains_profile_picture),
         :sender_profile_pic =>  (bucket_for_prof_pics.objects[User.where(:id => friend.friend_id).pluck(:s3_profile_pic_name)].url_for(:read, :expires => 10*60))}
       end
       friends_json =  { :status => "okay", :friends => friends  }
