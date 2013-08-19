@@ -370,7 +370,7 @@ def winners_and_losers
     if user 
       then 
       unless !GameMember.where(:user_id => user.id, :game_id => @game.id).empty?
-        unless @game.wager == 0 
+=begin       unless @game.wager == 0 
           unless user.customer_id.length > 2
             # get the credit card details submitted by Android
             credit_card_number = params[:credit_card_number]
@@ -408,7 +408,7 @@ def winners_and_losers
           # Now, make a stripe column for database table 'users'
           # save the customer ID in your database so you can use it later  
         end
-
+=end
         game_member = GameMember.create(:user_id=>params[:user_id], :game_id => params[:game_id])
         game_member.save
         stat = Stat.where(:winners_id => user.id).first 
