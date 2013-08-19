@@ -142,7 +142,7 @@ class GamesController < ApplicationController
     Stripe.api_key = @stripe_api_key   # this is our stripe test secret key (found on website)
 
     @user = User.where(:id => params[:user_id]).first
-    @wager = params[:wager]
+    @wager = 0
 
     unless @wager == 0  
       unless @user.customer_id.length < 2
