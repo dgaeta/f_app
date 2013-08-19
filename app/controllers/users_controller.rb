@@ -417,6 +417,22 @@ require 'json'
     end
   end
 
+  def check_iOS_udid
+    user = User.where(:id => params[:user_id]).first
+
+    if user
+      unless user.device_registered
+        user.iOS_udid = params[:udid]
+        user.save
+      end
+        true_json =  { :status => "okay"  }
+        render(json: JSON.pretty_generate(true_json))
+    else
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json))
+    end
+  end
+
    def does_customer_id_exist
     @user = User.where(:id => params[:user_id]).first
 

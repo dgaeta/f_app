@@ -306,6 +306,91 @@ def game_comments
     end
   end
 
+=begin  def post_sub_comment 
+    @comment = Comment.find(params[:comment_id])
+    @user = User.where(:id => params[:user_id]).first 
+ 
+    if @user.nil? || @comment.nil?
+      false_json = { :status => "user or comment not found"} 
+      render(json: JSON.pretty_generate(false_json) )
+    else
+      if @comment.sub_comments.empty?
+        ######## First person to like a comment, create a notification 
+        @comment.sub_comment_number += 1
+        
+        @comment.likers = @user.id.to_s 
+        @comment.save
+        unless @user.id == @comment.from_user_id
+          @notification = Notification.new
+          @notification.message = @user.first_name + " " + @user.last_name + " liked your posting"
+          @notification.sender_id = @user.id
+          @notification.notifiable_id = @comment.from_user_id
+          @notification.notifiable_type = 'User'
+          @notification.content = 'Liked comment'
+          @notification.comment_id = @comment.id
+          @notification.save
+        end
+        liked_json = { :status => "liked"} 
+        render(json: JSON.pretty_generate(liked_json) )
+      else
+        likers_array = @comment.likers.split(',') 
+        int_array = likers_array.map {|value| value.to_i}
+          
+        if int_array.include?(@user.id)
+          @comment.likes -= 1 
+         if @comment.likes >= 1 
+           int_array.delete_if {|value| value == @user.id}
+           @comment.likers = int_array.join(",")
+          else 
+          @comment.likers = ""
+         end
+         #### unlikes a comment, delete the notification
+          @comment.save
+          unless @user.id == @comment.from_user_id
+            @notification = Notification.where(:comment_id => @comment.id, :sender_id => @user.id).first 
+            @notification.delete
+          end
+          unliked_json = { :status => "unliked"} 
+          render(json: JSON.pretty_generate(unliked_json) )
+        else 
+          @comment.likes += 1
+          string = (@comment.likers.to_s + "," + @user.id.to_s) 
+          @comment.likers = string
+          @comment.save
+          unless @user.id == @comment.from_user_id
+            @notification = Notification.new
+            @notification.sender_id = @user.id
+            @notification.message = @user.first_name + " " + @user.last_name + " liked your posting"
+            @notification.notifiable_id = @comment.from_user_id
+            @notification.notifiable_type = 'User'
+            @notification.content = 'Liked comment'
+            @notification.comment_id = @comment.id
+            @notification.save
+          end
+          liked_json = { :status => "liked"} 
+          render(json: JSON.pretty_generate(liked_json) )
+        end
+      end
+    end
+  end
+=end
+
+  def flag_comment
+    comment = Comment.find(params[:comment_id])
+
+    if comment
+      comment.flagged_comment = "TRUE"
+      comment.save
+      true_json =  { :status => "okay"}
+      render(json: JSON.pretty_generate(true_json))
+    else 
+      false_json = { :status => "fail."} 
+      render(json: JSON.pretty_generate(false_json) )
+    end
+  end
+
+    
+
 
 
   def deleteSingleComment(comment_id)

@@ -63,11 +63,13 @@ FApp::Application.routes.draw do
   get "post_comment" => "comments#post_comment", :as => "post_comment"
   get "multimedia_message" => "comments#multimedia_message", :as => "multimedia_message"
   get "like_comment" => "comments#like_comment", :as => "like_comment"
+  get "flag_comment" => "comments#flag_comment", :as => "flag_comment"
   ###
   match "game_comments", :to => "comments#game_comments", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
   match "multimedia_message", :to => "comments#multimedia_message", :via => "post"
   match "like_comment", :to => "comments#like_comment", :via => "post"
+  match "flag_comment", :to => "comments#flag_comment", :via => "post"
 
 
 
@@ -137,6 +139,8 @@ FApp::Application.routes.draw do
   get "get_user_profile_picture" => "users#get_user_profile_picture", :as => "get_user_profile_picture"
   get "user_details" => "users#user_details", :as => "user_details"
   get "search_for_user" => "users#search_for_user", :as => "search_for_user"
+  get "check_iOS_udid" => "users#check_iOS_udid", :as => "check_iOS_udid"
+
   ###
   match "get_and_save_stripe_info", :to => "users#get_and_save_stripe_info", :via => "post"
   match "change_password", :to => "users#change_password", :via => "put"  
@@ -157,6 +161,7 @@ FApp::Application.routes.draw do
   match "get_user_profile_picture", :to => "users#get_user_profile_picture", :via => "get" 
   match "user_details", :to => "users#user_details", :via => "get" 
   match "search_for_user", :to => "users#search_for_user", :via => "get"
+  match "check_iOS_udid", :to => "users#check_iOS_udid", :via => "post"
 
 
   resources :password_resets

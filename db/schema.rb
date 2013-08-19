@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807214912) do
+ActiveRecord::Schema.define(:version => 20130819213158) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20130807214912) do
     t.boolean  "contains_profile_picture", :default => false
     t.integer  "likes",                    :default => 0
     t.string   "likers",                   :default => ""
+    t.boolean  "flaged_comment"
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20130807214912) do
     t.integer  "goal_days"
     t.datetime "created_at",                            :null => false
     t.datetime "updated_at",                            :null => false
+    t.string   "game_name"
   end
 
   create_table "landings", :force => true do |t|

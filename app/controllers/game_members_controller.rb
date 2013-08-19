@@ -164,6 +164,7 @@ class GameMembersController < ApplicationController
     
     all_of_users_gameMembers.each do |member|
       member.successful_checks += 1 
+      member.total_minutes_at_gym += params[:total_minutes_at_gym]
       member.save
       comment = Comment.new
       comment.from_game_id = member.game_id
