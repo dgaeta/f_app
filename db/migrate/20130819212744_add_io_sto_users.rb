@@ -1,7 +1,5 @@
 class AddIoStoUsers < ActiveRecord::Migration
-  def up
-  end
-
-  def down
+  def change
+    add_column :users, :iOS_udid, :string
   end
 end
