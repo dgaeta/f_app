@@ -167,7 +167,9 @@ class GameMembersController < ApplicationController
       if member.total_minutes_at_gym == nil 
         member.total_minutes_at_gym = 0 
       end
-      member.total_minutes_at_gym += params[:total_minutes_at_gym]
+      if params[:total_minutes_at_gym]
+        member.total_minutes_at_gym += params[:total_minutes_at_gym]
+      end
       member.save
       comment = Comment.new
       comment.from_game_id = member.game_id
