@@ -164,7 +164,7 @@ class GameMembersController < ApplicationController
     
     all_of_users_gameMembers.each do |member|
       member.successful_checks += 1 
-      if member.total_minutes_at_gym.nil?
+      if member.total_minutes_at_gym == nil 
         member.total_minutes_at_gym = 0 
       end
       member.total_minutes_at_gym += params[:total_minutes_at_gym]
