@@ -406,6 +406,7 @@ require 'json'
 
     if user
       unless user.device_registered
+        user.device_type = "Android"
         user.gcm_registration_id = params[:android_id]
         user.save
       end
