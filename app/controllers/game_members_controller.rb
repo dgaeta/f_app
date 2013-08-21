@@ -168,7 +168,7 @@ class GameMembersController < ApplicationController
         member.total_minutes_at_gym = 0 
       end
       if params[:total_minutes_at_gym]
-        member.total_minutes_at_gym += params[:total_minutes_at_gym]
+        member.total_minutes_at_gym += params[:total_minutes_at_gym].to_i
       end
       member.save
       comment = Comment.new

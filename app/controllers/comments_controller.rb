@@ -380,7 +380,7 @@ def game_comments
 
     if comment
       comment.flagged_comment = "TRUE"
-      comment.save
+      comment.saved
       true_json =  { :status => "okay"}
       render(json: JSON.pretty_generate(true_json))
     else 
@@ -388,9 +388,6 @@ def game_comments
       render(json: JSON.pretty_generate(false_json) )
     end
   end
-
-    
-
 
 
   def deleteSingleComment(comment_id)
