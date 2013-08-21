@@ -3,6 +3,7 @@ class Comment < ActiveRecord::Base
   attr_accessible :id, :message, :stamp, :from_user_id, :first_name, :last_name, :from_game_id, :comment_type, :image_name, :profile_picture_name, :contains_profile_picture, :likes, :likers
   belongs_to :commentable, polymorphic: true
   has_many :notifications, as: :notifiable
+  has_many :remarks, as: :remarkable
   #attr_accessor :game_member_id, :message, :stamp
  
 

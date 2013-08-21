@@ -1,5 +1,9 @@
 FApp::Application.routes.draw do
 
+  get "remarks/index"
+
+  get "remarks/new"
+
   ###EXCEPTIONS HANDLING
   match '(errors)/:status', to: 'errors#show', constraints: {status: /\d{3}/} # via: :all
  
@@ -53,7 +57,10 @@ FApp::Application.routes.draw do
   match "check_out_activity", :to => "game_members#check_out_activity", :via => "post"
 
 
-  resources :comments
+
+  resources :comments do
+   resources :remarkss
+  end
   get "deleteSingleComment"          => "comments#deleteSingleComment",          :as => "deleteSingleComment"
   get "deleteEntireGamesComments"    => "comments#deleteEntireGamesComments",    :as => "deleteEntireGamesComments"
   get "deleteSingleCommentAPI"       => "comments#deleteSingleCommentAPI",       :as => "deleteSingleCommentAPI"

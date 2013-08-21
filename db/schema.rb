@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130819213158) do
+ActiveRecord::Schema.define(:version => 20130821171004) do
 
   create_table "checklocations", :force => true do |t|
     t.integer  "requester_id"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(:version => 20130819213158) do
     t.integer  "number_of_requests"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+  end
+
+  create_table "comment_replies", :force => true do |t|
+    t.integer  "comment_id"
+    t.string   "content_type"
+    t.string   "message"
+    t.string   "photo_url"
+    t.integer  "from_user_id"
+    t.string   "from_user_profile_pic_url"
+    t.string   "comment_type"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "comments", :force => true do |t|
@@ -241,6 +253,18 @@ ActiveRecord::Schema.define(:version => 20130819213158) do
   end
 
   add_index "push_messages", ["delivered", "failed", "deliver_after"], :name => "index_push_messages_on_delivered_and_failed_and_deliver_after"
+
+  create_table "remarks", :force => true do |t|
+    t.string   "content"
+    t.string   "message"
+    t.integer  "from_user_id"
+    t.integer  "remarkable_id"
+    t.string   "remarkable_type"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "remarks", ["remarkable_id", "remarkable_type"], :name => "index_remarks_on_remarkable_id_and_remarkable_type"
 
   create_table "sessions", :force => true do |t|
     t.datetime "created_at",                       :null => false
