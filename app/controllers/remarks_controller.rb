@@ -30,6 +30,18 @@ class RemarksController < ApplicationController
 	   end
   end
 
+  def get_remarks
+	  	comment = Comment.find(params[:comment_id])
+
+	  	if comment 
+		  	succuess_json = { :status => "okay", :remarks => comment.remarks} 
+	        render(json: JSON.pretty_generate(success_json) )
+   	    else 
+	    	failed_json = { :status => "failure"} 
+	        render(json: JSON.pretty_generate(failed_json) )
+	   end
+  end
+
 private
 
   def load_remarkable

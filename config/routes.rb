@@ -30,7 +30,9 @@ FApp::Application.routes.draw do
 
   resources :remarks
   get "create_remark" => "remarks#create_remark", :as => "create_remark"
+  get "get_remarks" => "remarks#get_remarks", :as => "get_remarks"
   match "create_remark", :to => "remarks#create_remark", :via => "post"
+  match "get_remarks", :to => "remarks#get_remarks", :via => "get"
 
 
   resources :stats do 
