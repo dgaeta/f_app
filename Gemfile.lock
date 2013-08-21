@@ -134,7 +134,7 @@ GEM
     heroku-api (0.2.1)
       excon (~> 0.13.3)
     hike (1.2.3)
-    hoe (3.7.0)
+    hoe (3.7.1)
       rake (>= 0.8, < 11.0)
     httparty (0.11.0)
       multi_json (~> 1.0)
@@ -186,6 +186,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-ssh (2.6.7)
     netrc (0.7.7)
+    newrelic_rpm (3.6.6.147)
     nifty-generators (0.4.6)
     nokogiri (1.5.10)
     oauth (0.4.7)
@@ -355,6 +356,7 @@ DEPENDENCIES
   less-rails
   letter_opener
   meta_request
+  newrelic_rpm
   nifty-generators
   paperclip (~> 3.0)
   pg (= 0.12.2)
