@@ -28,7 +28,9 @@ FApp::Application.routes.draw do
   match 'blog',     to: 'landings#blog'
   
 
- 
+  resources :remarks
+  get "create_remark" => "remarks#create_remark", :as => "create_remark"
+  match "create_remark", :to => "remarks#create_remark", :via => "post"
 
 
   resources :stats do 
