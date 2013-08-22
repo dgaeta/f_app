@@ -63,7 +63,7 @@ FApp::Application.routes.draw do
 
 
   resources :comments do
-   resources :remarkss
+   resources :remarks
   end
   get "deleteSingleComment"          => "comments#deleteSingleComment",          :as => "deleteSingleComment"
   get "deleteEntireGamesComments"    => "comments#deleteEntireGamesComments",    :as => "deleteEntireGamesComments"
