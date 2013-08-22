@@ -1,5 +1,5 @@
 class RemarksController < ApplicationController
-  before_filter :load_remarkable
+  #before_filter :load_remarkable
   
   def index
     @remarks = @remarkable.remarks

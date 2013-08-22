@@ -3,7 +3,7 @@ class Remark < ActiveRecord::Base
   belongs_to :remarkable, polymorphic: true
 
 
-  def create_remark_for_client(content, message, from_user_id, comment_id)
+  def self.create_remark_for_client(content, message, from_user_id, comment_id)
 	  comment = Comment.find(comment_id)
 	  remark = comment.remarks.create!(content: content, message: message, from_user_id: from_user_id)
 
