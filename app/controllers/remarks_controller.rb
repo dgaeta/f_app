@@ -22,7 +22,7 @@ class RemarksController < ApplicationController
 	  	remark  = Remark.create_remark_for_client(params[:content], params[:message], params[:from_user_id], params[:comment_id])
 
 	  	if remark 
-		  	succuess_json = { :status => "created"} 
+		  	success_json = { :status => "created"} 
 	        render(json: JSON.pretty_generate(success_json) )
    	    else 
 	    	failed_json = { :status => "failure"} 
