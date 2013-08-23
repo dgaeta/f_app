@@ -31,7 +31,7 @@ class RemarksController < ApplicationController
   end
 
   def get_remarks
-	  	comment = Comment.find(params[:comment_id])
+	  	comment = Comment.where(params[:comment_id]).first
 	  	remarks = comment.remarks
 	  	remarks = remarks.map do |remark|
 	  	{:remark_id => remark.id, 
