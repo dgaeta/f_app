@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
     if @user.contains_profile_picture  
       status = "exists" 
       pic_url = (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)) 
-      array = Hash.new(:status => status, pic_url => pic_url)
+      array = Hash.new(:status => status, :pic_url => pic_url)
       return array
     else 
       return status = "does not exist"
