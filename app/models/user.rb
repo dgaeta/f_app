@@ -42,6 +42,8 @@ class User < ActiveRecord::Base
 
   def self.deliver_profile_picture(user_id)
     @user = User.where(:id => user_id).first 
+    s3 = AWS::S3.new
+    bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']
 
     if @user.nil?
       status = "no user found"
