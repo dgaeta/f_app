@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   def self.deliver_profile_picture(user_id)
     @user = User.where(:id => user_id).first 
 
-    if user.nil?
+    if @user.nil?
       status = "no user found"
       return status
     end 
