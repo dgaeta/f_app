@@ -38,8 +38,8 @@ class RemarksController < ApplicationController
 	  	:content => remark.content,
 	  	:message => remark.message, 
 	  	:from_user_id => remark.from_user_id,
-	  	:commentable_id => remark.remarkable_id,
-	  	:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id) }
+	  	:commentable_id => remark.remarkable_id
+	  	#:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id) }
 	  end
 
 	  	if comment 
