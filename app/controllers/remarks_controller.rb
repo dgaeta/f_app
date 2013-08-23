@@ -33,8 +33,8 @@ class RemarksController < ApplicationController
   def get_remarks
 	  	comment = Comment.find(params[:comment_id])
 	  	remarks = comment.remarks
-	  	remarks = remarks.map do { |remark|
-	  	:remark_id => remark.id, 
+	  	remarks = remarks.map do |remark|
+	  	{:remark_id => remark.id, 
 	  	:content => remark.content,
 	  	:message => remark.message, 
 	  	:from_user_id => remark.from_user_id,
