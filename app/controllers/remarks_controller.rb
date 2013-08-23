@@ -32,9 +32,10 @@ class RemarksController < ApplicationController
 
   def get_remarks
 	  	comment = Comment.find(params[:comment_id])
+	  	remarks = comment.remarks
 
 	  	if comment 
-		  	success_json = { :status => "okay", :remarks => comment.remarks} 
+		  	success_json = { :status => "okay", :remarks => remarks} 
 	        render(json: JSON.pretty_generate(success_json) )
    	    else 
 	    	failed_json = { :status => "failure"} 
