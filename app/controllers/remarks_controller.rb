@@ -34,7 +34,7 @@ class RemarksController < ApplicationController
 	  	comment = Comment.find(params[:comment_id])
 
 	  	if comment 
-		  	succuess_json = { :status => "okay", :remarks => comment.remarks} 
+		  	success_json = { :status => "okay", :remarks => comment.remarks} 
 	        render(json: JSON.pretty_generate(success_json) )
    	    else 
 	    	failed_json = { :status => "failure"} 
