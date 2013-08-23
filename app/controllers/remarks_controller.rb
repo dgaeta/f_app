@@ -39,7 +39,7 @@ class RemarksController < ApplicationController
 	  	:message => remark.message, 
 	  	:from_user_id => remark.from_user_id,
 	  	:commentable_id => remark.remarkable_id,
-	  	:profile_picture_status_array = User.deliver_profile_picture }
+	  	:profile_picture_status_array => User.deliver_profile_picture }
 
 	  	if comment 
 		  	success_json = { :status => "okay", :remarks => remarks} 
