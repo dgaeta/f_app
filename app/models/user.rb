@@ -39,5 +39,24 @@ class User < ActiveRecord::Base
     full_name = user.first_name + " " + user.last_name
     return full_name
   end
+
+  def self.deliver_profile_picture(user_id)
+    @user = User.where(user_id).first 
+
+    if user.nil?
+      status = "no user found"
+      return status
+    end 
+
+
+    if @user.contains_profile_picture  
+      status = "exists" 
+      pic_url = (bucket_for_prof_pics.objects[@user.s3_profile_pic_name].url_for(:read, :expires => 10*60)) 
+      array = Array.new(status, pic_url)
+      return array
+    else 
+      return status = "does not exist"
+    end   
+  end
   
 end
