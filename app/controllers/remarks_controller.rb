@@ -33,6 +33,13 @@ class RemarksController < ApplicationController
   def get_remarks
 	  	comment = Comment.find(params[:comment_id])
 	  	remarks = comment.remarks
+	  	remarks = remarks.map { |remark|
+	  	:remark_id => remark.id, 
+	  	:content => remark.content,
+	  	:message => remark.message, 
+	  	:from_user_id => remark.from_user_id,
+	  	:commentable_id => remark.remarkable_id,
+	  	:profile_picture_status_array = User.deliver_profile_picture }
 
 	  	if comment 
 		  	success_json = { :status => "okay", :remarks => remarks} 
