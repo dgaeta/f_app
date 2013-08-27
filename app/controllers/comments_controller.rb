@@ -128,7 +128,8 @@ def game_comments
         :checkin => comment.checkin,
         :comment_type => comment.comment_type,
         :image_name => (bucket_for_comments.objects[comment.image_name].url_for(:read, :expires => 10*60)),
-        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
+        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)"), 
+        :remarks_array => Remark.get_remarks(comment.id)}
       end
     else 
       all_comments = all_comments.map do |comment|
@@ -147,7 +148,8 @@ def game_comments
         :checkin => comment.checkin,
         :comment_type => comment.comment_type,
         :image_name => (bucket_for_comments.objects[comment.image_name].url_for(:read, :expires => 10*60)),
-        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)")}
+        :stamp => comment.created_at.strftime("%-I:%M%p (%m/%d/%y)"), 
+        :remarks_array => Remark.get_remarks(comment.id)}
       end
     end
 

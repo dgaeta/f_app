@@ -10,4 +10,25 @@ class Remark < ActiveRecord::Base
 	  return remark 
   end
 
+  def self.timestamp_minutes(remark_id)
+  	@remark = Remark.find(remark.id)
+
+  	timestampe = @remark.
+  	timestamp_string = 
+  end
+
+  def self.get_remarks
+      comment = Comment.where(params[:comment_id]).first
+      remarks = comment.remarks
+      remarks = remarks.map do |remark|
+      {:remark_id => remark.id, 
+      :content => remark.content,
+      :message => remark.message, 
+      :from_user_id => remark.from_user_id,
+      :from_user_fullname => User.get_full_name(remark.from_user_id),
+      :commentable_id => remark.remarkable_id
+      #:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id)
+       }
+    end
+
 end
