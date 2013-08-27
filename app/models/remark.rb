@@ -30,5 +30,6 @@ class Remark < ActiveRecord::Base
       #:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id)
        }
     end
+  end
 
 end
