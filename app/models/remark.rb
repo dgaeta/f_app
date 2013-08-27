@@ -19,7 +19,7 @@ class Remark < ActiveRecord::Base
 =end
   def self.get_remarks(comment_id)
       comment = Comment.where(comment_id).first
-      remarks = comment.remarks
+      remarks = comment.remarks.last(4)
       remarks = remarks.map do |remark|
       {:remark_id => remark.id, 
       :content => remark.content,
