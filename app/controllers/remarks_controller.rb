@@ -31,24 +31,39 @@ class RemarksController < ApplicationController
   end
 
   def get_remarks
-	  	comment = Comment.find(params[:comment_id])
-	  	remarks = comment.remarks
-	  	remarks = remarks.map do |remark|
-	  	{:remark_id => remark.id, 
-	  	:content => remark.content,
-	  	:message => remark.message, 
-	  	:from_user_id => remark.from_user_id,
-	  	:commentable_id => remark.remarkable_id,
-	  	:profile_picture_status_hash => User.deliver_profile_picture(from_user_id) }
-	  end
+      comment = Comment.where(params[:comment_id]).first
+      remarks = comment.remarks
+      remarks = remarks.map do |remark|
+      {:remark_id => remark.id, 
+      :content => remark.content,
+      :message => remark.message, 
+      :from_user_id => remark.from_user_id,
+      :from_user_fullname => User.get_full_name(remark.from_user_id),
+      :commentable_id => remark.remarkable_id
+      #:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id)
+       }
+    end
 
-	  	if comment 
-		  	success_json = { :status => "okay", :remarks => remarks} 
-	        render(json: JSON.pretty_generate(success_json) )
-   	    else 
-	    	failed_json = { :status => "failure"} 
-	        render(json: JSON.pretty_generate(failed_json) )
-	   end
+      if comment 
+        success_json = { :status => "okay", :remarks => remarks} 
+          render(json: JSON.pretty_generate(success_json) )
+        else 
+        failed_json = { :status => "failure"} 
+          render(json: JSON.pretty_generate(failed_json) )
+     end
+  end
+
+  def delete
+    @remark = Remark.where(:id => params[:remark]).first
+
+    if @remark
+      @remark.delete
+      success_json = { :status => "okay"} 
+      render(json: JSON.pretty_generate(success_json) )
+    else
+      failed_json = { :status => "failure"} 
+      render(json: JSON.pretty_generate(failed_json) )
+     end
   end
 
 private
