@@ -103,6 +103,7 @@ class CommentsController < ApplicationController
   end
 
 def getfeed
+  pages =  Comment.where(:from_game_id => params[:game_id]).count
   feed_results = Comment.getfeed(params[:get_page], params[:pagecount], params[:game_id], params[:user_id])
   
   if feed_results.nil?
@@ -110,7 +111,7 @@ def getfeed
       false_json = { :status => "fail."} 
       render(json: JSON.pretty_generate(false_json))
     else
-      true_json =  { :status => "okay" , :all_comments => feed_results }
+      true_json =  { :status => "okay" , :all_comments => feed_results, :total_pages => pages }
       render(json: JSON.pretty_generate(true_json))
   end
 end
