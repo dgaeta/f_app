@@ -19,6 +19,7 @@ class Remark < ActiveRecord::Base
 =end
   def self.get_remarks(comment_id)
       comment = Comment.where(:id => comment_id).first
+      remarks_count = comment.remarks.count 
       remarks = comment.remarks.last(4)
       remarks = remarks.map do |remark|
       {:remark_id => remark.id, 
@@ -26,7 +27,8 @@ class Remark < ActiveRecord::Base
       :message => remark.message, 
       :from_user_id => remark.from_user_id,
       :from_user_fullname => User.get_full_name(remark.from_user_id),
-      :commentable_id => remark.remarkable_id
+      :commentable_id => remark.remarkable_id, 
+      :count => remarks_count
       #:profile_picture_status_hash => User.deliver_profile_picture(remark.from_user_id)
        }
     end
