@@ -188,7 +188,7 @@ def game_comments
 
     @user_id = @comment.from_user_id
 
-    user = User.where(:id => @user_id).first
+    user = User.where(:id => params[:user_id]).first
     user.comments_made +=1 
     user.save
 
