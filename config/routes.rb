@@ -75,12 +75,14 @@ FApp::Application.routes.draw do
   get "multimedia_message" => "comments#multimedia_message", :as => "multimedia_message"
   get "like_comment" => "comments#like_comment", :as => "like_comment"
   get "flag_comment" => "comments#flag_comment", :as => "flag_comment"
+  get "getfeed" => "comments#getfeed", :as => "getfeed"
   ###
   match "game_comments", :to => "comments#game_comments", :via => "get"
   match "post_comment", :to => "comments#post_comment", :via => "post"
   match "multimedia_message", :to => "comments#multimedia_message", :via => "post"
   match "like_comment", :to => "comments#like_comment", :via => "post"
   match "flag_comment", :to => "comments#flag_comment", :via => "post"
+  match "getfeed", :to => "comments#getfeed", :via => "get"
 
 
 
