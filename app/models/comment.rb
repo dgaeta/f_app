@@ -36,7 +36,7 @@ class Comment < ActiveRecord::Base
    end until (Comment.where(:from_game_id => 346).first == nil)
   end
 
-  def self.getfeed(get_page, pagecount, game_id, user_id)
+  def self.getfeed(get_page, game_id, user_id)
     s3 = AWS::S3.new
     bucket_for_comments = s3.buckets['images.fitsby.com']
     bucket_for_prof_pics = s3.buckets['profilepics.fitsby.com']

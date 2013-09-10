@@ -104,7 +104,11 @@ class CommentsController < ApplicationController
 
 def getfeed
   pages =  Comment.where(:from_game_id => params[:game_id]).count
-  feed_results = Comment.getfeed(params[:get_page], params[:pagecount], params[:game_id], params[:user_id])
+  if (params[:get_page] > pages) 
+    false_json = { :status => "exceeded pages"} 
+    render(json: JSON.pretty_generate(false_json))
+  end
+  feed_results = Comment.getfeed(params[:get_page], params[:game_id], params[:user_id])
   
   if feed_results.nil?
     then 
